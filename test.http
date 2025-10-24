@@ -1,0 +1,21 @@
+### Listar todas las canciones
+GET http://localhost:8080/api/canciones
+
+### Buscar canción por ID
+GET http://localhost:8080/api/canciones/1
+
+### Agregar nueva canción
+POST http://localhost:8080/api/canciones
+Content-Type: application/json
+
+{
+  "id": "4",
+  "titulo": "Billie Jean",
+  "artista": "Michael Jackson",
+  "genero": "Pop",
+  "anio": 1983,
+  "duracion": 4.54
+}
+
+### Eliminar canción
+DELETE http://localhost:8080/api/canciones/4
