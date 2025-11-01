@@ -6,7 +6,8 @@ import org.springframework.stereotype.Repository;
 import java.io.*;
 import java.nio.charset.StandardCharsets;
 import java.util.*;
-import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.*;
+import java.util.stream.Collectors;
 
 /**
  * Repositorio con persistencia en archivo canciones.txt
@@ -32,10 +33,21 @@ public class CancionRepository {
     }
 
     // ✅ Agregar canción
+    // ✅ Agregar canción (ahora con control de IDs duplicados)
     public void agregarCancion(Cancion cancion) {
-        canciones.put(cancion.getId(), cancion);
+        String id = cancion.getId();
+
+        // Si el ID ya existe, asignar el siguiente disponible
+        if (canciones.containsKey(id)) {
+            id = obtenerSiguienteIdDisponible();
+            cancion.setId(id);
+            System.out.println("⚠️ ID duplicado detectado. Se asignó nuevo ID: " + id);
+        }
+
+        canciones.put(id, cancion);
         guardarCancionesEnArchivo();
     }
+
 
     // ✅ Actualizar canción
     public boolean actualizarCancion(Cancion cancion) {
@@ -97,6 +109,7 @@ public class CancionRepository {
         }
     }
 
+    // 🔍 Búsqueda simple (por título y género)
     public List<Cancion> buscarPorFiltro(String titulo, String genero) {
         List<Cancion> resultado = new ArrayList<>();
 
@@ -110,4 +123,86 @@ public class CancionRepository {
         }
         return resultado;
     }
+
+    // ⚡ Búsqueda avanzada concurrente (RF-004 + RF-030)
+    public List<Cancion> buscarAvanzadaConcurrente(String titulo,
+                                                   String artista,
+                                                   String genero,
+                                                   Integer anioFrom,
+                                                   Integer anioTo,
+                                                   String op) {
+        ExecutorService executor = Executors.newFixedThreadPool(4);
+        List<Future<List<Cancion>>> tareas = new ArrayList<>();
+
+        // Crear tareas independientes por criterio
+        if (titulo != null && !titulo.isBlank()) {
+            tareas.add(executor.submit(() -> canciones.values().stream()
+                    .filter(c -> c.getTitulo().toLowerCase().contains(titulo.toLowerCase()))
+                    .collect(Collectors.toList())));
+        }
+
+        if (artista != null && !artista.isBlank()) {
+            tareas.add(executor.submit(() -> canciones.values().stream()
+                    .filter(c -> c.getArtista().toLowerCase().contains(artista.toLowerCase()))
+                    .collect(Collectors.toList())));
+        }
+
+        if (genero != null && !genero.isBlank()) {
+            tareas.add(executor.submit(() -> canciones.values().stream()
+                    .filter(c -> c.getGenero().toLowerCase().contains(genero.toLowerCase()))
+                    .collect(Collectors.toList())));
+        }
+
+        if (anioFrom != null || anioTo != null) {
+            tareas.add(executor.submit(() -> canciones.values().stream()
+                    .filter(c -> (anioFrom == null || c.getAnio() >= anioFrom) &&
+                            (anioTo == null || c.getAnio() <= anioTo))
+                    .collect(Collectors.toList())));
+        }
+
+        // Esperar los resultados
+        List<List<Cancion>> resultados = new ArrayList<>();
+        for (Future<List<Cancion>> tarea : tareas) {
+            try {
+                resultados.add(tarea.get());
+            } catch (Exception e) {
+                System.err.println("⚠️ Error en hilo de búsqueda: " + e.getMessage());
+            }
+        }
+
+        executor.shutdown();
+
+        // Combinar resultados según operador lógico
+        if (resultados.isEmpty()) return new ArrayList<>();
+
+        Set<Cancion> combinado = new HashSet<>(resultados.get(0));
+        if ("AND".equalsIgnoreCase(op)) {
+            for (List<Cancion> lista : resultados.subList(1, resultados.size())) {
+                combinado.retainAll(lista);
+            }
+        } else { // OR por defecto
+            for (List<Cancion> lista : resultados.subList(1, resultados.size())) {
+                combinado.addAll(lista);
+            }
+        }
+
+        return new ArrayList<>(combinado);
+    }
+
+    // ✅ Agregar esta función auxiliar dentro de CancionRepository
+    private String obtenerSiguienteIdDisponible() {
+        if (canciones.isEmpty()) {
+            return "1";
+        }
+
+        // Obtener el número máximo actual de IDs (asumiendo que son numéricos)
+        int maxId = canciones.keySet().stream()
+                .filter(id -> id.matches("\\d+")) // solo números
+                .mapToInt(Integer::parseInt)
+                .max()
+                .orElse(0);
+
+        return String.valueOf(maxId + 1);
+    }
+
 }

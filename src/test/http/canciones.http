@@ -78,3 +78,26 @@ Content-Type: application/json
 # Lógica AND: títulos que contengan "Love" Y género "Pop"
 GET http://localhost:8080/api/canciones/buscar?titulo=Love&genero=Pop
 Content-Type: application/json
+
+### 🔎 BÚSQUEDA AVANZADA - AND (por defecto)
+GET http://localhost:8080/api/canciones/buscar/avanzado?titulo=love&genero=pop
+Content-Type: application/json
+
+###
+
+### 🔎 BÚSQUEDA AVANZADA - OR
+GET http://localhost:8080/api/canciones/buscar/avanzado?titulo=imagine&artista=queen&op=OR
+Content-Type: application/json
+
+###
+
+### 🔎 BÚSQUEDA AVANZADA - RANGO AÑOS
+GET http://localhost:8080/api/canciones/buscar/avanzado?anioFrom=1970&anioTo=1980
+Content-Type: application/json
+
+###
+
+### 🔎 BÚSQUEDA AVANZADA - COMBINADA (titulo + artista + rango) con OR
+GET http://localhost:8080/api/canciones/buscar/avanzado?titulo=love&artista=beatles&anioFrom=1960&anioTo=1975&op=OR
+Content-Type: application/json
+

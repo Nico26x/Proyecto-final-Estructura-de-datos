@@ -1,0 +1,12 @@
+### 🎵 Cargar canciones masivamente
+POST http://localhost:8080/api/canciones/cargar
+Content-Type: multipart/form-data; boundary=boundary
+
+--boundary
+Content-Disposition: form-data; name="archivo"; filename="canciones_nuevas.txt"
+Content-Type: text/plain
+
+10;Yogurcito;Blessd;Urbano;2024;4.03
+11;Me parte el corazon;Daniel Calderon;Vallenato;2006;6.30
+12;GataG;Ryan Castro;Urbano;2023;4.54
+--boundary--

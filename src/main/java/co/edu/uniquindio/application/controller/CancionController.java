@@ -3,6 +3,7 @@ package co.edu.uniquindio.application.controller;
 import co.edu.uniquindio.application.model.Cancion;
 import co.edu.uniquindio.application.service.CancionService;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.util.Collection;
 import java.util.List;
@@ -74,4 +75,32 @@ public class CancionController {
             @RequestParam(required = false) String genero) {
         return cancionService.buscarPorFiltro(titulo, genero);
     }
+
+    /**
+     * Búsqueda avanzada concurrente
+     * Ejemplo:
+     * GET /api/canciones/buscar/avanzado?titulo=love&artista=queen&genero=rock&anioFrom=1970&anioTo=1990&op=OR
+     */
+    @GetMapping("/buscar/avanzado")
+    public List<Cancion> buscarAvanzado(
+            @RequestParam(required = false) String titulo,
+            @RequestParam(required = false) String artista,
+            @RequestParam(required = false) String genero,
+            @RequestParam(required = false) Integer anioFrom,
+            @RequestParam(required = false) Integer anioTo,
+            @RequestParam(required = false, defaultValue = "AND") String op
+    ) {
+        return cancionService.buscarAvanzada(titulo, artista, genero, anioFrom, anioTo, op);
+    }
+
+    @PostMapping("/cargar")
+    public String cargarCancionesMasivamente(@RequestParam("archivo") MultipartFile archivo) {
+        try {
+            int cantidad = cancionService.cargarCancionesMasivamente(archivo);
+            return "✅ Se cargaron " + cantidad + " canciones correctamente.";
+        } catch (Exception e) {
+            return "❌ Error al cargar canciones: " + e.getMessage();
+        }
+    }
+
 }
