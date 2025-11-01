@@ -62,6 +62,21 @@ public class CancionRepository {
     }
 
     /**
+     * 🔹 Actualiza una canción existente.
+     * Busca por ID y reemplaza sus datos con los del objeto recibido.
+     */
+    public boolean actualizarCancion(Cancion cancionActualizada) {
+        Cancion existente = buscarPorId(cancionActualizada.getId());
+        if (existente != null) {
+            canciones.remove(existente);
+            canciones.add(cancionActualizada);
+            guardarCancionesEnArchivo();
+            return true;
+        }
+        return false;
+    }
+
+    /**
      * 🔹 Carga las canciones desde el archivo .txt.
      */
     private void cargarCanciones() {
@@ -93,5 +108,21 @@ public class CancionRepository {
         } catch (IOException e) {
             e.printStackTrace();
         }
+    }
+
+    /**
+     * 🔹 Busca canciones por título o género (o ambos).
+     * Si no se pasa ningún parámetro, devuelve todas las canciones.
+     */
+    public List<Cancion> buscarPorFiltro(String titulo, String genero) {
+        return canciones.stream()
+                .filter(c -> {
+                    boolean coincideTitulo = (titulo == null || titulo.isEmpty()) ||
+                            c.getTitulo().toLowerCase().contains(titulo.toLowerCase());
+                    boolean coincideGenero = (genero == null || genero.isEmpty()) ||
+                            c.getGenero().toLowerCase().contains(genero.toLowerCase());
+                    return coincideTitulo && coincideGenero;
+                })
+                .toList();
     }
 }

@@ -1,21 +1,16 @@
-### Listar todas las canciones
+//
+
+### 🎵 Listar todas las canciones
 GET http://localhost:8080/api/canciones
 
-### Buscar canción por ID
-GET http://localhost:8080/api/canciones/1
+### Buscar canciones por título
+GET http://localhost:8080/api/canciones/buscar?titulo=Imagine
 
-### Agregar nueva canción
-POST http://localhost:8080/api/canciones
-Content-Type: application/json
+### Buscar canciones por género
+GET http://localhost:8080/api/canciones/buscar?genero=Rock
 
-{
-  "id": "4",
-  "titulo": "Billie Jean",
-  "artista": "Michael Jackson",
-  "genero": "Pop",
-  "anio": 1983,
-  "duracion": 4.54
-}
+### Buscar canciones por título y género a la vez
+GET http://localhost:8080/api/canciones/buscar?titulo=Love&genero=Pop
 
-### Eliminar canción
-DELETE http://localhost:8080/api/canciones/4
+### 🆓 Buscar sin filtros (devuelve todas)
+GET http://localhost:8080/api/canciones/buscar

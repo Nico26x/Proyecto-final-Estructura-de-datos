@@ -9,5 +9,4 @@ public class SyncUpApplication {
 	public static void main(String[] args) {
 		SpringApplication.run(SyncUpApplication.class, args);
 	}
-
 }

@@ -70,4 +70,45 @@ public class CancionController {
             return "❌ No se encontró la canción con ID " + id;
         }
     }
+
+    /**
+     * 🔹 Actualizar una canción existente
+     * Ejemplo:
+     * PUT http://localhost:8080/api/canciones/1
+     * Body (JSON):
+     * {
+     *   "id": "1",
+     *   "titulo": "Imagine (Remastered)",
+     *   "artista": "John Lennon",
+     *   "genero": "Rock",
+     *   "anio": 1971,
+     *   "duracion": 3.12
+     * }
+     */
+    @PutMapping("/{id}")
+    public String actualizarCancion(@PathVariable String id, @RequestBody Cancion cancionActualizada) {
+        // Aseguramos que el ID del path y el del cuerpo coincidan
+        cancionActualizada.setId(id);
+
+        boolean actualizada = cancionRepository.actualizarCancion(cancionActualizada);
+        if (actualizada) {
+            return "✅ Canción actualizada correctamente.";
+        } else {
+            return "❌ No se encontró la canción con ID " + id;
+        }
+    }
+
+    /**
+     * 🔹 Buscar canciones por título o género (filtro).
+     * Ejemplos:
+     *  - GET /api/canciones/buscar?titulo=Imagine
+     *  - GET /api/canciones/buscar?genero=Rock
+     *  - GET /api/canciones/buscar?titulo=Love&genero=Pop
+     */
+    @GetMapping("/buscar")
+    public List<Cancion> buscarCanciones(
+            @RequestParam(required = false) String titulo,
+            @RequestParam(required = false) String genero) {
+        return cancionRepository.buscarPorFiltro(titulo, genero);
+    }
 }

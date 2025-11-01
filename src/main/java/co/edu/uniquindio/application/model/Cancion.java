@@ -67,12 +67,12 @@ public class Cancion {
         if (partes.length != 6) return null;
 
         try {
-            String id = partes[0];
-            String titulo = partes[1];
-            String artista = partes[2];
-            String genero = partes[3];
-            int anio = Integer.parseInt(partes[4]);
-            double duracion = Double.parseDouble(partes[5]);
+            String id = partes[0].trim();
+            String titulo = partes[1].trim();
+            String artista = partes[2].trim();
+            String genero = partes[3].trim();
+            int anio = Integer.parseInt(partes[4].trim());
+            double duracion = Double.parseDouble(partes[5].trim());
             return new Cancion(id, titulo, artista, genero, anio, duracion);
         } catch (NumberFormatException ex) {
             ex.printStackTrace();
