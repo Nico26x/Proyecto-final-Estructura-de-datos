@@ -1,27 +1,80 @@
-### Agregar nueva cancion
+### 🎵 LISTAR TODAS LAS CANCIONES
+GET http://localhost:8080/api/canciones
+Content-Type: application/json
+
+###
+
+### 🔎 BUSCAR CANCIÓN POR ID
+GET http://localhost:8080/api/canciones/2
+Content-Type: application/json
+
+###
+
+### ➕ AGREGAR UNA NUEVA CANCIÓN
 POST http://localhost:8080/api/canciones
 Content-Type: application/json
 
 {
-  "id": "5",
-  "titulo": "Imagine",
-  "artista": "Metallica",
+  "id": "10",
+  "titulo": "Let It Be",
+  "artista": "The Beatles",
   "genero": "Rock",
-  "anio": 1991,
-  "duracion": 6.28
+  "anio": 1970,
+  "duracion": 4.03
 }
 
-### 🎵 Listar todas las canciones
-GET http://localhost:8080/api/canciones
 
-### Buscar canciones por título
-GET http://localhost:8080/api/canciones/buscar?titulo=Imagine
+### ➕ AGREGAR UNA NUEVA CANCIÓN
+POST http://localhost:8080/api/canciones
+Content-Type: application/json
 
-### Buscar canciones por género
+{
+  "id": "11",
+  "titulo": "Yogurcito",
+  "artista": "Blessd",
+  "genero": "Urbano",
+  "anio": 2024,
+  "duracion": 3.26
+}
+
+###
+
+### ✏️ ACTUALIZAR UNA CANCIÓN EXISTENTE
+PUT http://localhost:8080/api/canciones/10
+Content-Type: application/json
+
+{
+  "id": "10",
+  "titulo": "Let It Be (Remastered)",
+  "artista": "The Beatles",
+  "genero": "Rock",
+  "anio": 1970,
+  "duracion": 4.05
+}
+
+###
+
+### 🗑️ ELIMINAR UNA CANCIÓN POR ID
+DELETE http://localhost:8080/api/canciones/10
+Content-Type: application/json
+
+###
+
+### 🔍 BUSCAR CANCIONES POR TÍTULO
+# Devuelve todas las canciones cuyo título contenga la palabra "Love"
+GET http://localhost:8080/api/canciones/buscar?titulo=Love
+Content-Type: application/json
+
+###
+
+### 🔍 BUSCAR CANCIONES POR GÉNERO
+# Devuelve todas las canciones cuyo género contenga "Rock"
 GET http://localhost:8080/api/canciones/buscar?genero=Rock
+Content-Type: application/json
 
-### Buscar canciones por título y género a la vez
+###
+
+### 🔍 BUSCAR CANCIONES POR TÍTULO Y GÉNERO (filtro combinado)
+# Lógica AND: títulos que contengan "Love" Y género "Pop"
 GET http://localhost:8080/api/canciones/buscar?titulo=Love&genero=Pop
-
-### 🆓 Buscar sin filtros (devuelve todas)
-GET http://localhost:8080/api/canciones/buscar
+Content-Type: application/json

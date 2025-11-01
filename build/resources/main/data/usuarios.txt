@@ -1,6 +1,7 @@
 Nico26x;1090;Nicolas;
 nico;123;Nicolas;1
 ana;123;Ana;
+juan;123;Juan Jose;2
 alexxd;123;alex;
 Dm05;123;Deivid;
 username;password;nombre;

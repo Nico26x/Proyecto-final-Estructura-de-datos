@@ -4,125 +4,110 @@ import co.edu.uniquindio.application.model.Cancion;
 import org.springframework.stereotype.Repository;
 
 import java.io.*;
-import java.util.LinkedList;
-import java.util.List;
+import java.nio.charset.StandardCharsets;
+import java.util.*;
+import java.util.concurrent.ConcurrentHashMap;
 
+/**
+ * Repositorio con persistencia en archivo canciones.txt
+ */
 @Repository
 public class CancionRepository {
 
-    private final String RUTA_ARCHIVO = "src/main/resources/data/canciones.txt";
-    private List<Cancion> canciones;
+    private final Map<String, Cancion> canciones = new ConcurrentHashMap<>();
+    private static final String FILE_PATH = "src/main/resources/data/canciones.txt";
 
     public CancionRepository() {
-        this.canciones = new LinkedList<>();
-        cargarCanciones();
+        cargarCancionesDesdeArchivo();
     }
 
-    /**
-     * 🔹 Devuelve la lista completa de canciones en memoria.
-     */
-    public List<Cancion> listarCanciones() {
-        return canciones;
-    }
-
-    /**
-     * 🔹 Busca una canción por su ID.
-     */
+    // ✅ Buscar canción por ID
     public Cancion buscarPorId(String id) {
-        return canciones.stream()
-                .filter(c -> c.getId().equals(id))
-                .findFirst()
-                .orElse(null);
+        return canciones.get(id);
     }
 
-    /**
-     * 🔹 Agrega una nueva canción (si no existe ya).
-     * También la guarda en el archivo.
-     */
-    public boolean agregarCancion(Cancion nuevaCancion) {
-        if (buscarPorId(nuevaCancion.getId()) != null) {
-            return false; // Ya existe una canción con ese ID
-        }
-        canciones.add(nuevaCancion);
+    // ✅ Listar todas las canciones
+    public Collection<Cancion> listarCanciones() {
+        return canciones.values();
+    }
+
+    // ✅ Agregar canción
+    public void agregarCancion(Cancion cancion) {
+        canciones.put(cancion.getId(), cancion);
+        guardarCancionesEnArchivo();
+    }
+
+    // ✅ Actualizar canción
+    public boolean actualizarCancion(Cancion cancion) {
+        if (!canciones.containsKey(cancion.getId())) return false;
+        canciones.put(cancion.getId(), cancion);
         guardarCancionesEnArchivo();
         return true;
     }
 
-    /**
-     * 🔹 Elimina una canción por su ID.
-     */
+    // ✅ Eliminar canción
     public boolean eliminarCancion(String id) {
-        Cancion encontrada = buscarPorId(id);
-        if (encontrada != null) {
-            canciones.remove(encontrada);
+        Cancion eliminada = canciones.remove(id);
+        if (eliminada != null) {
             guardarCancionesEnArchivo();
             return true;
         }
         return false;
     }
 
-    /**
-     * 🔹 Actualiza una canción existente.
-     * Busca por ID y reemplaza sus datos con los del objeto recibido.
-     */
-    public boolean actualizarCancion(Cancion cancionActualizada) {
-        Cancion existente = buscarPorId(cancionActualizada.getId());
-        if (existente != null) {
-            canciones.remove(existente);
-            canciones.add(cancionActualizada);
-            guardarCancionesEnArchivo();
-            return true;
-        }
-        return false;
-    }
-
-    /**
-     * 🔹 Carga las canciones desde el archivo .txt.
-     */
-    private void cargarCanciones() {
-        File archivo = new File(RUTA_ARCHIVO);
+    // 🔹 Cargar canciones desde archivo
+    private void cargarCancionesDesdeArchivo() {
+        File archivo = new File(FILE_PATH);
         if (!archivo.exists()) return;
 
-        try (BufferedReader br = new BufferedReader(new FileReader(archivo))) {
+        try (BufferedReader br = new BufferedReader(
+                new InputStreamReader(new FileInputStream(archivo), StandardCharsets.UTF_8))) {
             String linea;
             while ((linea = br.readLine()) != null) {
-                Cancion cancion = Cancion.fromString(linea);
-                if (cancion != null) {
-                    canciones.add(cancion);
+                String[] partes = linea.split(";");
+                if (partes.length == 6) {
+                    String id = partes[0];
+                    String titulo = partes[1];
+                    String artista = partes[2];
+                    String genero = partes[3];
+                    int anio = Integer.parseInt(partes[4]);
+                    double duracion = Double.parseDouble(partes[5].replace(",", "."));
+                    canciones.put(id, new Cancion(id, titulo, artista, genero, anio, duracion));
                 }
             }
         } catch (IOException e) {
-            e.printStackTrace();
+            System.err.println("❌ Error al cargar canciones: " + e.getMessage());
         }
     }
 
-    /**
-     * 🔹 Guarda todas las canciones en el archivo .txt.
-     */
+    // 💾 Guardar canciones en archivo
     private void guardarCancionesEnArchivo() {
-        try (BufferedWriter bw = new BufferedWriter(new FileWriter(RUTA_ARCHIVO))) {
-            for (Cancion c : canciones) {
-                bw.write(c.toString());
+        try (BufferedWriter bw = new BufferedWriter(
+                new OutputStreamWriter(new FileOutputStream(FILE_PATH), StandardCharsets.UTF_8))) {
+
+            for (Cancion c : canciones.values()) {
+                bw.write(String.format("%s;%s;%s;%s;%d;%.2f",
+                        c.getId(), c.getTitulo(), c.getArtista(),
+                        c.getGenero(), c.getAnio(), c.getDuracion()));
                 bw.newLine();
             }
+
         } catch (IOException e) {
-            e.printStackTrace();
+            System.err.println("❌ Error al guardar canciones: " + e.getMessage());
         }
     }
 
-    /**
-     * 🔹 Busca canciones por título o género (o ambos).
-     * Si no se pasa ningún parámetro, devuelve todas las canciones.
-     */
     public List<Cancion> buscarPorFiltro(String titulo, String genero) {
-        return canciones.stream()
-                .filter(c -> {
-                    boolean coincideTitulo = (titulo == null || titulo.isEmpty()) ||
-                            c.getTitulo().toLowerCase().contains(titulo.toLowerCase());
-                    boolean coincideGenero = (genero == null || genero.isEmpty()) ||
-                            c.getGenero().toLowerCase().contains(genero.toLowerCase());
-                    return coincideTitulo && coincideGenero;
-                })
-                .toList();
+        List<Cancion> resultado = new ArrayList<>();
+
+        for (Cancion c : canciones.values()) {
+            boolean coincideTitulo = (titulo == null || c.getTitulo().toLowerCase().contains(titulo.toLowerCase()));
+            boolean coincideGenero = (genero == null || c.getGenero().toLowerCase().contains(genero.toLowerCase()));
+
+            if (coincideTitulo && coincideGenero) {
+                resultado.add(c);
+            }
+        }
+        return resultado;
     }
 }
