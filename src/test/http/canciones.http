@@ -1,4 +1,15 @@
-//
+### Agregar nueva cancion
+POST http://localhost:8080/api/canciones
+Content-Type: application/json
+
+{
+  "id": "5",
+  "titulo": "Imagine",
+  "artista": "Metallica",
+  "genero": "Rock",
+  "anio": 1991,
+  "duracion": 6.28
+}
 
 ### 🎵 Listar todas las canciones
 GET http://localhost:8080/api/canciones

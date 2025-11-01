@@ -1,0 +1,44 @@
+### 🧍 Registrar un nuevo usuario
+POST http://localhost:8080/api/usuarios/registrar?username=juan&password=123&nombre=Juan Jose
+Content-Type: application/json
+
+###
+
+### 🔐 Iniciar sesión
+POST http://localhost:8080/api/usuarios/login?username=juan&password=123
+Content-Type: application/json
+
+###
+
+### 📋 Listar todos los usuarios
+GET http://localhost:8080/api/usuarios/listar
+Content-Type: application/json
+
+###
+
+### 🎵 Agregar canción a favoritos
+# ⚠️ Asegúrate de que exista una canción con id=1 en canciones.txt
+POST http://localhost:8080/api/usuarios/juan/favoritos/agregar?idCancion=2
+Content-Type: application/json
+
+###
+
+### 🎵 Ver lista de canciones favoritas de un usuario
+GET http://localhost:8080/api/usuarios/juan/favoritos
+Content-Type: application/json
+
+###
+
+### 🗑️ Eliminar una canción de favoritos
+DELETE http://localhost:8080/api/usuarios/juan/favoritos/eliminar?idCancion=1
+Content-Type: application/json
+
+
+### 1️⃣ Agregar canción a favoritos
+POST http://localhost:8080/api/usuarios/nico/favoritos/agregar?idCancion=1
+
+### 2️⃣ Ver favoritos (para confirmar)
+GET http://localhost:8080/api/usuarios/juan/favoritos
+
+### 3️⃣ Reinicia el servidor y vuelve a hacer:
+GET http://localhost:8080/api/usuarios/nico/favoritos
