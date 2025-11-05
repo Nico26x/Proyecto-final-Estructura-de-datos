@@ -2,10 +2,16 @@ package co.edu.uniquindio.application.controller;
 
 import co.edu.uniquindio.application.model.Cancion;
 import co.edu.uniquindio.application.model.Usuario;
+import co.edu.uniquindio.application.security.JwtUtil;
 import co.edu.uniquindio.application.service.UsuarioService;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.Collection;
+import java.util.HashMap;
+import java.util.Map;
 
 /**
  * Controlador REST para la gestión de usuarios y sus favoritos.
@@ -17,13 +23,16 @@ import java.util.Collection;
 public class UsuarioController {
 
     private final UsuarioService usuarioService;
+    private final JwtUtil jwtUtil;
 
-    // ✅ Inyección de dependencias por constructor
-    public UsuarioController(UsuarioService usuarioService) {
+    // ✅ Inyección de dependencias
+    @Autowired
+    public UsuarioController(UsuarioService usuarioService, JwtUtil jwtUtil) {
         this.usuarioService = usuarioService;
+        this.jwtUtil = jwtUtil;
     }
 
-    // 📌 Registrar usuario
+    // 📌 Registrar usuario (ahora con contraseña encriptada)
     @PostMapping("/registrar")
     public String registrar(@RequestParam String username,
                             @RequestParam String password,
@@ -36,15 +45,42 @@ public class UsuarioController {
         }
     }
 
-    // 📌 Iniciar sesión
+    // 📌 Iniciar sesión (genera y devuelve el JWT)
     @PostMapping("/login")
-    public Usuario login(@RequestParam String username,
-                         @RequestParam String password) {
-        Usuario usuario = usuarioService.login(username, password);
+    public ResponseEntity<Map<String, Object>> login(@RequestParam String username,
+                                                     @RequestParam String password) {
+        Map<String, Object> respuesta = new HashMap<>();
+        Usuario usuario = usuarioService.autenticarUsuario(username, password);
+
         if (usuario != null) {
-            return usuario;
+            String token = jwtUtil.generarToken(username);
+            usuarioService.iniciarSesion(usuario);
+
+            respuesta.put("mensaje", "✅ Inicio de sesión exitoso");
+            respuesta.put("token", token);
+            respuesta.put("usuario", usuario);
+
+            // Devuelve 200 OK con JSON
+            return ResponseEntity.ok(respuesta);
+        } else {
+            respuesta.put("error", "❌ Credenciales incorrectas");
+
+            // Devuelve 401 Unauthorized con JSON
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(respuesta);
         }
-        throw new RuntimeException("❌ Credenciales incorrectas");
+    }
+
+    // 📌 Cerrar sesión
+    @PostMapping("/logout")
+    public String cerrarSesion() {
+        usuarioService.logout();
+        return "👋 Sesión cerrada correctamente.";
+    }
+
+    // 📌 Obtener sesión actual
+    @GetMapping("/sesion")
+    public Usuario obtenerSesion() {
+        return usuarioService.obtenerUsuarioActual();
     }
 
     // 📌 Listar usuarios
@@ -56,20 +92,68 @@ public class UsuarioController {
     // 🎵 FAVORITOS — Agregar canción
     @PostMapping("/{username}/favoritos/agregar")
     public String agregarFavorito(@PathVariable String username,
-                                  @RequestParam String idCancion) {
+                                  @RequestParam String idCancion,
+                                  @RequestHeader(value = "Authorization", required = false) String authHeader) {
+
+        if (authHeader == null || !authHeader.startsWith("Bearer ")) {
+            return "🚫 Debes enviar un token JWT válido.";
+        }
+
+        String token = authHeader.substring(7);
+        if (!jwtUtil.validarToken(token)) {
+            return "🚫 Token inválido o expirado.";
+        }
+
         return usuarioService.agregarFavorito(username, idCancion);
     }
 
     // 🎵 FAVORITOS — Eliminar canción
     @DeleteMapping("/{username}/favoritos/eliminar")
     public String eliminarFavorito(@PathVariable String username,
-                                   @RequestParam String idCancion) {
+                                   @RequestParam String idCancion,
+                                   @RequestHeader(value = "Authorization", required = false) String authHeader) {
+
+        if (authHeader == null || !authHeader.startsWith("Bearer ")) {
+            return "🚫 Debes enviar un token JWT válido.";
+        }
+
+        String token = authHeader.substring(7);
+        if (!jwtUtil.validarToken(token)) {
+            return "🚫 Token inválido o expirado.";
+        }
+
         return usuarioService.eliminarFavorito(username, idCancion);
     }
 
     // 🎵 FAVORITOS — Listar canciones favoritas
     @GetMapping("/{username}/favoritos")
-    public Collection<Cancion> listarFavoritos(@PathVariable String username) {
+    public Collection<Cancion> listarFavoritos(@PathVariable String username,
+                                               @RequestHeader(value = "Authorization", required = false) String authHeader) {
+
+        if (authHeader == null || !authHeader.startsWith("Bearer ")) {
+            throw new RuntimeException("🚫 Debes enviar un token JWT válido.");
+        }
+
+        String token = authHeader.substring(7);
+        if (!jwtUtil.validarToken(token)) {
+            throw new RuntimeException("🚫 Token inválido o expirado.");
+        }
+
         return usuarioService.listarFavoritos(username);
     }
+
+    // ✏️ Actualizar nombre del usuario
+    @PutMapping("/{username}/actualizar-nombre")
+    public String actualizarNombre(@PathVariable String username,
+                                   @RequestParam String nuevoNombre) {
+        return usuarioService.actualizarNombre(username, nuevoNombre);
+    }
+
+    // 🔒 Cambiar contraseña del usuario
+    @PutMapping("/{username}/cambiar-password")
+    public String cambiarPassword(@PathVariable String username,
+                                  @RequestParam String nuevaPassword) {
+        return usuarioService.cambiarPassword(username, nuevaPassword);
+    }
+
 }

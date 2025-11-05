@@ -1,5 +1,7 @@
 package co.edu.uniquindio.application.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Objects;
@@ -7,7 +9,10 @@ import java.util.Objects;
 public class Usuario {
 
     private String username;
+
+    @JsonIgnore
     private String password;
+
     private String nombre;
     private List<Cancion> listaFavoritos;
 

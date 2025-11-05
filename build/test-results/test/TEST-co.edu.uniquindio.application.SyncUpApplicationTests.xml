@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testsuite name="co.edu.uniquindio.application.SyncUpApplicationTests" tests="1" skipped="0" failures="0" errors="0" timestamp="2025-11-05T03:48:38.412Z" hostname="NICHOPC" time="0.543">
+  <properties/>
+  <testcase name="contextLoads()" classname="co.edu.uniquindio.application.SyncUpApplicationTests" time="0.543"/>
+  <system-out><![CDATA[22:48:36.649 [Test worker] INFO org.springframework.test.context.support.AnnotationConfigContextLoaderUtils -- Could not detect default configuration classes for test class [co.edu.uniquindio.application.SyncUpApplicationTests]: SyncUpApplicationTests does not declare any static, non-private, non-final, nested classes annotated with @Configuration.
+22:48:36.754 [Test worker] INFO org.springframework.boot.test.context.SpringBootTestContextBootstrapper -- Found @SpringBootConfiguration co.edu.uniquindio.application.SyncUpApplication for test class co.edu.uniquindio.application.SyncUpApplicationTests
+
+  .   ____          _            __ _ _
+ /\\ / ___'_ __ _ _(_)_ __  __ _ \ \ \ \
+( ( )\___ | '_ | '_| | '_ \/ _` | \ \ \ \
+ \\/  ___)| |_)| | | | | || (_| |  ) ) ) )
+  '  |____| .__|_| |_|_| |_\__, | / / / /
+ =========|_|==============|___/=/_/_/_/
+
+ :: Spring Boot ::                (v3.5.6)
+
+2025-11-04T22:48:37.152-05:00  INFO 1380 --- [demo] [    Test worker] c.e.u.a.SyncUpApplicationTests           : Starting SyncUpApplicationTests using Java 21.0.8 with PID 1380 (started by nbeta in C:\Users\nbeta\OneDrive\Documentos\Proyecto-final-Estructura-de-datos)
+2025-11-04T22:48:37.153-05:00  INFO 1380 --- [demo] [    Test worker] c.e.u.a.SyncUpApplicationTests           : No active profile set, falling back to 1 default profile: "default"
+2025-11-04T22:48:38.100-05:00  INFO 1380 --- [demo] [    Test worker] r$InitializeUserDetailsManagerConfigurer : Global AuthenticationManager configured with UserDetailsService bean with name customUserDetailsService
+2025-11-04T22:48:38.398-05:00  INFO 1380 --- [demo] [    Test worker] c.e.u.a.SyncUpApplicationTests           : Started SyncUpApplicationTests in 1.483 seconds (process running for 2.86)
+]]></system-out>
+  <system-err><![CDATA[Mockito is currently self-attaching to enable the inline-mock-maker. This will no longer work in future releases of the JDK. Please add Mockito as an agent to your build as described in Mockito's documentation: https://javadoc.io/doc/org.mockito/mockito-core/latest/org.mockito/org/mockito/Mockito.html#0.3
+WARNING: A Java agent has been loaded dynamically (C:\Users\nbeta\.gradle\caches\modules-2\files-2.1\net.bytebuddy\byte-buddy-agent\1.17.7\fbf3d6d649ed37fc9e9c59480a05be0a26e3c2da\byte-buddy-agent-1.17.7.jar)
+WARNING: If a serviceability tool is in use, please run with -XX:+EnableDynamicAgentLoading to hide this warning
+WARNING: If a serviceability tool is not in use, please run with -Djdk.instrument.traceUsage for more information
+WARNING: Dynamic loading of agents will be disallowed by default in a future release
+]]></system-err>
+</testsuite>

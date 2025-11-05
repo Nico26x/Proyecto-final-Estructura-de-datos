@@ -1,44 +1,69 @@
-### 🧍 Registrar un nuevo usuario
-POST http://localhost:8080/api/usuarios/registrar?username=juan&password=123&nombre=Juan Jose
+### 👤 REGISTRAR NUEVO USUARIO
+POST http://localhost:8080/api/usuarios/registrar?username=deivid&password=123&nombre=Deivid
 Content-Type: application/json
 
 ###
 
-### 🔐 Iniciar sesión
-POST http://localhost:8080/api/usuarios/login?username=juan&password=123
+### 🔑 INICIAR SESIÓN (Genera token JWT)
+POST http://localhost:8080/api/usuarios/login?username=deivid&password=gas
 Content-Type: application/json
+
+> {% client.global.set("token", JSON.parse(response.body).token); %}
 
 ###
 
-### 📋 Listar todos los usuarios
+### 📋 LISTAR USUARIOS (requiere token)
 GET http://localhost:8080/api/usuarios/listar
+Authorization: Bearer {{token}}
+Accept: application/json
+
+###
+
+### 🎵 AGREGAR CANCIÓN A FAVORITOS
+POST http://localhost:8080/api/usuarios/deivid/favoritos/agregar?idCancion=3
+Authorization: Bearer {{token}}
 Content-Type: application/json
 
 ###
 
-### 🎵 Agregar canción a favoritos
-# ⚠️ Asegúrate de que exista una canción con id=1 en canciones.txt
-POST http://localhost:8080/api/usuarios/juan/favoritos/agregar?idCancion=2
-Content-Type: application/json
-
-###
-
-### 🎵 Ver lista de canciones favoritas de un usuario
-GET http://localhost:8080/api/usuarios/juan/favoritos
-Content-Type: application/json
-
-###
-
-### 🗑️ Eliminar una canción de favoritos
-DELETE http://localhost:8080/api/usuarios/juan/favoritos/eliminar?idCancion=1
-Content-Type: application/json
-
-
-### 1️⃣ Agregar canción a favoritos
-POST http://localhost:8080/api/usuarios/nico/favoritos/agregar?idCancion=1
-
-### 2️⃣ Ver favoritos (para confirmar)
-GET http://localhost:8080/api/usuarios/juan/favoritos
-
-### 3️⃣ Reinicia el servidor y vuelve a hacer:
+### 🎵 LISTAR FAVORITOS DE UN USUARIO
 GET http://localhost:8080/api/usuarios/nico/favoritos
+Authorization: Bearer {{token}}
+Accept: application/json
+
+###
+
+### 🗑️ ELIMINAR CANCIÓN DE FAVORITOS
+DELETE http://localhost:8080/api/usuarios/nico/favoritos/eliminar?idCancion=1
+Authorization: Bearer {{token}}
+Content-Type: application/json
+
+###
+
+### ✏️ ACTUALIZAR NOMBRE DE USUARIO
+PUT http://localhost:8080/api/usuarios/deivid/actualizar-nombre?nuevoNombre=Deivid%20Mateo
+Authorization: Bearer {{token}}
+Content-Type: application/json
+
+###
+
+### 🔐 CAMBIAR CONTRASEÑA
+PUT http://localhost:8080/api/usuarios/deivid/cambiar-password?nuevaPassword=gas
+Authorization: Bearer {{token}}
+Content-Type: application/json
+
+###
+
+### 👀 CONSULTAR USUARIO EN SESIÓN ACTUAL
+GET http://localhost:8080/api/usuarios/sesion
+Authorization: Bearer {{token}}
+Accept: application/json
+
+###
+
+### 🚪 CERRAR SESIÓN
+POST http://localhost:8080/api/usuarios/logout
+Authorization: Bearer {{token}}
+Content-Type: application/json
+
+###

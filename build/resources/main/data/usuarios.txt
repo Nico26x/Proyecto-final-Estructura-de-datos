@@ -1,7 +1,3 @@
-Nico26x;1090;Nicolas;
-nico;123;Nicolas;1
-ana;123;Ana;
-juan;123;Juan Jose;2
-alexxd;123;alex;
-Dm05;123;Deivid;
-username;password;nombre;
+laura;$2a$10$vakD02lSHz.wgep4Dc/DTOm.d..YWVkqTARr5opyZnLFPzdI.nzg.;Laura+Martinez;2
+nico;$2a$10$jrk.cd5m7xrgyVKrdd97aed3pN9AfoOMyg8EUgs3WJS9i4ztXuO..;Nicolas Loaiza;
+juan;$2a$10$WPGlSKewOgrqiEyrk5lqluRdhU40sAf4wenYFvUCjfU0ZHrFDl6aW;Juan Jose;2
