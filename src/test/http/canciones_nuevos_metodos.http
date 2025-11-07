@@ -1,0 +1,68 @@
+### 🎶 AUTOCOMPLETADO DE TÍTULOS
+# Devuelve títulos que comienzan con "Lo"
+GET http://localhost:8080/api/canciones/autocompletar?prefijo=Lo
+Authorization: Bearer {{token}}
+Accept: application/json
+
+###
+
+### 🎵 OBTENER CANCIONES SIMILARES A UNA CANCIÓN
+# Busca canciones similares a la canción con ID=22 (puedes ajustar el ID según tus datos)
+GET http://localhost:8080/api/canciones/22/similares?limite=5
+Authorization: Bearer {{token}}
+Accept: application/json
+
+###
+
+### ➕ AGREGAR CANCIÓN Y ACTUALIZAR GRAFO/AUTOCOMPLETADO
+POST http://localhost:8080/api/canciones
+Authorization: Bearer {{admin_token}}
+Content-Type: application/json
+
+{
+  "id": "25",
+  "titulo": "Lo Que Pasó Pasó",
+  "artista": "Daddy Yankee",
+  "genero": "Reggaeton",
+  "anio": 2004,
+  "duracion": 3.30
+}
+
+###
+
+### ✏️ ACTUALIZAR CANCIÓN (refresca Trie y Grafo)
+PUT http://localhost:8080/api/canciones/20
+Authorization: Bearer {{admin_token}}
+Content-Type: application/json
+
+{
+  "id": "25",
+  "titulo": "Lo Que Pasó Pasó (Remastered)",
+  "artista": "Daddy Yankee",
+  "genero": "Reggaeton",
+  "anio": 2005,
+  "duracion": 3.31
+}
+
+###
+
+### 🗑️ ELIMINAR CANCIÓN (refresca Trie y Grafo)
+DELETE http://localhost:8080/api/canciones/25
+Authorization: Bearer {{admin_token}}
+Content-Type: application/json
+
+###
+
+### 📂 CARGAR CANCIONES MASIVAMENTE (actualiza Trie y Grafo)
+POST http://localhost:8080/api/canciones/cargar
+Authorization: Bearer {{admin_token}}
+Content-Type: multipart/form-data; boundary=boundary
+
+--boundary
+Content-Disposition: form-data; name="archivo"; filename="canciones_nuevas.txt"
+Content-Type: text/plain
+
+15;Diomedez;Kris R;Urbano;2025;3.00
+16;Llamado de Emergencia;Daddy Yankee;Reggaeton;2008;3.45
+17;Love Story;Taylor Swift;Pop;2008;3.55
+--boundary--

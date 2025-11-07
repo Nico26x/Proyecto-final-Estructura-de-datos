@@ -14,12 +14,14 @@ public class Usuario {
     private String password;
 
     private String nombre;
+    private Rol rol;
     private List<Cancion> listaFavoritos;
 
-    public Usuario(String username, String password, String nombre) {
+    public Usuario(String username, String password, String nombre, Rol rol) {
         this.username = username;
         this.password = password;
         this.nombre = nombre;
+        this.rol = rol;
         this.listaFavoritos = new LinkedList<>();
     }
 
@@ -27,10 +29,12 @@ public class Usuario {
     public String getUsername() { return username; }
     public String getPassword() { return password; }
     public String getNombre() { return nombre; }
+    public Rol getRol() { return rol; }
     public List<Cancion> getListaFavoritos() { return listaFavoritos; }
 
     public void setNombre(String nombre) { this.nombre = nombre; }
     public void setPassword(String password) { this.password = password; }
+    public void serRol(Rol rol) { this.rol = rol; }
 
     // ✅ Métodos de favoritos
     public boolean agregarFavorito(Cancion cancion) {

@@ -1,0 +1,18 @@
+### 🧑‍💻 REGISTRAR ADMIN
+POST http://localhost:8080/api/usuarios/registrar?username=admin&password=admin123&nombre=Administrador
+Content-Type: application/json
+
+###
+
+### 🔑 INICIAR SESIÓN COMO ADMIN
+POST http://localhost:8080/api/usuarios/login?username=admin&password=admin123
+Content-Type: application/json
+
+> {% client.global.set("admin_token", response.body.token); %}
+
+###
+
+### 📋 LISTAR USUARIOS (Solo ADMIN)
+GET http://localhost:8080/api/usuarios/listar
+Authorization: Bearer {{admin_token}}
+Accept: application/json

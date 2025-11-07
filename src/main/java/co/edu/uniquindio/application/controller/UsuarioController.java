@@ -53,7 +53,7 @@ public class UsuarioController {
         Usuario usuario = usuarioService.autenticarUsuario(username, password);
 
         if (usuario != null) {
-            String token = jwtUtil.generarToken(username);
+            String token = jwtUtil.generarToken(username, usuario.getRol().name());
             usuarioService.iniciarSesion(usuario);
 
             respuesta.put("mensaje", "✅ Inicio de sesión exitoso");
@@ -79,15 +79,38 @@ public class UsuarioController {
 
     // 📌 Obtener sesión actual
     @GetMapping("/sesion")
-    public Usuario obtenerSesion() {
-        return usuarioService.obtenerUsuarioActual();
+    public ResponseEntity<?> obtenerSesion(@RequestHeader("Authorization") String authHeader) {
+        if (authHeader == null || !authHeader.startsWith("Bearer ")) {
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED)
+                    .body(Map.of("error", "🚫 Token no proporcionado"));
+        }
+
+        String token = authHeader.substring(7);
+        String username = jwtUtil.obtenerUsername(token);
+
+        Usuario usuario = usuarioService.buscarPorUsername(username);
+        if (usuario == null) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND)
+                    .body(Map.of("error", "❌ Usuario no encontrado"));
+        }
+
+        return ResponseEntity.ok(usuario);
     }
+
 
     // 📌 Listar usuarios
     @GetMapping("/listar")
-    public Collection<Usuario> listar() {
-        return usuarioService.listarUsuarios();
+    public ResponseEntity<?> listar(@RequestHeader("Authorization") String token) {
+        if (!jwtUtil.validarToken(token.replace("Bearer ", ""))) {
+            return ResponseEntity.status(401).body("❌ Token inválido");
+        }
+        String rol = jwtUtil.obtenerRol(token.replace("Bearer ", ""));
+        if (!"ADMIN".equals(rol)) {
+            return ResponseEntity.status(403).body("🚫 Acceso denegado: solo administradores");
+        }
+        return ResponseEntity.ok(usuarioService.listarUsuarios());
     }
+
 
     // 🎵 FAVORITOS — Agregar canción
     @PostMapping("/{username}/favoritos/agregar")

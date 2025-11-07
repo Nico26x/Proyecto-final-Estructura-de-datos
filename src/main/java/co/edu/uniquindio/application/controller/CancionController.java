@@ -2,6 +2,7 @@ package co.edu.uniquindio.application.controller;
 
 import co.edu.uniquindio.application.model.Cancion;
 import co.edu.uniquindio.application.service.CancionService;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -101,6 +102,18 @@ public class CancionController {
         } catch (Exception e) {
             return "❌ Error al cargar canciones: " + e.getMessage();
         }
+    }
+
+    @GetMapping("/autocompletar")
+    public List<String> autocompletar(@RequestParam String prefijo) {
+        return cancionService.autocompletarTitulo(prefijo);
+    }
+
+    @GetMapping("/{id}/similares")
+    public ResponseEntity<List<Cancion>> obtenerSimilares(@PathVariable String id,
+                                                          @RequestParam(defaultValue = "5") int limite) {
+        List<Cancion> similares = cancionService.obtenerCancionesSimilares(id, limite);
+        return ResponseEntity.ok(similares);
     }
 
 }

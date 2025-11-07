@@ -5,10 +5,10 @@ Content-Type: application/json
 ###
 
 ### 🔑 INICIAR SESIÓN (Genera token JWT)
-POST http://localhost:8080/api/usuarios/login?username=deivid&password=gas
+POST http://localhost:8080/api/usuarios/login?username=deivid&password=123
 Content-Type: application/json
 
-> {% client.global.set("token", JSON.parse(response.body).token); %}
+> {% client.global.set("token", response.body.token || JSON.parse(response.body).token); %}
 
 ###
 
@@ -34,7 +34,7 @@ Accept: application/json
 ###
 
 ### 🗑️ ELIMINAR CANCIÓN DE FAVORITOS
-DELETE http://localhost:8080/api/usuarios/nico/favoritos/eliminar?idCancion=1
+DELETE http://localhost:8080/api/usuarios/deivid/favoritos/eliminar?idCancion=3
 Authorization: Bearer {{token}}
 Content-Type: application/json
 

@@ -1,3 +1,2 @@
-laura;$2a$10$vakD02lSHz.wgep4Dc/DTOm.d..YWVkqTARr5opyZnLFPzdI.nzg.;Laura+Martinez;2
-nico;$2a$10$jrk.cd5m7xrgyVKrdd97aed3pN9AfoOMyg8EUgs3WJS9i4ztXuO..;Nicolas Loaiza;
-juan;$2a$10$WPGlSKewOgrqiEyrk5lqluRdhU40sAf4wenYFvUCjfU0ZHrFDl6aW;Juan Jose;2
+admin;$2a$10$Tb9ktjIlotHFDlFyDMVxleat.Jm/MUJnsCPp/8pUUriQ6v.qa0LTG;Administrador;ADMIN;
+deivid;$2a$10$uu/SCjvadvpR3W9HlZnqOOXcFYttZaMmnHtg80dtpeUv4A3jX7L12;Deivid;USER;

@@ -1,21 +1,25 @@
 ### 🎧 BÚSQUEDA AVANZADA: por título y género con AND
 GET http://localhost:8080/api/canciones/buscar/avanzado?titulo=love&genero=pop&op=AND
+Authorization: Bearer {{token}}
 Content-Type: application/json
 
 ###
 
 ### 🎸 BÚSQUEDA AVANZADA: por artista y año con OR
 GET http://localhost:8080/api/canciones/buscar/avanzado?artista=beatles&anioFrom=1960&anioTo=1970&op=OR
+Authorization: Bearer {{token}}
 Content-Type: application/json
 
 ###
 
 ### 🔎 BÚSQUEDA AVANZADA: solo por rango de años
 GET http://localhost:8080/api/canciones/buscar/avanzado?anioFrom=1990&anioTo=2025
+Authorization: Bearer {{token}}
 Content-Type: application/json
 
 ###
 
 ### 🧠 BÚSQUEDA AVANZADA: mezcla de criterios con OR
 GET http://localhost:8080/api/canciones/buscar/avanzado?titulo=love&genero=rock&artista=queen&op=OR
+Authorization: Bearer {{token}}
 Content-Type: application/json

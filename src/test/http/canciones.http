@@ -1,17 +1,20 @@
 ### 🎵 LISTAR TODAS LAS CANCIONES
 GET http://localhost:8080/api/canciones
+Authorization: Bearer {{token}}
 Content-Type: application/json
 
 ###
 
 ### 🔎 BUSCAR CANCIÓN POR ID
 GET http://localhost:8080/api/canciones/2
+Authorization: Bearer {{token}}
 Content-Type: application/json
 
 ###
 
 ### ➕ AGREGAR UNA NUEVA CANCIÓN
 POST http://localhost:8080/api/canciones
+Authorization: Bearer {{token}}
 Content-Type: application/json
 
 {
@@ -23,17 +26,19 @@ Content-Type: application/json
   "duracion": 4.03
 }
 
+###
 
 ### ➕ AGREGAR UNA NUEVA CANCIÓN
 POST http://localhost:8080/api/canciones
+Authorization: Bearer {{token}}
 Content-Type: application/json
 
 {
-  "id": "11",
-  "titulo": "Yogurcito",
-  "artista": "Blessd",
-  "genero": "Urbano",
-  "anio": 2024,
+  "id": "20",
+  "titulo": "Que me perdone",
+  "artista": "Combinacion vallenata",
+  "genero": "Vallenato",
+  "anio": 2005,
   "duracion": 3.26
 }
 
@@ -41,6 +46,7 @@ Content-Type: application/json
 
 ### ✏️ ACTUALIZAR UNA CANCIÓN EXISTENTE
 PUT http://localhost:8080/api/canciones/10
+Authorization: Bearer {{token}}
 Content-Type: application/json
 
 {
@@ -56,6 +62,7 @@ Content-Type: application/json
 
 ### 🗑️ ELIMINAR UNA CANCIÓN POR ID
 DELETE http://localhost:8080/api/canciones/10
+Authorization: Bearer {{token}}
 Content-Type: application/json
 
 ###
@@ -63,6 +70,7 @@ Content-Type: application/json
 ### 🔍 BUSCAR CANCIONES POR TÍTULO
 # Devuelve todas las canciones cuyo título contenga la palabra "Love"
 GET http://localhost:8080/api/canciones/buscar?titulo=Love
+Authorization: Bearer {{token}}
 Content-Type: application/json
 
 ###
@@ -70,6 +78,7 @@ Content-Type: application/json
 ### 🔍 BUSCAR CANCIONES POR GÉNERO
 # Devuelve todas las canciones cuyo género contenga "Rock"
 GET http://localhost:8080/api/canciones/buscar?genero=Rock
+Authorization: Bearer {{token}}
 Content-Type: application/json
 
 ###
@@ -77,27 +86,82 @@ Content-Type: application/json
 ### 🔍 BUSCAR CANCIONES POR TÍTULO Y GÉNERO (filtro combinado)
 # Lógica AND: títulos que contengan "Love" Y género "Pop"
 GET http://localhost:8080/api/canciones/buscar?titulo=Love&genero=Pop
+Authorization: Bearer {{token}}
 Content-Type: application/json
+
+###
 
 ### 🔎 BÚSQUEDA AVANZADA - AND (por defecto)
 GET http://localhost:8080/api/canciones/buscar/avanzado?titulo=love&genero=pop
+Authorization: Bearer {{token}}
 Content-Type: application/json
 
 ###
 
 ### 🔎 BÚSQUEDA AVANZADA - OR
 GET http://localhost:8080/api/canciones/buscar/avanzado?titulo=imagine&artista=queen&op=OR
+Authorization: Bearer {{token}}
 Content-Type: application/json
 
 ###
 
 ### 🔎 BÚSQUEDA AVANZADA - RANGO AÑOS
 GET http://localhost:8080/api/canciones/buscar/avanzado?anioFrom=1970&anioTo=1980
+Authorization: Bearer {{token}}
 Content-Type: application/json
 
 ###
 
 ### 🔎 BÚSQUEDA AVANZADA - COMBINADA (titulo + artista + rango) con OR
 GET http://localhost:8080/api/canciones/buscar/avanzado?titulo=love&artista=beatles&anioFrom=1960&anioTo=1975&op=OR
+Authorization: Bearer {{token}}
 Content-Type: application/json
 
+### ➕ AGREGAR CANCIONES SIMILARES
+POST http://localhost:8080/api/canciones
+Authorization: Bearer {{token}}
+Content-Type: application/json
+
+{
+  "id": "21",
+  "titulo": "Shape of You",
+  "artista": "Ed Sheeran",
+  "genero": "Pop",
+  "anio": 2017,
+  "duracion": 3.53
+}
+
+###
+
+POST http://localhost:8080/api/canciones
+Authorization: Bearer {{token}}
+Content-Type: application/json
+
+{
+  "id": "22",
+  "titulo": "Perfect",
+  "artista": "Ed Sheeran",
+  "genero": "Pop",
+  "anio": 2017,
+  "duracion": 4.23
+}
+
+###
+
+POST http://localhost:8080/api/canciones
+Authorization: Bearer {{token}}
+Content-Type: application/json
+
+{
+  "id": "23",
+  "titulo": "Photograph",
+  "artista": "Ed Sheeran",
+  "genero": "Pop",
+  "anio": 2015,
+  "duracion": 4.17
+}
+
+### 🎵 OBTENER CANCIONES SIMILARES
+GET http://localhost:8080/api/canciones/5/similares?limite=3
+Authorization: Bearer {{token}}
+Accept: application/json

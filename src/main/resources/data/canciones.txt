@@ -1,10 +1,15 @@
 11;Hotel California;Eagles;Rock;1976;6,30
-1;Imagine;John Lennon;Rock;1971;3,10
+22;Perfect;Ed Sheeran;Pop;2017;4,23
+23;Photograph;Ed Sheeran;Pop;2015;4,17
 12;Billie Jean;Michael Jackson;Pop;1983;4,54
-2;Bohemian Rhapsody;Queen;Rock;1975;5,55
 13;Yogurcito;Blessd;Urbano;2024;4,03
-3;Nothing Else Matters;Metallica;Rock;1991;6,28
 14;Me parte el corazon;Daniel Calderon;Vallenato;2006;6,30
-4;Love Story;Taylor Swift;Pop;2008;3,55
 15;GataG;Ryan Castro;Urbano;2023;4,54
+16;Diomedez;Kris R;Urbano;2025;3,00
+1;Imagine;John Lennon;Rock;1971;3,10
+2;Bohemian Rhapsody;Queen;Rock;1975;5,55
+3;Nothing Else Matters;Metallica;Rock;1991;6,28
+4;Love Story;Taylor Swift;Pop;2008;3,55
+20;Lo Que Pasó Pasó (Remastered);Daddy Yankee;Reggaeton;2005;3,31
 10;Viva la Vida;Coldplay;Pop;2008;4,03
+21;Shape of You;Ed Sheeran;Pop;2017;3,53

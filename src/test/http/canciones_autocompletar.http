@@ -1,0 +1,4 @@
+### ✨ AUTOCOMPLETADO DE TÍTULOS
+GET http://localhost:8080/api/canciones/autocompletar?prefijo=Q
+Authorization: Bearer {{token}}
+Accept: application/json

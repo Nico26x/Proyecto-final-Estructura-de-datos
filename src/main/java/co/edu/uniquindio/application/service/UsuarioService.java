@@ -1,10 +1,12 @@
 package co.edu.uniquindio.application.service;
 
 import co.edu.uniquindio.application.model.Cancion;
+import co.edu.uniquindio.application.model.Rol;
 import co.edu.uniquindio.application.model.Usuario;
 import co.edu.uniquindio.application.repository.CancionRepository;
 import co.edu.uniquindio.application.repository.UsuarioRepository;
 import co.edu.uniquindio.application.security.JwtUtil;
+import jakarta.annotation.PostConstruct;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -33,13 +35,23 @@ public class UsuarioService {
         this.passwordEncoder = passwordEncoder;
     }
 
+    @PostConstruct
+    public void inicializarAdmin() {
+        if (usuarioRepository.buscarPorUsername("admin") == null) {
+            String passwordEncriptada = passwordEncoder.encode("admin123");
+            Usuario admin = new Usuario("admin", passwordEncriptada, "Administrador", Rol.ADMIN);
+            usuarioRepository.guardarUsuario(admin);
+            System.out.println("👑 Usuario administrador creado por defecto (admin / admin123)");
+        }
+    }
+
     // ✅ Registrar nuevo usuario con contraseña cifrada
     public boolean registrarUsuario(String username, String password, String nombre) {
         if (usuarioRepository.buscarPorUsername(username) != null) {
             return false;
         }
         String passwordEncriptada = passwordEncoder.encode(password);
-        Usuario usuario = new Usuario(username, passwordEncriptada, nombre);
+        Usuario usuario = new Usuario(username, passwordEncriptada, nombre, Rol.USER); // 👈 asigna USER
         usuarioRepository.guardarUsuario(usuario);
         return true;
     }
@@ -48,7 +60,7 @@ public class UsuarioService {
     public String login(String username, String password) {
         Usuario usuario = usuarioRepository.buscarPorUsername(username);
         if (usuario != null && passwordEncoder.matches(password, usuario.getPassword())) {
-            return jwtUtil.generarToken(username);
+            return jwtUtil.generarToken(username, usuario.getRol().name());
         }
         return null;
     }
@@ -134,5 +146,9 @@ public class UsuarioService {
         usuario.setPassword(passwordEncriptada);
         usuarioRepository.guardarUsuario(usuario);
         return "🔑 Contraseña actualizada correctamente";
+    }
+
+    public Usuario buscarPorUsername(String username) {
+        return usuarioRepository.buscarPorUsername(username);
     }
 }
