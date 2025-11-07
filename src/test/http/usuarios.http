@@ -1,11 +1,19 @@
 ### 👤 REGISTRAR NUEVO USUARIO
-POST http://localhost:8080/api/usuarios/registrar?username=deivid&password=123&nombre=Deivid
+POST http://localhost:8080/api/usuarios/registrar?username=nico&password=123&nombre=Deivid
 Content-Type: application/json
 
 ###
 
 ### 🔑 INICIAR SESIÓN (Genera token JWT)
 POST http://localhost:8080/api/usuarios/login?username=deivid&password=123
+Content-Type: application/json
+
+> {% client.global.set("token", response.body.token || JSON.parse(response.body).token); %}
+
+###
+
+### 🔑 INICIAR SESIÓN (Genera token JWT)
+POST http://localhost:8080/api/usuarios/login?username=nico&password=123
 Content-Type: application/json
 
 > {% client.global.set("token", response.body.token || JSON.parse(response.body).token); %}

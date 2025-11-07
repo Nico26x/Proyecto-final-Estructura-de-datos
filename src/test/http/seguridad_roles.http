@@ -1,0 +1,82 @@
+### 🧍 REGISTRAR USUARIO NORMAL
+POST http://localhost:8080/api/usuarios/registrar?username=user1&password=123&nombre=Usuario Prueba
+Content-Type: application/json
+
+###
+
+### 🔑 LOGIN COMO USUARIO NORMAL
+POST http://localhost:8080/api/usuarios/login?username=user1&password=123
+Content-Type: application/json
+
+> {% client.global.set("user_token", response.body.token); %}
+
+###
+
+### 👑 LOGIN COMO ADMIN
+POST http://localhost:8080/api/usuarios/login?username=admin&password=admin123
+Content-Type: application/json
+
+> {% client.global.set("admin_token", response.body.token); %}
+
+###
+
+### 🧾 VERIFICAR TOKEN DE USUARIO
+GET http://localhost:8080/api/usuarios/sesion
+Authorization: Bearer {{user_token}}
+Accept: application/json
+
+###
+
+### 🧾 VERIFICAR TOKEN DE ADMIN
+GET http://localhost:8080/api/usuarios/sesion
+Authorization: Bearer {{admin_token}}
+Accept: application/json
+
+###
+
+### 🚫 INTENTAR LISTAR USUARIOS CON TOKEN DE USER (DEBE FALLAR 403)
+GET http://localhost:8080/api/usuarios/listar
+Authorization: Bearer {{user_token}}
+Accept: application/json
+
+###
+
+### ✅ LISTAR USUARIOS CON TOKEN DE ADMIN (DEBE FUNCIONAR)
+GET http://localhost:8080/api/usuarios/listar
+Authorization: Bearer {{admin_token}}
+Accept: application/json
+
+###
+
+### 🚫 INTENTAR CARGAR CANCIONES MASIVAMENTE COMO USER (403)
+POST http://localhost:8080/api/canciones/cargar
+Authorization: Bearer {{user_token}}
+Content-Type: multipart/form-data; boundary=boundary
+
+--boundary
+Content-Disposition: form-data; name="archivo"; filename="canciones.txt"
+Content-Type: text/plain
+
+26;Tusa;Karol G;Urbano;2020;3.20
+27;Perfect;Ed Sheeran;Pop;2017;4.25
+28;Shape of You;Ed Sheeran;Pop;2017;4.02
+29;Photograph;Ed Sheeran;Pop;2015;4.19
+--boundary--
+
+###
+
+### ✅ CARGAR CANCIONES MASIVAMENTE COMO ADMIN (200)
+POST http://localhost:8080/api/canciones/cargar
+Authorization: Bearer {{admin_token}}
+Content-Type: multipart/form-data; boundary=boundary
+
+--boundary
+Content-Disposition: form-data; name="archivo"; filename="canciones.txt"
+Content-Type: text/plain
+
+30;Blinding Lights;The Weeknd;Pop;2020;3.21
+31;After Hours;The Weeknd;Pop;2020;4.05
+32;Starboy;The Weeknd;Pop;2016;3.50
+--boundary--
+
+###

@@ -11,6 +11,7 @@ import org.springframework.web.multipart.MultipartFile;
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
 import java.nio.charset.StandardCharsets;
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
@@ -145,4 +146,19 @@ public class CancionService {
         if (origen == null) return List.of();
         return grafoDeSimilitud.obtenerSimilares(origen, limite);
     }
+
+    public List<Cancion> iniciarRadio(String idCancion, int limite) {
+        Cancion origen = cancionRepository.buscarPorId(idCancion);
+        if (origen == null) return List.of();
+
+        List<Cancion> similares = grafoDeSimilitud.obtenerSimilares(origen, limite);
+
+        // Insertar la canción original al inicio de la "cola"
+        List<Cancion> cola = new ArrayList<>();
+        cola.add(origen);
+        cola.addAll(similares);
+
+        return cola;
+    }
+
 }

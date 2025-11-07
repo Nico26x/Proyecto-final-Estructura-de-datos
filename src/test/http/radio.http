@@ -1,0 +1,4 @@
+### 🎧 Iniciar una radio a partir de una canción
+GET http://localhost:8080/api/canciones/26/radio?limite=8
+Authorization: Bearer {{token}}
+Accept: application/json

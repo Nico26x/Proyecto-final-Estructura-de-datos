@@ -18,7 +18,7 @@ public class JwtUtil {
     public String generarToken(String username, String rol) {
         return Jwts.builder()
                 .setSubject(username)
-                .claim("rol", rol) // 👈 incluir rol
+                .claim("rol", rol)
                 .setIssuedAt(new Date())
                 .setExpiration(new Date(System.currentTimeMillis() + EXPIRATION_TIME))
                 .signWith(key, SignatureAlgorithm.HS256)
@@ -52,4 +52,23 @@ public class JwtUtil {
             return false;
         }
     }
+
+    public String obtenerUsernameDelToken(String token) {
+        return Jwts.parserBuilder()
+                .setSigningKey(key)
+                .build()
+                .parseClaimsJws(token)
+                .getBody()
+                .getSubject();
+    }
+
+    public String obtenerRolDelToken(String token) {
+        return Jwts.parserBuilder()
+                .setSigningKey(key)
+                .build()
+                .parseClaimsJws(token)
+                .getBody()
+                .get("rol", String.class);
+    }
+
 }

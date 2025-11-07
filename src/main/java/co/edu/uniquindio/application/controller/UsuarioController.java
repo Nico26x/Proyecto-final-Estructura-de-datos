@@ -9,10 +9,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.Collection;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 /**
  * Controlador REST para la gestión de usuarios y sus favoritos.
@@ -204,6 +201,27 @@ public class UsuarioController {
         }
 
         return ResponseEntity.ok(playlist);
+    }
+
+    @PostMapping("/{username}/seguir/{destino}")
+    public ResponseEntity<String> seguirUsuario(@PathVariable String username, @PathVariable String destino) {
+        return ResponseEntity.ok(usuarioService.seguirUsuario(username, destino));
+    }
+
+    @PostMapping("/{username}/dejarSeguir/{destino}")
+    public ResponseEntity<String> dejarSeguir(@PathVariable String username, @PathVariable String destino) {
+        return ResponseEntity.ok(usuarioService.dejarDeSeguir(username, destino));
+    }
+
+    @GetMapping("/{username}/seguidos")
+    public ResponseEntity<Set<String>> listarSeguidos(@PathVariable String username) {
+        return ResponseEntity.ok(usuarioService.listarSeguidos(username));
+    }
+
+    @GetMapping("/{username}/sugerencias")
+    public ResponseEntity<List<String>> sugerirUsuarios(@PathVariable String username,
+                                                        @RequestParam(defaultValue = "5") int limite) {
+        return ResponseEntity.ok(usuarioService.sugerirUsuarios(username, limite));
     }
 
 }

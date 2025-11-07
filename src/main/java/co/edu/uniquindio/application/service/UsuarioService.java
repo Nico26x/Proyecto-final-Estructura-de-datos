@@ -1,6 +1,7 @@
 package co.edu.uniquindio.application.service;
 
 import co.edu.uniquindio.application.model.Cancion;
+import co.edu.uniquindio.application.model.GrafoSocial;
 import co.edu.uniquindio.application.model.Rol;
 import co.edu.uniquindio.application.model.Usuario;
 import co.edu.uniquindio.application.repository.CancionRepository;
@@ -20,6 +21,7 @@ public class UsuarioService {
     private final UsuarioRepository usuarioRepository;
     private final CancionRepository cancionRepository;
     private final PasswordEncoder passwordEncoder;
+    private final GrafoSocial grafoSocial = new GrafoSocial();
 
     // ✅ Nuevo: referencia al servicio de canciones
     private final CancionService cancionService;
@@ -203,4 +205,35 @@ public class UsuarioService {
                 .filter(Objects::nonNull)
                 .collect(Collectors.toList());
     }
+
+    // 👥 Nuevo: seguir a otro usuario
+    public String seguirUsuario(String username, String destino) {
+        Usuario origen = usuarioRepository.buscarPorUsername(username);
+        Usuario objetivo = usuarioRepository.buscarPorUsername(destino);
+
+        if (origen == null || objetivo == null) return "❌ Usuario no encontrado";
+
+        grafoSocial.agregarUsuario(username);
+        grafoSocial.agregarUsuario(destino);
+
+        boolean exito = grafoSocial.seguirUsuario(username, destino);
+        return exito ? "✅ Ahora sigues a " + destino : "⚠️ No se pudo seguir al usuario.";
+    }
+
+    // 🚫 Nuevo: dejar de seguir
+    public String dejarDeSeguir(String username, String destino) {
+        boolean exito = grafoSocial.dejarDeSeguir(username, destino);
+        return exito ? "🗑️ Has dejado de seguir a " + destino : "⚠️ No seguías a ese usuario.";
+    }
+
+    // 📜 Nuevo: obtener amigos (seguimientos actuales)
+    public Set<String> listarSeguidos(String username) {
+        return grafoSocial.obtenerAmigos(username);
+    }
+
+    // 💡 Nuevo: sugerir usuarios por BFS (RF-008)
+    public List<String> sugerirUsuarios(String username, int limite) {
+        return grafoSocial.sugerirUsuarios(username, limite);
+    }
+
 }

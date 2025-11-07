@@ -1,0 +1,22 @@
+### Crear relaciones de seguimiento
+POST http://localhost:8080/api/usuarios/nico/seguir/deivid
+Authorization: Bearer {{token}}
+Content-Type: application/json
+
+###
+
+POST http://localhost:8080/api/usuarios/deivid/seguir/nico
+Authorization: Bearer {{token}}
+Content-Type: application/json
+
+###
+
+GET http://localhost:8080/api/usuarios/user1/seguidos
+Authorization: Bearer {{token}}
+Accept: application/json
+
+###
+
+GET http://localhost:8080/api/usuarios/user1/sugerencias?limite=5
+Authorization: Bearer {{token}}
+Accept: application/json

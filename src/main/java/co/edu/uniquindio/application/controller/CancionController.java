@@ -116,4 +116,13 @@ public class CancionController {
         return ResponseEntity.ok(similares);
     }
 
+    @GetMapping("/{id}/radio")
+    public ResponseEntity<List<Cancion>> iniciarRadio(
+            @PathVariable String id,
+            @RequestParam(defaultValue = "10") int limite) {
+
+        List<Cancion> cola = cancionService.iniciarRadio(id, limite);
+        return ResponseEntity.ok(cola);
+    }
+
 }

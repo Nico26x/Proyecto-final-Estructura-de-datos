@@ -1,2 +1,4 @@
+user1;$2a$10$/NLCTjcg3rhvG1OqecRrKuUUGD3A3ODHNYsafMAcbz6GhPxBaLORK;Usuario Prueba;USER;
+nico;$2a$10$KR2cqelv/b.jh8wDUV6y2ufqV0TPK6vn365bu/6nOVT3uFm5NXxrO;Deivid;USER;
 admin;$2a$10$Tb9ktjIlotHFDlFyDMVxleat.Jm/MUJnsCPp/8pUUriQ6v.qa0LTG;Administrador;ADMIN;
 deivid;$2a$10$uu/SCjvadvpR3W9HlZnqOOXcFYttZaMmnHtg80dtpeUv4A3jX7L12;Deivid;USER;21,22,23
