@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.Collection;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -177,6 +178,32 @@ public class UsuarioController {
     public String cambiarPassword(@PathVariable String username,
                                   @RequestParam String nuevaPassword) {
         return usuarioService.cambiarPassword(username, nuevaPassword);
+    }
+
+    // 🎧 Generar playlist "Descubrimiento Semanal"
+    @GetMapping("/{username}/descubrimiento")
+    public ResponseEntity<?> generarDescubrimientoSemanal(
+            @PathVariable String username,
+            @RequestParam(defaultValue = "10") int size,
+            @RequestHeader("Authorization") String authHeader) {
+
+        // Validar token JWT
+        if (authHeader == null || !authHeader.startsWith("Bearer ")) {
+            return ResponseEntity.status(401).body("🚫 Token no proporcionado.");
+        }
+
+        String token = authHeader.substring(7);
+        if (!jwtUtil.validarToken(token)) {
+            return ResponseEntity.status(403).body("❌ Token inválido o expirado.");
+        }
+
+        List<Cancion> playlist = usuarioService.generarPlaylistDescubrimiento(username, size);
+
+        if (playlist.isEmpty()) {
+            return ResponseEntity.ok("⚠️ No se encontraron recomendaciones para el usuario.");
+        }
+
+        return ResponseEntity.ok(playlist);
     }
 
 }

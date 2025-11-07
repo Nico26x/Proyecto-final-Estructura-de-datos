@@ -11,7 +11,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
-import java.util.Collection;
+import java.util.*;
+import java.util.stream.Collectors;
 
 @Service
 public class UsuarioService {
@@ -19,6 +20,9 @@ public class UsuarioService {
     private final UsuarioRepository usuarioRepository;
     private final CancionRepository cancionRepository;
     private final PasswordEncoder passwordEncoder;
+
+    // ✅ Nuevo: referencia al servicio de canciones
+    private final CancionService cancionService;
 
     // 🔹 Usuario en sesión (almacenado temporalmente)
     private Usuario usuarioLogueado;
@@ -29,9 +33,11 @@ public class UsuarioService {
     @Autowired
     public UsuarioService(UsuarioRepository usuarioRepository,
                           CancionRepository cancionRepository,
+                          CancionService cancionService,
                           PasswordEncoder passwordEncoder) {
         this.usuarioRepository = usuarioRepository;
         this.cancionRepository = cancionRepository;
+        this.cancionService = cancionService;
         this.passwordEncoder = passwordEncoder;
     }
 
@@ -51,7 +57,7 @@ public class UsuarioService {
             return false;
         }
         String passwordEncriptada = passwordEncoder.encode(password);
-        Usuario usuario = new Usuario(username, passwordEncriptada, nombre, Rol.USER); // 👈 asigna USER
+        Usuario usuario = new Usuario(username, passwordEncriptada, nombre, Rol.USER);
         usuarioRepository.guardarUsuario(usuario);
         return true;
     }
@@ -65,7 +71,7 @@ public class UsuarioService {
         return null;
     }
 
-    // ✅ NUEVO: Autenticar usuario (devuelve el objeto Usuario si las credenciales son correctas)
+    // ✅ Autenticar usuario (devuelve el objeto Usuario si las credenciales son correctas)
     public Usuario autenticarUsuario(String username, String password) {
         Usuario usuario = usuarioRepository.buscarPorUsername(username);
         if (usuario != null && passwordEncoder.matches(password, usuario.getPassword())) {
@@ -123,7 +129,7 @@ public class UsuarioService {
         return usuarioLogueado != null;
     }
 
-    // ✏️ NUEVO: Actualizar nombre del usuario
+    // ✏️ Actualizar nombre del usuario
     public String actualizarNombre(String username, String nuevoNombre) {
         Usuario usuario = usuarioRepository.buscarPorUsername(username);
         if (usuario == null) {
@@ -135,7 +141,7 @@ public class UsuarioService {
         return "✅ Nombre actualizado correctamente";
     }
 
-    // 🔐 NUEVO: Cambiar contraseña (con encriptación)
+    // 🔐 Cambiar contraseña (con encriptación)
     public String cambiarPassword(String username, String nuevaPassword) {
         Usuario usuario = usuarioRepository.buscarPorUsername(username);
         if (usuario == null) {
@@ -150,5 +156,51 @@ public class UsuarioService {
 
     public Usuario buscarPorUsername(String username) {
         return usuarioRepository.buscarPorUsername(username);
+    }
+
+    // ✅ NUEVO: Generar playlist "Descubrimiento Semanal" (RF-005)
+    public List<Cancion> generarPlaylistDescubrimiento(String username, int size) {
+        Usuario usuario = usuarioRepository.buscarPorUsername(username);
+        if (usuario == null) return Collections.emptyList();
+
+        Collection<Cancion> favoritos = usuario.getListaFavoritos();
+        // Si no tiene favoritos, devolvemos top canciones (primeras del repo)
+        if (favoritos == null || favoritos.isEmpty()) {
+            return cancionRepository.listarCanciones().stream()
+                    .limit(size)
+                    .collect(Collectors.toList());
+        }
+
+        Map<String, Double> scoreMap = new HashMap<>();
+
+        int kPorFavorito = 10;
+        for (Cancion fav : favoritos) {
+            List<Cancion> similares = cancionService.obtenerCancionesSimilares(fav.getId(), kPorFavorito);
+            int rank = 1;
+            for (Cancion s : similares) {
+                if (usuario.tieneEnFavoritos(s.getId())) continue;
+                double score = (kPorFavorito - rank + 1) * 1.0;
+                scoreMap.merge(s.getId(), score, Double::sum);
+                rank++;
+            }
+        }
+
+        if (scoreMap.isEmpty()) {
+            return cancionRepository.listarCanciones().stream()
+                    .filter(c -> !usuario.tieneEnFavoritos(c.getId()))
+                    .limit(size)
+                    .collect(Collectors.toList());
+        }
+
+        List<String> orderedIds = scoreMap.entrySet().stream()
+                .sorted(Map.Entry.<String, Double>comparingByValue().reversed())
+                .map(Map.Entry::getKey)
+                .limit(size)
+                .collect(Collectors.toList());
+
+        return orderedIds.stream()
+                .map(cancionRepository::buscarPorId)
+                .filter(Objects::nonNull)
+                .collect(Collectors.toList());
     }
 }

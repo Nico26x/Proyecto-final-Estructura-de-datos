@@ -1,11 +1,11 @@
-### 🎵 Cargar canciones masivamente (autenticado)
+### 🎵 Cargar canciones similares (IDs 26–60)
 POST http://localhost:8080/api/canciones/cargar
 Authorization: Bearer {{token}}
 Content-Type: multipart/form-data; boundary=boundary
 
 --boundary
-Content-Disposition: form-data; name="archivo"; filename="canciones_nuevas.txt"
+Content-Disposition: form-data; name="archivo"; filename="canciones_prueba_similares.txt"
 Content-Type: text/plain
 
-15;Diomedez;Kris R;Urbano;2025;3.00
+< C:\Users\nbeta\OneDrive\Documentos\Proyecto-final-Estructura-de-datos\src\main\resources\data\canciones_prueba_similares.txt
 --boundary--

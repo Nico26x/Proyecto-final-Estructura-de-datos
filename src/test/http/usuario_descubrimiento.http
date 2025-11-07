@@ -1,0 +1,25 @@
+### 🎧 Generar playlist "Descubrimiento Semanal"
+# Genera una lista de recomendaciones personalizadas basadas en tus favoritos
+GET http://localhost:8080/api/usuarios/deivid/descubrimiento?size=5
+Authorization: Bearer {{token}}
+Accept: application/json
+
+###
+
+### 🎧 Generar playlist "Descubrimiento Semanal" con tamaño personalizado (8 canciones)
+GET http://localhost:8080/api/usuarios/deivid/descubrimiento?size=8
+Authorization: Bearer {{token}}
+Accept: application/json
+
+###
+
+### 🚫 Intentar sin token (debe fallar con 401)
+GET http://localhost:8080/api/usuarios/deivid/descubrimiento?size=5
+Accept: application/json
+
+###
+
+### 🔑 Intentar con token inválido (debe fallar con 403)
+GET http://localhost:8080/api/usuarios/deivid/descubrimiento?size=5
+Authorization: Bearer invalid.token.prueba
+Accept: application/json

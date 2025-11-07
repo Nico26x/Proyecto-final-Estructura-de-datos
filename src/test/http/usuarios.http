@@ -20,7 +20,7 @@ Accept: application/json
 ###
 
 ### 🎵 AGREGAR CANCIÓN A FAVORITOS
-POST http://localhost:8080/api/usuarios/deivid/favoritos/agregar?idCancion=3
+POST http://localhost:8080/api/usuarios/deivid/favoritos/agregar?idCancion=23
 Authorization: Bearer {{token}}
 Content-Type: application/json
 

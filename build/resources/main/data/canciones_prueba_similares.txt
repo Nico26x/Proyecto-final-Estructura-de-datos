@@ -1,0 +1,35 @@
+26;Shape of You;Ed Sheeran;Pop;2017;3.54
+27;Perfect;Ed Sheeran;Pop;2017;4.40
+28;Thinking Out Loud;Ed Sheeran;Pop;2014;4.41
+29;Photograph;Ed Sheeran;Pop;2014;4.18
+30;Castle on the Hill;Ed Sheeran;Pop;2017;4.21
+31;Bad Habits;Ed Sheeran;Pop;2021;3.50
+32;Blinding Lights;The Weeknd;Pop;2020;3.22
+33;Save Your Tears;The Weeknd;Pop;2020;3.35
+34;Can't Feel My Face;The Weeknd;Pop;2015;3.34
+35;Starboy;The Weeknd;Pop;2016;3.50
+36;Levitating;Dua Lipa;Pop;2020;3.23
+37;Don't Start Now;Dua Lipa;Pop;2019;3.03
+38;New Rules;Dua Lipa;Pop;2017;3.29
+39;Break My Heart;Dua Lipa;Pop;2020;3.42
+40;One Kiss;Dua Lipa;Pop;2018;3.35
+41;Believer;Imagine Dragons;Rock;2017;3.24
+42;Thunder;Imagine Dragons;Rock;2017;3.07
+43;Whatever It Takes;Imagine Dragons;Rock;2017;3.21
+44;Demons;Imagine Dragons;Rock;2013;2.57
+45;Radioactive;Imagine Dragons;Rock;2012;3.06
+46;Viva La Vida;Coldplay;Rock;2008;4.02
+47;Yellow;Coldplay;Rock;2000;4.29
+48;Fix You;Coldplay;Rock;2005;4.55
+49;The Scientist;Coldplay;Rock;2002;5.09
+50;Paradise;Coldplay;Rock;2011;4.38
+51;Uptown Funk;Mark Ronson;Funk;2014;4.30
+52;Treasure;Bruno Mars;Funk;2013;2.58
+53;24K Magic;Bruno Mars;Funk;2016;3.46
+54;Locked Out of Heaven;Bruno Mars;Pop;2012;3.53
+55;Just the Way You Are;Bruno Mars;Pop;2010;3.40
+56;Grenade;Bruno Mars;Pop;2010;3.42
+57;When I Was Your Man;Bruno Mars;Pop;2012;3.33
+58;Smells Like Teen Spirit;Nirvana;Rock;1991;5.01
+59;Come As You Are;Nirvana;Rock;1991;3.39
+60;Heart-Shaped Box;Nirvana;Rock;1993;4.41

@@ -49,6 +49,11 @@ public class Usuario {
         return listaFavoritos.removeIf(c -> c.getId().equals(idCancion));
     }
 
+    public boolean tieneEnFavoritos(String idCancion) {
+        if (listaFavoritos == null) return false;
+        return listaFavoritos.stream().anyMatch(c -> c.getId().equals(idCancion));
+    }
+
     // ✅ equals/hashCode basados en username (RF-017)
     @Override
     public boolean equals(Object o) {
