@@ -52,13 +52,33 @@ public class UsuarioRepository {
         return usuarios.containsKey(username);
     }
 
-    // 🗑️ Eliminar usuario
+    // 🗑️ Eliminar usuario (ya existente)
     public Usuario eliminarUsuario(String username) {
         Usuario eliminado = usuarios.remove(username);
         if (eliminado != null) {
             guardarUsuariosEnArchivo();
         }
         return eliminado;
+    }
+
+    // 🆕 🗑️ Helper: eliminar si existe (boolean)
+    public boolean eliminarUsuarioSiExiste(String username) {
+        return eliminarUsuario(username) != null;
+    }
+
+    // 🆕 🗑️ Helper: eliminar en lote. Retorna cuántos eliminó realmente.
+    public int eliminarUsuarios(Collection<String> usernames) {
+        if (usernames == null || usernames.isEmpty()) return 0;
+        int count = 0;
+        for (String u : usernames) {
+            if (usuarios.remove(u) != null) {
+                count++;
+            }
+        }
+        if (count > 0) {
+            guardarUsuariosEnArchivo();
+        }
+        return count;
     }
 
     // 🎵 FAVORITOS
@@ -91,7 +111,7 @@ public class UsuarioRepository {
      * 🔹 Cargar usuarios desde usuarios.txt
      */
     // dentro de UsuarioRepository (asegúrate de tener un campo:
-// private final CancionRepository cancionRepository; y que esté inyectado)
+    // private final CancionRepository cancionRepository; y que esté inyectado)
 
     private void cargarUsuariosDesdeArchivo() {
         File archivo = new File(FILE_PATH);

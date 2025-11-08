@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testsuite name="co.edu.uniquindio.application.UsuarioServiceTest" tests="2" skipped="0" failures="0" errors="0" timestamp="2025-11-08T20:53:31.359Z" hostname="NICHOPC" time="0.441">
+  <properties/>
+  <testcase name="generarPlaylistDescubrimiento_sinFavoritos_devuelvePrimerasDelRepositorio()" classname="co.edu.uniquindio.application.UsuarioServiceTest" time="0.426"/>
+  <testcase name="generarPlaylistDescubrimiento_conFavoritos_usaSimilaresYFiltraYaFavoritos()" classname="co.edu.uniquindio.application.UsuarioServiceTest" time="0.012"/>
+  <system-out><![CDATA[]]></system-out>
+  <system-err><![CDATA[]]></system-err>
+</testsuite>

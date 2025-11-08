@@ -26,7 +26,8 @@ repositories {
 
 dependencies {
 	implementation 'org.springframework.boot:spring-boot-starter-web'
-	compileOnly 'org.projectlombok:lombok'
+    implementation 'org.springframework.boot:spring-boot-starter-validation'
+    compileOnly 'org.projectlombok:lombok'
 	developmentOnly 'org.springframework.boot:spring-boot-devtools'
 	annotationProcessor 'org.springframework.boot:spring-boot-configuration-processor'
 	annotationProcessor 'org.projectlombok:lombok'
@@ -40,4 +41,49 @@ dependencies {
 
 tasks.named('test') {
 	useJUnitPlatform()
+}
+
+// Limpieza específica de la carpeta de JavaDoc
+tasks.register('cleanJavadoc', Delete) {
+    delete layout.buildDirectory.dir('docs/javadoc')
+}
+
+// Atajo para generar y abrir el index en sistemas compatibles
+tasks.register('openJavadoc') {
+    group = 'documentation'
+    description = 'Genera JavaDoc y la abre en el navegador por defecto'
+    dependsOn tasks.javadoc
+    doLast {
+        def index = file("${buildDir}/docs/javadoc/index.html")
+        if (index.exists()) {
+            println "JavaDoc generada en: ${index}"
+            // Intenta abrir en Windows/Mac/Linux (no detiene el build si falla)
+            try {
+                if (System.properties['os.name'].toLowerCase().contains('windows')) {
+                    ["cmd", "/c", "start", index.absolutePath].execute()
+                } else if (System.properties['os.name'].toLowerCase().contains('mac')) {
+                    ["open", index.absolutePath].execute()
+                } else {
+                    ["xdg-open", index.absolutePath].execute()
+                }
+            } catch (ignored) {}
+        } else {
+            println "No se encontró el index de JavaDoc. ¿Falló la tarea javadoc?"
+        }
+    }
+}
+
+tasks.withType(Javadoc) {
+    options.addStringOption('Xdoclint:none', '-quiet')  // desactiva doclint estricto
+    options.encoding = 'UTF-8'
+    options.charSet = 'UTF-8'
+    options.locale = 'es'
+    failOnError = false  // evita que warnings rompan la build
+}
+
+tasks.named('javadoc', Javadoc) {
+    options.encoding = 'UTF-8'
+    // Desactiva doclint para que no corte la build por comentarios faltantes
+    options.addStringOption('Xdoclint:none', '-quiet')
+    failOnError = false
 }

@@ -16,3 +16,10 @@ Content-Type: application/json
 GET http://localhost:8080/api/usuarios/listar
 Authorization: Bearer {{admin_token}}
 Accept: application/json
+
+### ELIMINAR USUARIO (elimina solo a samuel)
+DELETE http://localhost:8080/api/usuarios/eliminar?username=samuel
+Authorization: Bearer {{admin_token}}
+Accept: application/json
+
+###

@@ -1,5 +1,6 @@
 package co.edu.uniquindio.application.controller;
 
+import co.edu.uniquindio.application.api.ApiResponse;
 import co.edu.uniquindio.application.model.Cancion;
 import co.edu.uniquindio.application.model.Usuario;
 import co.edu.uniquindio.application.security.JwtUtil;
@@ -11,6 +12,7 @@ import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.time.Instant;
 import java.util.*;
 
 /**
@@ -45,6 +47,23 @@ public class UsuarioController {
         }
     }
 
+    // ===== NUEVO: versión “envelope” del registro (opcional, no rompe lo anterior)
+    @PostMapping("/auth/registrar")
+    public ResponseEntity<ApiResponse<Map<String, Object>>> registrarStd(@RequestParam String username,
+                                                                         @RequestParam String password,
+                                                                         @RequestParam String nombre) {
+        boolean registrado = usuarioService.registrarUsuario(username, password, nombre);
+        Map<String, Object> payload = new HashMap<>();
+        if (registrado) {
+            payload.put("mensaje", "✅ Usuario registrado correctamente");
+            payload.put("username", username);
+            return ResponseEntity.ok(ApiResponse.ok(payload));
+        } else {
+            return ResponseEntity.status(HttpStatus.CONFLICT)
+                    .body(ApiResponse.error("⚠️ El usuario ya existe"));
+        }
+    }
+
     // 📌 Iniciar sesión (genera y devuelve el JWT)
     @PostMapping("/login")
     public ResponseEntity<Map<String, Object>> login(@RequestParam String username,
@@ -69,6 +88,28 @@ public class UsuarioController {
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(respuesta);
         }
     }
+
+    // ===== NUEVO: versión “envelope” del login (opcional)
+    @PostMapping("/auth/login")
+    public ResponseEntity<ApiResponse<Map<String, Object>>> loginStd(@RequestParam String username,
+                                                                     @RequestParam String password) {
+        Usuario usuario = usuarioService.autenticarUsuario(username, password);
+        if (usuario == null) {
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED)
+                    .body(ApiResponse.error("❌ Credenciales incorrectas"));
+        }
+
+        String token = jwtUtil.generarToken(username, usuario.getRol().name());
+        usuarioService.iniciarSesion(usuario);
+
+        Map<String, Object> data = new HashMap<>();
+        data.put("mensaje", "✅ Inicio de sesión exitoso");
+        data.put("token", token);
+        data.put("usuario", usuario); // ya viene sin password por @JsonIgnore
+
+        return ResponseEntity.ok(ApiResponse.ok(data));
+    }
+    // ===== fin nuevo
 
     // 📌 Cerrar sesión
     @PostMapping("/logout")
@@ -285,4 +326,38 @@ public class UsuarioController {
                 .contentType(MediaType.valueOf("text/csv"))
                 .body(csv);
     }
+
+    // Dentro de UsuarioController (ajusta imports si hace falta)
+    @DeleteMapping("/eliminar")
+    public ResponseEntity<?> eliminarUsuarioAdmin(
+            @RequestParam String username,
+            @RequestHeader(value = "Authorization", required = false) String authHeader) {
+
+        // 1) Validar header
+        if (authHeader == null || !authHeader.startsWith("Bearer ")) {
+            return ResponseEntity.status(401).body("🚫 Token no proporcionado.");
+        }
+
+        String token = authHeader.substring(7);
+
+        // 2) Validar token
+        if (!jwtUtil.validarToken(token)) {
+            return ResponseEntity.status(403).body("❌ Token inválido o expirado.");
+        }
+
+        // 3) Validar rol ADMIN (si tu JwtUtil guarda 'ADMIN')
+        String rol = jwtUtil.obtenerRol(token);
+        if (!"ADMIN".equalsIgnoreCase(rol) && !"ROLE_ADMIN".equalsIgnoreCase(rol)) {
+            return ResponseEntity.status(403).body("🚫 Acceso denegado: solo administradores.");
+        }
+
+        // 4) Eliminar usuario via service (retorna boolean)
+        boolean ok = usuarioService.eliminarUsuarioAdmin(username);
+        if (ok) {
+            return ResponseEntity.ok("✅ Usuario '" + username + "' eliminado correctamente.");
+        } else {
+            return ResponseEntity.status(404).body("❌ Usuario '" + username + "' no existe.");
+        }
+    }
+
 }

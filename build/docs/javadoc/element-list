@@ -1,0 +1,8 @@
+co.edu.uniquindio.application
+co.edu.uniquindio.application.controller
+co.edu.uniquindio.application.model
+co.edu.uniquindio.application.repository
+co.edu.uniquindio.application.security
+co.edu.uniquindio.application.service
+co.edu.uniquindio.application.trie
+co.edu.uniquindio.application.utils

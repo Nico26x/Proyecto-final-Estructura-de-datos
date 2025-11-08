@@ -1,0 +1,25 @@
+### 📊 DESCARGAS DE FAVORITOS POR DÍA (requiere token)
+GET http://localhost:8080/api/metricas/descargas-favoritos/dia
+Authorization: Bearer {{admin_token}}
+Accept: application/json
+
+###
+
+### 🏆 TOP USUARIOS EXPORTADORES (limit=5)
+GET http://localhost:8080/api/metricas/usuarios/top-exportadores?limit=5
+Authorization: Bearer {{admin_token}}
+Accept: application/json
+
+###
+
+### 🎤 TOP ARTISTAS EN FAVORITOS (leyendo favoritos_*.csv) (limit=10)
+GET http://localhost:8080/api/metricas/top-artistas?limit=10
+Authorization: Bearer {{token}}
+Accept: application/json
+
+###
+
+### 🎧 TOP GÉNEROS EN FAVORITOS (leyendo favoritos_*.csv) (limit=10)
+GET http://localhost:8080/api/metricas/top-generos?limit=10
+Authorization: Bearer {{token}}
+Accept: application/json

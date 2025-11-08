@@ -18,8 +18,10 @@ import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.nio.file.StandardOpenOption;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 
 import java.util.*;
@@ -34,6 +36,11 @@ public class UsuarioService {
     private final GrafoSocial grafoSocial = new GrafoSocial();
     private static final String RUTA_GRAFO = "src/main/resources/data/grafo_social.txt";
 
+    // === NUEVO: rutas para reportes y métricas ===
+    private static final String RUTA_REPORTES = "src/main/resources/data/reportes";
+    private static final String RUTA_METRICAS = "src/main/resources/data/metricas";
+    private static final String ARCHIVO_METRICAS = "metricas_export_favoritos.csv";
+
     // ✅ Referencia al servicio de canciones
     private final CancionService cancionService;
 
@@ -42,6 +49,9 @@ public class UsuarioService {
 
     @Autowired
     private JwtUtil jwtUtil;
+
+    @Autowired
+    private MetricasService metricasService;
 
     @Autowired
     public UsuarioService(UsuarioRepository usuarioRepository,
@@ -156,6 +166,39 @@ public class UsuarioService {
         usuarioRepository.guardarUsuario(usuario);
         return "✅ Nombre actualizado correctamente";
     }
+
+    // 👑 Eliminar usuario (acción de administrador)
+    public boolean eliminarUsuarioAdmin(String username) {
+        // opcional: proteger al admin por defecto
+        if ("admin".equalsIgnoreCase(username)) {
+            return false; // no permitir borrar el admin base
+        }
+
+        // El repositorio devuelve Usuario; úsalo como boolean comparando con null
+        Usuario eliminado = usuarioRepository.eliminarUsuario(username);
+        boolean ok = (eliminado != null);
+
+        if (ok) {
+            // Mantener consistencia del grafo social
+            try {
+                grafoSocial.eliminarUsuario(username); // asegúrate de tener este método; si no, bórralo de sus listas
+                grafoSocial.guardarRelacionesEnArchivo(RUTA_GRAFO);
+            } catch (Exception e) {
+                System.err.println("⚠️ No se pudo sincronizar el grafo social tras eliminar usuario: " + e.getMessage());
+            }
+
+            // (Opcional) Si estás guardando reportes CSV por usuario, puedes limpiar el archivo:
+            // try {
+            //     Path reporte = getReporteFavoritosPath(username);
+            //     java.nio.file.Files.deleteIfExists(reporte);
+            // } catch (Exception e) {
+            //     System.err.println("⚠️ No se pudo borrar el CSV de reportes del usuario: " + e.getMessage());
+            // }
+        }
+
+        return ok;
+    }
+
 
     public String cambiarPassword(String username, String nuevaPassword) {
         Usuario usuario = usuarioRepository.buscarPorUsername(username);
@@ -298,12 +341,12 @@ public class UsuarioService {
         return "favoritos_" + username + "_" + fecha + ".csv";
     }
 
-    // ========= NUEVO: Helpers de RUTA y guardado en DATA =========
+    // ========= Helpers de RUTA y guardado en DATA =========
 
     /** Directorio donde se guardan/actualizan los CSV por usuario. */
     public Path getReportesDir() {
         // Dentro de la misma carpeta "data" de persistencia
-        return Paths.get("src/main/resources/data/reportes");
+        return Paths.get(RUTA_REPORTES);
     }
 
     /** Nombre de archivo FIJO en disco (uno por usuario, se sobrescribe). */
@@ -315,6 +358,16 @@ public class UsuarioService {
     /** Ruta completa del CSV de un usuario dentro de /data/reportes. */
     public Path getReporteFavoritosPath(String username) {
         return getReportesDir().resolve(buildFavoritosStorageName(username));
+    }
+
+    /** Directorio de métricas. */
+    public Path getMetricasDir() {
+        return Paths.get(RUTA_METRICAS);
+    }
+
+    /** Ruta del archivo de métricas de exportación de favoritos. */
+    public Path getMetricasFavoritosPath() {
+        return getMetricasDir().resolve(ARCHIVO_METRICAS);
     }
 
     /** Guarda (crea o sobrescribe) el CSV en /data/reportes y devuelve la ruta absoluta. */
@@ -333,14 +386,65 @@ public class UsuarioService {
     }
 
     /**
-     * Flujo completo: genera CSV en memoria y LO GUARDA en /data/reportes.
-     * Retorna los bytes para permitir descargas, y sirve al front.
+     * Cuenta favoritos actuales del usuario (útil para métricas).
+     */
+    public int contarFavoritosUsuario(String username) {
+        Collection<Cancion> favs = listarFavoritos(username);
+        return (favs == null) ? 0 : favs.size();
+    }
+
+    /**
+     * Registra una línea de métrica en CSV:
+     * columnas: fecha_iso,username,total_favoritos,archivo_reporte
+     */
+    public void registrarMetricaExportFavoritos(String username, int totalFavoritos, Path archivoReporte) {
+        try {
+            Path dir = getMetricasDir();
+            if (!Files.exists(dir)) {
+                Files.createDirectories(dir);
+            }
+            Path metricas = getMetricasFavoritosPath();
+
+            boolean existe = Files.exists(metricas);
+            if (!existe) {
+                // encabezado
+                String header = CsvUtils.joinRow(List.of("fecha_iso", "username", "total_favoritos", "archivo_reporte")) + "\n";
+                Files.write(metricas, header.getBytes(StandardCharsets.UTF_8), StandardOpenOption.CREATE, StandardOpenOption.APPEND);
+            }
+
+            String fechaIso = LocalDateTime.now().format(DateTimeFormatter.ISO_LOCAL_DATE_TIME);
+            String rutaRelativa = archivoReporte != null ? getReportesDir().relativize(archivoReporte).toString().replace("\\","/") : "";
+
+            String row = CsvUtils.joinRow(List.of(
+                    fechaIso,
+                    username,
+                    String.valueOf(totalFavoritos),
+                    rutaRelativa
+            )) + "\n";
+
+            Files.write(metricas, row.getBytes(StandardCharsets.UTF_8), StandardOpenOption.CREATE, StandardOpenOption.APPEND);
+        } catch (Exception e) {
+            // No romper el flujo por métricas; solo loguear
+            System.err.println("⚠️ No se pudo registrar métrica de exportación: " + e.getMessage());
+        }
+    }
+
+    /**
+     * Flujo completo: genera CSV en memoria, lo guarda/actualiza en /data/reportes,
+     * registra la métrica y retorna bytes + nombre sugerido de descarga + ruta guardada.
      */
     public ExportResultado exportarYGuardarFavoritosCsv(String username) {
         byte[] csv = exportarFavoritosCsv(username);
         String savedPath = guardarFavoritosCsvEnData(username, csv);
-        // Nombre sugerido de descarga (con fecha)
         String downloadName = buildFavoritosFilename(username);
+
+        // 👇 REGISTRA el evento de exportación en tu servicio de métricas (para endpoints /metricas)
+        int items = usuarioRepository.listarFavoritos(username).size();
+        metricasService.registrarExportFavoritos(username, items);
+
+        // 👇 (Opcional, adicional) deja traza de auditoría local en /data/metricas/metricas_export_favoritos.csv
+        registrarMetricaExportFavoritos(username, items, Paths.get(savedPath));
+
         return new ExportResultado(csv, downloadName, savedPath);
     }
 

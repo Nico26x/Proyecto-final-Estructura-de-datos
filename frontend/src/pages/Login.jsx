@@ -1,75 +1,111 @@
+// src/pages/Login.jsx
 import React, { useState } from "react";
+import { Link, useNavigate } from "react-router-dom";
+
+const API_URL = process.env.REACT_APP_API_URL || "http://localhost:8080";
 
 export default function Login() {
-  const [username, setUsername] = useState("");
-  const [password, setPassword] = useState("");
-  const [mensaje, setMensaje] = useState("");
-  const [usuario, setUsuario] = useState(null);
+    const navigate = useNavigate();
+    const [form, setForm] = useState({ username: "", password: "" });
+    const [loading, setLoading] = useState(false);
+    const [errorMsg, setErrorMsg] = useState("");
 
-  const handleSubmit = async (e) => {
-    e.preventDefault();
+    const handleChange = (e) => {
+        setForm((prev) => ({ ...prev, [e.target.name]: e.target.value }));
+    };
 
-    const url = `http://localhost:8080/api/usuarios/login?username=${username}&password=${password}`;
+    const handleSubmit = async (e) => {
+        e.preventDefault();
+        setErrorMsg("");
+        setLoading(true);
 
-    try {
-      const response = await fetch(url, { method: "POST" });
+        try {
+            const url = `${API_URL}/api/usuarios/login?username=${encodeURIComponent(
+                form.username
+            )}&password=${encodeURIComponent(form.password)}`;
 
-      if (response.ok) {
-        const data = await response.json(); // el backend devuelve un Usuario
-        if (data) {
-          setUsuario(data);
-          setMensaje("✅ Inicio de sesión exitoso");
-        } else {
-          setMensaje("❌ Usuario o contraseña incorrectos");
+            const res = await fetch(url, {
+                method: "POST",
+                headers: { "Content-Type": "application/json", Accept: "application/json" },
+            });
+
+            if (!res.ok) {
+                const body = await res.json().catch(() => ({}));
+                const msg =
+                    body?.error ||
+                    body?.mensaje ||
+                    `Error de autenticación (HTTP ${res.status})`;
+                throw new Error(msg);
+            }
+
+            const data = await res.json();
+            // guarda token y (opcional) usuario
+            if (data?.token) localStorage.setItem("token", data.token);
+            if (data?.usuario) localStorage.setItem("usuario", JSON.stringify(data.usuario));
+
+            navigate("/"); // redirige a Home (ajusta la ruta si quieres)
+        } catch (err) {
+            setErrorMsg(err.message || "No se pudo iniciar sesión");
+        } finally {
+            setLoading(false);
         }
-      } else {
-        setMensaje("❌ Error al iniciar sesión");
-      }
-    } catch (error) {
-      console.error(error);
-      setMensaje("🚨 No se pudo conectar con el servidor");
-    }
-  };
+    };
 
-  return (
-    <div style={{ maxWidth: "400px", margin: "2rem auto" }}>
-      <h2>Iniciar Sesión</h2>
-      <form onSubmit={handleSubmit}>
-        <div>
-          <label>Usuario</label><br />
-          <input
-            type="text"
-            value={username}
-            onChange={(e) => setUsername(e.target.value)}
-            required
-          />
+    return (
+        <div className="container py-5">
+            <div className="row justify-content-center">
+                <div className="col-12 col-sm-10 col-md-6 col-lg-5">
+                    <h1 className="display-6 mb-4">Iniciar sesión</h1>
+
+                    <form onSubmit={handleSubmit} noValidate>
+                        <div className="mb-3">
+                            <label className="form-label">Usuario</label>
+                            <input
+                                type="text"
+                                name="username"
+                                className="form-control"
+                                value={form.username}
+                                onChange={handleChange}
+                                autoComplete="username"
+                                required
+                            />
+                        </div>
+
+                        <div className="mb-3">
+                            <label className="form-label">Contraseña</label>
+                            <input
+                                type="password"
+                                name="password"
+                                className="form-control"
+                                value={form.password}
+                                onChange={handleChange}
+                                autoComplete="current-password"
+                                required
+                            />
+                        </div>
+
+                        {errorMsg && (
+                            <div className="alert alert-danger py-2" role="alert">
+                                {errorMsg}
+                            </div>
+                        )}
+
+                        <button
+                            type="submit"
+                            className="btn btn-primary w-100"
+                            disabled={loading}
+                        >
+                            {loading ? "Entrando..." : "Entrar"}
+                        </button>
+                    </form>
+
+                    {/* ⬇️ Enlace a registro agregado */}
+                    <div className="text-center mt-3">
+                        <span className="text-muted me-1">¿No tienes cuenta?</span>
+                        <Link to="/register">Regístrate</Link>
+                    </div>
+                </div>
+            </div>
         </div>
-
-        <div>
-          <label>Contraseña</label><br />
-          <input
-            type="password"
-            value={password}
-            onChange={(e) => setPassword(e.target.value)}
-            required
-          />
-        </div>
-
-        <button type="submit" style={{ marginTop: "1rem" }}>
-          Ingresar
-        </button>
-      </form>
-
-      {mensaje && (
-        <p style={{ marginTop: "1rem", fontWeight: "bold" }}>{mensaje}</p>
-      )}
-
-      {usuario && (
-        <div style={{ marginTop: "1rem", background: "#f3f3f3", padding: "1rem", borderRadius: "8px" }}>
-          <h3>👋 Bienvenido, {usuario.nombre}!</h3>
-          <p>Usuario: {usuario.username}</p>
-        </div>
-      )}
-    </div>
-  );
+    );
 }

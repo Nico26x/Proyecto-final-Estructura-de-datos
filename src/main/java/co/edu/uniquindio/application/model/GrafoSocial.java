@@ -79,7 +79,27 @@ public class GrafoSocial {
         return sugerencias;
     }
 
-    // 🔽🔽🔽 NUEVO: Métodos de persistencia 🔽🔽🔽
+    // 🔽🔽🔽 NUEVO: Eliminar usuario del grafo 🔽🔽🔽
+
+    /**
+     * Elimina por completo un usuario del grafo y todas sus conexiones.
+     * @param username usuario a eliminar
+     * @return true si existía y fue eliminado; false si no estaba presente
+     */
+    public boolean eliminarUsuario(String username) {
+        if (!relaciones.containsKey(username)) {
+            return false;
+        }
+        // Quitar la referencia del resto de usuarios
+        for (Set<String> amigos : relaciones.values()) {
+            amigos.remove(username);
+        }
+        // Remover el nodo del usuario
+        relaciones.remove(username);
+        return true;
+    }
+
+    // 🔽🔽🔽 Métodos de persistencia 🔽🔽🔽
 
     /**
      * Guarda todas las relaciones en un archivo de texto.

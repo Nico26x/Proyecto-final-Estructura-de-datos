@@ -61,8 +61,36 @@ Accept: application/json
 
 ###
 
-### 🎵 AGREGAR CANCIÓN A FAVORITOS
-POST http://localhost:8080/api/usuarios/robinson/favoritos/agregar?idCancion=28
+### 🎵 AGREGAR CANCIÓN A FAVORITOS - NICO
+POST http://localhost:8080/api/usuarios/nico/favoritos/agregar?idCancion=28
+Authorization: Bearer {{token}}
+Content-Type: application/json
+
+###
+
+### 🎵 AGREGAR CANCIÓN A FAVORITOS - NICO
+POST http://localhost:8080/api/usuarios/nico/favoritos/agregar?idCancion=3
+Authorization: Bearer {{token}}
+Content-Type: application/json
+
+###
+
+### 🎵 AGREGAR CANCIÓN A FAVORITOS - DEIVID
+POST http://localhost:8080/api/usuarios/deivid/favoritos/agregar?idCancion=1
+Authorization: Bearer {{token}}
+Content-Type: application/json
+
+###
+
+### 🎵 AGREGAR CANCIÓN A FAVORITOS - DEIVID
+POST http://localhost:8080/api/usuarios/deivid/favoritos/agregar?idCancion=2
+Authorization: Bearer {{token}}
+Content-Type: application/json
+
+###
+
+### 🎵 AGREGAR CANCIÓN A FAVORITOS - SAMUEL
+POST http://localhost:8080/api/usuarios/samuel/favoritos/agregar?idCancion=3
 Authorization: Bearer {{token}}
 Content-Type: application/json
 

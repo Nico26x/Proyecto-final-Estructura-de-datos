@@ -80,7 +80,7 @@ public class CancionController {
     /**
      * Búsqueda avanzada concurrente
      * Ejemplo:
-     * GET /api/canciones/buscar/avanzado?titulo=love&artista=queen&genero=rock&anioFrom=1970&anioTo=1990&op=OR
+     * {@code GET /api/canciones/buscar/avanzado?titulo=love&artista=queen&genero=rock&anioFrom=1970&anioTo=1990&op=OR}
      */
     @GetMapping("/buscar/avanzado")
     public List<Cancion> buscarAvanzado(

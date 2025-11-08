@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testsuite name="co.edu.uniquindio.application.GrafoSocialTest" tests="3" skipped="0" failures="0" errors="0" timestamp="2025-11-08T20:53:28.509Z" hostname="NICHOPC" time="0.006">
+  <properties/>
+  <testcase name="sugerirUsuarios_bfsAmigosDeAmigos()" classname="co.edu.uniquindio.application.GrafoSocialTest" time="0.003"/>
+  <testcase name="seguirYDejarDeSeguir_creaYEliminaConexionBidireccional()" classname="co.edu.uniquindio.application.GrafoSocialTest" time="0.001"/>
+  <testcase name="seguirUsuario_noPermiteSeguirseASiMismoNiUsuariosInexistentes()" classname="co.edu.uniquindio.application.GrafoSocialTest" time="0.001"/>
+  <system-out><![CDATA[]]></system-out>
+  <system-err><![CDATA[]]></system-err>
+</testsuite>

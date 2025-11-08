@@ -1,26 +1,39 @@
-### 📄 EXPORTAR Y GUARDAR CSV DE FAVORITOS (usuario nico)
-GET http://localhost:8080/api/usuarios/nico/favoritos/export
+### 📤 EXPORTAR FAVORITOS (esto genera el CSV y registra métricas)
+GET http://localhost:8080/api/usuarios/favoritos/export
 Authorization: Bearer {{token}}
 Accept: text/csv
 
 ###
 
-### 📄 EXPORTAR Y GUARDAR CSV DE FAVORITOS (usuario deivid)
-GET http://localhost:8080/api/usuarios/deivid/favoritos/export
+### 📤 (Opcional) Ejecutar nuevamente para generar más registros de métricas
+GET http://localhost:8080/api/usuarios/favoritos/export
 Authorization: Bearer {{token}}
 Accept: text/csv
 
 ###
 
-### 📄 EXPORTAR Y GUARDAR CSV DE FAVORITOS (usuario robinson)
-GET http://localhost:8080/api/usuarios/robinson/favoritos/export
+### 📊 DESCARGAS DE FAVORITOS POR DÍA
+GET http://localhost:8080/api/metricas/descargas-favoritos/dia
 Authorization: Bearer {{token}}
-Accept: text/csv
+Accept: application/json
 
 ###
 
-### 🔒 (Opcional) INTENTO BLOQUEADO: exportar CSV de otro usuario sin ser ADMIN
-# Esperado: 403 Forbidden si el token no pertenece a "samuel" ni es ADMIN.
-GET http://localhost:8080/api/usuarios/samuel/favoritos/export
+### 🏆 TOP USUARIOS EXPORTADORES (limit=5)
+GET http://localhost:8080/api/metricas/usuarios/top-exportadores?limit=5
 Authorization: Bearer {{token}}
-Accept: text/csv
+Accept: application/json
+
+###
+
+### 🎙️ TOP ARTISTAS DESDE TODOS LOS FAVORITOS (limit=5)
+GET http://localhost:8080/api/metricas/favoritos/top-artistas?limit=5
+Authorization: Bearer {{token}}
+Accept: application/json
+
+###
+
+### 🎚️ TOP GÉNEROS DESDE TODOS LOS FAVORITOS (limit=5)
+GET http://localhost:8080/api/metricas/favoritos/top-generos?limit=5
+Authorization: Bearer {{token}}
+Accept: application/json

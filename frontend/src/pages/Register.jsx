@@ -1,79 +1,93 @@
-import React, { useState } from "react";
+import { useState } from "react";
+import { registerUser } from "../api/auth";
+import { useNavigate, Link } from "react-router-dom";
 
 export default function Register() {
-  const [username, setUsername] = useState("");
-  const [nombre, setNombre] = useState("");
-  const [password, setPassword] = useState("");
-  const [mensaje, setMensaje] = useState("");
+    const [form, setForm] = useState({ username: "", password: "", nombre: "" });
+    const [loading, setLoading] = useState(false);
+    const [msg, setMsg] = useState(null);
+    const navigate = useNavigate();
 
-  const handleSubmit = async (e) => {
-    e.preventDefault();
+    const onChange = (e) => {
+        setForm({ ...form, [e.target.name]: e.target.value });
+    };
 
-    // Construimos la URL con parámetros
-    const url = `http://localhost:8080/api/usuarios/register?username=${username}&password=${password}&nombre=${nombre}`;
+    const onSubmit = async (e) => {
+        e.preventDefault();
+        setMsg(null);
+        setLoading(true);
+        try {
+            const { data } = await registerUser(form);
+            // El backend devuelve texto tipo: "✅ Usuario registrado correctamente" o "⚠️ El usuario ya existe"
+            setMsg({ type: "success", text: data });
+            // si quieres, navega al login tras 1.2s
+            setTimeout(() => navigate("/login"), 1200);
+        } catch (err) {
+            const text =
+                err?.response?.data ??
+                "No se pudo registrar. Revisa el servidor.";
+            setMsg({ type: "danger", text: String(text) });
+        } finally {
+            setLoading(false);
+        }
+    };
 
-    try {
-      const response = await fetch(url, {
-        method: "POST",
-      });
+    return (
+        <div className="container py-4" style={{ maxWidth: 520 }}>
+            <h1 className="display-6 mb-3">Crear cuenta</h1>
 
-      if (response.ok) {
-        const text = await response.text();
-        setMensaje(text);
-        setUsername("");
-        setNombre("");
-        setPassword("");
-      } else {
-        setMensaje("❌ Error al registrar el usuario");
-      }
-    } catch (error) {
-      console.error(error);
-      setMensaje("🚨 No se pudo conectar con el servidor");
-    }
-  };
+            {msg && (
+                <div className={`alert alert-${msg.type}`} role="alert">
+                    {msg.text}
+                </div>
+            )}
 
-  return (
-    <div style={{ maxWidth: "400px", margin: "2rem auto" }}>
-      <h2>Registro de Usuario</h2>
-      <form onSubmit={handleSubmit}>
-        <div>
-          <label>Nombre completo</label><br />
-          <input
-            type="text"
-            value={nombre}
-            onChange={(e) => setNombre(e.target.value)}
-            required
-          />
+            <form onSubmit={onSubmit}>
+                <div className="mb-3">
+                    <label className="form-label">Usuario</label>
+                    <input
+                        className="form-control"
+                        name="username"
+                        value={form.username}
+                        onChange={onChange}
+                        autoComplete="username"
+                        required
+                    />
+                </div>
+
+                <div className="mb-3">
+                    <label className="form-label">Nombre</label>
+                    <input
+                        className="form-control"
+                        name="nombre"
+                        value={form.nombre}
+                        onChange={onChange}
+                        required
+                    />
+                </div>
+
+                <div className="mb-3">
+                    <label className="form-label">Contraseña</label>
+                    <input
+                        type="password"
+                        className="form-control"
+                        name="password"
+                        value={form.password}
+                        onChange={onChange}
+                        autoComplete="new-password"
+                        required
+                    />
+                </div>
+
+                <button className="btn btn-primary w-100" disabled={loading}>
+                    {loading ? "Registrando..." : "Crear cuenta"}
+                </button>
+            </form>
+
+            <div className="text-center mt-3">
+                <span className="text-muted me-1">¿Ya tienes cuenta?</span>
+                <Link to="/login">Inicia sesión</Link>
+            </div>
         </div>
-
-        <div>
-          <label>Nombre de usuario</label><br />
-          <input
-            type="text"
-            value={username}
-            onChange={(e) => setUsername(e.target.value)}
-            required
-          />
-        </div>
-
-        <div>
-          <label>Contraseña</label><br />
-          <input
-            type="password"
-            value={password}
-            onChange={(e) => setPassword(e.target.value)}
-            required
-          />
-        </div>
-
-        <button type="submit" style={{ marginTop: "1rem" }}>
-          Registrarse
-        </button>
-      </form>
-
-      {mensaje && (
-        <p style={{ marginTop: "1rem", fontWeight: "bold" }}>{mensaje}</p>
-      )}
-    </div>
-  );
+    );
 }

@@ -1,6 +1,8 @@
 user1;$2a$10$/NLCTjcg3rhvG1OqecRrKuUUGD3A3ODHNYsafMAcbz6GhPxBaLORK;Usuario Prueba;USER;
-nico;$2a$10$KR2cqelv/b.jh8wDUV6y2ufqV0TPK6vn365bu/6nOVT3uFm5NXxrO;Deivid;USER;23,26
+sorner11d;$2a$10$WEKeeEupTT4y2u3bqBm39eYdDCPRinO/T6kRojLMlllaspZr4vSJC;Alex;USER;
+nico;$2a$10$KR2cqelv/b.jh8wDUV6y2ufqV0TPK6vn365bu/6nOVT3uFm5NXxrO;Deivid;USER;23,26,28,3
+dqwdqw;$2a$10$r4bfp7EQjN3aRJrs9phEzezxBo4CIxpUuzFdhvTueken4jSU0zrw6;dqwdq;USER;
 robinson;$2a$10$0r1hxiwKLVZg7ssnh86Wy.yzG/8vjasP.5wamsMHR/6lv.93fGFSe;Deivid;USER;23,28
 admin;$2a$10$Tb9ktjIlotHFDlFyDMVxleat.Jm/MUJnsCPp/8pUUriQ6v.qa0LTG;Administrador;ADMIN;
-samuel;$2a$10$/oBs4ZtB5hZB5jq9hw15reIbVdmegwJfhtrCPd52U13gnSypy067O;Deivid;USER;
-deivid;$2a$10$uu/SCjvadvpR3W9HlZnqOOXcFYttZaMmnHtg80dtpeUv4A3jX7L12;Deivid;USER;21,22,23
+deivid;$2a$10$uu/SCjvadvpR3W9HlZnqOOXcFYttZaMmnHtg80dtpeUv4A3jX7L12;Deivid Mateo;USER;21,22,23,1,2
+Flame;$2a$10$2akyXVC9gHJ2uMBOo3BrMOxFQkRmEpqzo4u7A..lEAKw2haXAvO/G;deivid;USER;
