@@ -1,61 +1,51 @@
-// src/context/AuthContext.jsx
-import { createContext, useEffect, useMemo, useState } from "react";
-import { loginUser, getSession, registerUser } from "../api/auth";
+import { createContext, useContext, useEffect, useState } from "react";
 
-export const AuthContext = createContext(null);
+const AuthContext = createContext(null);
 
+// Hook para consumir el contexto
+export function useAuth() {
+    return useContext(AuthContext);
+}
+
+// 👉 Provider (exportación con nombre)
 export function AuthProvider({ children }) {
-    const [token, setToken] = useState(() => localStorage.getItem("token") || "");
     const [user, setUser] = useState(null);
-    const [loading, setLoading] = useState(!!token);
+    const [token, setToken] = useState(null);
 
+    // Carga inicial desde storage (si ya había sesión)
     useEffect(() => {
-        async function bootstrap() {
-            if (!token) return;
-            try {
-                const { data } = await getSession(token);
-                setUser(data);
-            } catch {
-                localStorage.removeItem("token");
-                setToken("");
-                setUser(null);
-            } finally {
-                setLoading(false);
-            }
-        }
-        bootstrap();
-    }, [token]);
+        try {
+            const t = localStorage.getItem("token");
+            const u = localStorage.getItem("user");
+            if (t) setToken(t);
+            if (u) setUser(JSON.parse(u));
+        } catch (_) {}
+    }, []);
 
-    async function login(username, password) {
-        const { data } = await loginUser(username, password);
-        const tk = data?.token;
-        if (tk) {
-            localStorage.setItem("token", tk);
-            setToken(tk);
-            // opcional: también podrías setear user aquí si lo devuelves en login
-        }
-        return data;
-    }
+    const login = (userObj, jwt) => {
+        setUser(userObj);
+        setToken(jwt);
+        localStorage.setItem("token", jwt);
+        localStorage.setItem("user", JSON.stringify(userObj));
+    };
 
-    async function register(payload) {
-        // payload: { username, password, nombre }
-        const { data } = await registerUser(payload);
-        return data;
-    }
-
-    function logout() {
-        localStorage.removeItem("token");
-        setToken("");
+    const logout = () => {
         setUser(null);
-    }
+        setToken(null);
+        localStorage.removeItem("token");
+        localStorage.removeItem("user");
+    };
 
-    const value = useMemo(
-        () => ({ token, user, loading, login, register, logout }),
-        [token, user, loading]
-    );
+    const value = {
+        user,
+        token,
+        isAuthenticated: !!token,
+        login,
+        logout,
+    };
 
     return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;
 }
 
-// default export del contexto (por si lo importas como default)
-export default AuthContext;
+// También lo exportamos por defecto, por si importas sin llaves.
+export default AuthProvider;
