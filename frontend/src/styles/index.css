@@ -11,3 +11,33 @@ code {
   font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
     monospace;
 }
+
+/* Foco rojo translúcido (no se pone blanco) */
+.form-control:focus {
+    background-color: rgba(220, 53, 69, 0.08); /* rojo bootstrap con transparencia */
+    border-color: rgba(220, 53, 69, 0.6);
+    box-shadow: 0 0 0 .2rem rgba(220, 53, 69, 0.25);
+    color: #fff; /* si usas tema oscuro */
+}
+
+/* Estado normal en tema oscuro (opcional) */
+.form-control {
+    background-color: rgba(255,255,255,0.06);
+    border-color: rgba(255,255,255,0.15);
+    color: #fff;
+}
+
+/* Neutralizar el fondo amarillo de autofill en Chrome */
+input:-webkit-autofill,
+input:-webkit-autofill:hover,
+input:-webkit-autofill:focus {
+    -webkit-text-fill-color: #fff;
+    /* “pinta” el fondo usando shadow para ocultar el amarillo */
+    -webkit-box-shadow: 0 0 0px 1000px rgba(220, 53, 69, 0.08) inset;
+    box-shadow: 0 0 0px 1000px rgba(220, 53, 69, 0.08) inset;
+    transition: background-color 9999s ease-in-out 0s;
+}
+
+/* Quitar el “X” de limpiar en Edge/IE (opcional) */
+input::-ms-clear { display: none; }
+

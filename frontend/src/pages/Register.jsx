@@ -1,48 +1,66 @@
 import { useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { registerUser } from "../api/auth";
+import "../styles/register.css"; // estilos del formulario oscuro
 
 export default function Register() {
     const navigate = useNavigate();
-    const [form, setForm] = useState({ username: "", password: "", nombre: "" });
+
+    const [form, setForm] = useState({ nombre: "", username: "", password: "" });
     const [loading, setLoading] = useState(false);
     const [errorMsg, setErrorMsg] = useState("");
+    const [touched, setTouched] = useState({}); // para saber si mostrar error visual
 
-    const onChange = (e) => setForm({ ...form, [e.target.name]: e.target.value });
+    const setField = (e) => {
+        setForm((prev) => ({ ...prev, [e.target.name]: e.target.value }));
+    };
+
+    const markTouched = (e) => {
+        setTouched((prev) => ({ ...prev, [e.target.name]: true }));
+    };
+
+    const hasError = (name) => {
+        // regla simple: requerido
+        return touched[name] && !String(form[name]).trim();
+    };
 
     const onSubmit = async (e) => {
         e.preventDefault();
         setErrorMsg("");
         setLoading(true);
+        // marcar todos como tocados para validar
+        setTouched({ nombre: true, username: true, password: true });
+
+        // validación mínima del front
+        if (!form.nombre.trim() || !form.username.trim() || !form.password.trim()) {
+            setLoading(false);
+            return;
+        }
+
         try {
-            // Llama al API
+            // === IMPORTANTE: mantenemos tu contrato actual ===
+            // 1) si tu API devuelve un string con “El usuario ya existe” → no navegar
+            // 2) si cambiaste registerUser para que devuelva { ok, message }, también lo soportamos
             const result = await registerUser(form);
 
-            // Compatibilidad: si el API devuelve string (modo antiguo) o { ok, message } (modo nuevo)
-            let ok = false;
-            let message = "";
-
-            if (typeof result === "object" && result !== null && "ok" in result) {
-                ok = !!result.ok;
-                message = result.message || "";
-            } else if (typeof result === "string") {
-                message = result;
-                // Si contiene señales de fallo conocidas, lo tratamos como error
-                const esDuplicado =
-                    result.includes("El usuario ya existe") || result.includes("⚠️");
-                ok = !esDuplicado;
-            } else {
-                // Cualquier forma desconocida la tratamos como error
-                ok = false;
+            // soporte dual
+            if (typeof result === "string") {
+                if (result.includes("El usuario ya existe") || result.includes("⚠️")) {
+                    setErrorMsg(
+                        result.replace("⚠️", "").trim() || "El usuario ya existe."
+                    );
+                    return;
+                }
+                // si llegó un string feliz, navega
+                navigate("/login");
+                return;
             }
 
-            // Nueva lógica solicitada:
-            if (!ok) {
-                setErrorMsg(message || "El usuario ya existe");
+            if (result && result.ok === false) {
+                setErrorMsg(result.message || "El usuario ya existe");
                 return; // NO navegar
             }
 
-            // Si todo bien, navegar a login
             navigate("/login");
         } catch (err) {
             setErrorMsg("Error al registrar. Intenta de nuevo.");
@@ -52,57 +70,98 @@ export default function Register() {
     };
 
     return (
-        <div className="container py-4" style={{ maxWidth: 480 }}>
-            <h1 className="h4 mb-3">Crear cuenta</h1>
-
-            {errorMsg && (
-                <div className="alert alert-danger" role="alert">
-                    {errorMsg}
-                </div>
-            )}
-
-            <form onSubmit={onSubmit}>
-                <div className="mb-3">
-                    <label className="form-label">Usuario</label>
-                    <input
-                        className="form-control"
-                        name="username"
-                        value={form.username}
-                        onChange={onChange}
-                        required
-                        autoComplete="username"
-                    />
+        <div className="register-bg d-flex align-items-center justify-content-center">
+            <div className="auth-card shadow-lg">
+                <div className="text-center mb-3">
+                    <div className="logo-note">♫</div>
+                    <h1 className="app-title">SyncUp</h1>
+                    <p className="app-subtitle">Únete a la comunidad musical</p>
                 </div>
 
-                <div className="mb-3">
-                    <label className="form-label">Nombre</label>
-                    <input
-                        className="form-control"
-                        name="nombre"
-                        value={form.nombre}
-                        onChange={onChange}
-                        required
-                        autoComplete="name"
-                    />
-                </div>
+                {errorMsg && (
+                    <div className="alert alert-danger py-2" role="alert">
+                        {errorMsg}
+                    </div>
+                )}
 
-                <div className="mb-3">
-                    <label className="form-label">Contraseña</label>
-                    <input
-                        type="password"
-                        className="form-control"
-                        name="password"
-                        value={form.password}
-                        onChange={onChange}
-                        required
-                        autoComplete="new-password"
-                    />
-                </div>
+                <form onSubmit={onSubmit} noValidate>
+                    {/* Nombre completo */}
+                    <div className="mb-3">
+                        <label className="form-label text-light-weak">Nombre Completo</label>
+                        <input
+                            className={`form-control glass-input ${
+                                hasError("nombre") ? "is-soft-error" : ""
+                            }`}
+                            name="nombre"
+                            value={form.nombre}
+                            onChange={setField}
+                            onBlur={markTouched}
+                            placeholder="escriba el nombre"
+                            autoComplete="off"
+                            spellCheck={false}
+                            autoCorrect="off"
+                            autoCapitalize="none"
+                            onFocus={(e) => e.currentTarget.setAttribute("autocomplete", "off")}
+                        />
+                        {hasError("nombre") && (
+                            <small className="text-danger-weak">Este campo es obligatorio.</small>
+                        )}
+                    </div>
 
-                <button className="btn btn-primary w-100" disabled={loading}>
-                    {loading ? "Creando..." : "Registrarme"}
-                </button>
-            </form>
+                    {/* Username */}
+                    <div className="mb-3">
+                        <label className="form-label text-light-weak">Nombre de Usuario</label>
+                        <input
+                            className={`form-control glass-input ${
+                                hasError("username") ? "is-soft-error" : ""
+                            }`}
+                            name="username"
+                            value={form.username}
+                            onChange={setField}
+                            onBlur={markTouched}
+                            placeholder="escriba el username"
+                            autoComplete="off"
+                            spellCheck={false}
+                            autoCorrect="off"
+                            autoCapitalize="none"
+                            onFocus={(e) => e.currentTarget.setAttribute("autocomplete", "off")}
+                        />
+                        {hasError("username") && (
+                            <small className="text-danger-weak">Este campo es obligatorio.</small>
+                        )}
+                    </div>
+
+                    {/* Password */}
+                    <div className="mb-4">
+                        <label className="form-label text-light-weak">Contraseña</label>
+                        <input
+                            type="password"
+                            className={`form-control glass-input ${
+                                hasError("password") ? "is-soft-error" : ""
+                            }`}
+                            name="password"
+                            value={form.password}
+                            onChange={setField}
+                            onBlur={markTouched}
+                            placeholder="••••••••"
+                        />
+                        {hasError("password") && (
+                            <small className="text-danger-weak">La contraseña es obligatoria.</small>
+                        )}
+                    </div>
+
+                    <button className="btn btn-danger w-100 rounded-pill fw-semibold" disabled={loading}>
+                        {loading ? "Creando..." : "Registrarse"}
+                    </button>
+                </form>
+
+                <div className="text-center mt-3">
+                    <span className="text-light-weak me-1">¿Ya tienes una cuenta?</span>
+                    <Link to="/login" className="link-accent">
+                        Inicia sesión
+                    </Link>
+                </div>
+            </div>
         </div>
     );
 }

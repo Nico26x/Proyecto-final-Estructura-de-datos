@@ -1,18 +1,16 @@
-import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
+// src/Routes/AppRouter.jsx
+import { Routes, Route, Navigate } from "react-router-dom";
+import Home from "../pages/Home";
 import Login from "../pages/Login";
 import Register from "../pages/Register";
-import Home from "../pages/Home";
 
 export default function AppRouter() {
     return (
-        <BrowserRouter>
-            <Routes>
-                <Route path="/" element={<Navigate to="/login" replace />} />
-                <Route path="/login" element={<Login />} />
-                <Route path="/register" element={<Register />} />
-                <Route path="/home" element={<Home />} />
-                <Route path="*" element={<Navigate to="/login" replace />} />
-            </Routes>
-        </BrowserRouter>
+        <Routes>
+            <Route path="/" element={<Home />} />
+            <Route path="/login" element={<Login />} />
+            <Route path="/register" element={<Register />} />
+            <Route path="*" element={<Navigate to="/" replace />} />
+        </Routes>
     );
 }
