@@ -5,7 +5,9 @@ import co.edu.uniquindio.application.model.Usuario;
 import co.edu.uniquindio.application.security.JwtUtil;
 import co.edu.uniquindio.application.service.UsuarioService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -95,7 +97,6 @@ public class UsuarioController {
         return ResponseEntity.ok(usuario);
     }
 
-
     // 📌 Listar usuarios
     @GetMapping("/listar")
     public ResponseEntity<?> listar(@RequestHeader("Authorization") String token) {
@@ -108,7 +109,6 @@ public class UsuarioController {
         }
         return ResponseEntity.ok(usuarioService.listarUsuarios());
     }
-
 
     // 🎵 FAVORITOS — Agregar canción
     @PostMapping("/{username}/favoritos/agregar")
@@ -203,25 +203,86 @@ public class UsuarioController {
         return ResponseEntity.ok(playlist);
     }
 
-    @PostMapping("/{username}/seguir/{destino}")
-    public ResponseEntity<String> seguirUsuario(@PathVariable String username, @PathVariable String destino) {
-        return ResponseEntity.ok(usuarioService.seguirUsuario(username, destino));
+    // 👥 Seguir a otro usuario
+    @PostMapping("/seguir")
+    public ResponseEntity<String> seguirUsuario(
+            @RequestParam String username,
+            @RequestParam String destino) {
+        String resultado = usuarioService.seguirUsuario(username, destino);
+        return ResponseEntity.ok(resultado);
     }
 
-    @PostMapping("/{username}/dejarSeguir/{destino}")
-    public ResponseEntity<String> dejarSeguir(@PathVariable String username, @PathVariable String destino) {
-        return ResponseEntity.ok(usuarioService.dejarDeSeguir(username, destino));
+    // 🚫 Dejar de seguir
+    @PostMapping("/dejar-seguir")
+    public ResponseEntity<String> dejarDeSeguir(
+            @RequestParam String username,
+            @RequestParam String destino) {
+        String resultado = usuarioService.dejarDeSeguir(username, destino);
+        return ResponseEntity.ok(resultado);
     }
 
+    // 📜 Listar seguidos
     @GetMapping("/{username}/seguidos")
-    public ResponseEntity<Set<String>> listarSeguidos(@PathVariable String username) {
-        return ResponseEntity.ok(usuarioService.listarSeguidos(username));
+    public ResponseEntity<Set<String>> listarSeguidos(
+            @PathVariable String username) {
+        Set<String> seguidos = usuarioService.listarSeguidos(username);
+        return ResponseEntity.ok(seguidos);
     }
 
+    // 💡 Sugerencias de usuarios a seguir
     @GetMapping("/{username}/sugerencias")
-    public ResponseEntity<List<String>> sugerirUsuarios(@PathVariable String username,
-                                                        @RequestParam(defaultValue = "5") int limite) {
-        return ResponseEntity.ok(usuarioService.sugerirUsuarios(username, limite));
+    public ResponseEntity<List<String>> sugerirUsuarios(
+            @PathVariable String username,
+            @RequestParam(defaultValue = "5") int limite) {
+        List<String> sugerencias = usuarioService.sugerirUsuarios(username, limite);
+        return ResponseEntity.ok(sugerencias);
     }
 
+    // =========================
+    // RF-009 — Exportar y GUARDAR CSV (depende del usuario logueado)
+    // =========================
+    @GetMapping("/{username}/favoritos/export")
+    public ResponseEntity<byte[]> exportarFavoritosCsv(
+            @PathVariable String username,
+            @RequestHeader(value = "Authorization", required = false) String authHeader) {
+
+        // Validación de token
+        if (authHeader == null || !authHeader.startsWith("Bearer ")) {
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
+        }
+        String token = authHeader.substring(7);
+        if (!jwtUtil.validarToken(token)) {
+            return ResponseEntity.status(HttpStatus.FORBIDDEN).build();
+        }
+
+        // Sólo el dueño o ADMIN
+        String userFromToken = jwtUtil.obtenerUsername(token);
+        String rol = jwtUtil.obtenerRol(token);
+        boolean esAdmin = "ADMIN".equalsIgnoreCase(rol);
+        if (!esAdmin && !userFromToken.equals(username)) {
+            return ResponseEntity.status(HttpStatus.FORBIDDEN).build();
+        }
+
+        // Exportar y guardar (un archivo por usuario, se sobreescribe)
+        UsuarioService.ExportResultado res = usuarioService.exportarYGuardarFavoritosCsv(username);
+
+        return ResponseEntity.ok()
+                .header(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=\"" + res.downloadName + "\"")
+                .header("X-Saved-At", res.savedAbsolutePath) // útil para depurar/ver dónde se guardó
+                .contentType(MediaType.valueOf("text/csv"))
+                .body(res.csv);
+    }
+
+    // (Endpoint alterno que exporta por usuario actual, si quisieras mantenerlo)
+    @GetMapping("/favoritos/export")
+    public ResponseEntity<byte[]> exportarFavoritosCsvUsuarioActual() {
+        String username = usuarioService.obtenerUsernameActual();
+        byte[] csv = usuarioService.exportarFavoritosCsvUsuarioActual();
+        String filename = usuarioService.buildFavoritosFilename(username);
+
+        return ResponseEntity.ok()
+                .header("Content-Disposition", "attachment; filename=\"" + filename + "\"")
+                .contentType(MediaType.valueOf("text/csv"))
+                .body(csv);
+    }
 }

@@ -1,10 +1,28 @@
-### 👤 REGISTRAR NUEVO USUARIO
+### 👤 REGISTRAR NUEVO USUARIO (Nico)
 POST http://localhost:8080/api/usuarios/registrar?username=nico&password=123&nombre=Deivid
 Content-Type: application/json
 
 ###
 
-### 🔑 INICIAR SESIÓN (Genera token JWT)
+### 👤 REGISTRAR NUEVO USUARIO (Deivid)
+POST http://localhost:8080/api/usuarios/registrar?username=deivid&password=123&nombre=Deivid
+Content-Type: application/json
+
+###
+
+### 👤 REGISTRAR NUEVO USUARIO (Samuel)
+POST http://localhost:8080/api/usuarios/registrar?username=samuel&password=123&nombre=Deivid
+Content-Type: application/json
+
+###
+
+### 👤 REGISTRAR NUEVO USUARIO (Robinson)
+POST http://localhost:8080/api/usuarios/registrar?username=robinson&password=123&nombre=Deivid
+Content-Type: application/json
+
+###
+
+### 🔑 INICIAR SESIÓN (Deivid)
 POST http://localhost:8080/api/usuarios/login?username=deivid&password=123
 Content-Type: application/json
 
@@ -12,8 +30,24 @@ Content-Type: application/json
 
 ###
 
-### 🔑 INICIAR SESIÓN (Genera token JWT)
+### 🔑 INICIAR SESIÓN (Nico)
 POST http://localhost:8080/api/usuarios/login?username=nico&password=123
+Content-Type: application/json
+
+> {% client.global.set("token", response.body.token || JSON.parse(response.body).token); %}
+
+###
+
+### 🔑 INICIAR SESIÓN (Samuel)
+POST http://localhost:8080/api/usuarios/login?username=samuel&password=123
+Content-Type: application/json
+
+> {% client.global.set("token", response.body.token || JSON.parse(response.body).token); %}
+
+###
+
+### 🔑 INICIAR SESIÓN (Robinson)
+POST http://localhost:8080/api/usuarios/login?username=robinson&password=123
 Content-Type: application/json
 
 > {% client.global.set("token", response.body.token || JSON.parse(response.body).token); %}
@@ -28,7 +62,7 @@ Accept: application/json
 ###
 
 ### 🎵 AGREGAR CANCIÓN A FAVORITOS
-POST http://localhost:8080/api/usuarios/deivid/favoritos/agregar?idCancion=23
+POST http://localhost:8080/api/usuarios/robinson/favoritos/agregar?idCancion=28
 Authorization: Bearer {{token}}
 Content-Type: application/json
 

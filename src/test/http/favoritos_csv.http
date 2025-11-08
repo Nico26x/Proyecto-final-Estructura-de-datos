@@ -1,0 +1,26 @@
+### 📄 EXPORTAR Y GUARDAR CSV DE FAVORITOS (usuario nico)
+GET http://localhost:8080/api/usuarios/nico/favoritos/export
+Authorization: Bearer {{token}}
+Accept: text/csv
+
+###
+
+### 📄 EXPORTAR Y GUARDAR CSV DE FAVORITOS (usuario deivid)
+GET http://localhost:8080/api/usuarios/deivid/favoritos/export
+Authorization: Bearer {{token}}
+Accept: text/csv
+
+###
+
+### 📄 EXPORTAR Y GUARDAR CSV DE FAVORITOS (usuario robinson)
+GET http://localhost:8080/api/usuarios/robinson/favoritos/export
+Authorization: Bearer {{token}}
+Accept: text/csv
+
+###
+
+### 🔒 (Opcional) INTENTO BLOQUEADO: exportar CSV de otro usuario sin ser ADMIN
+# Esperado: 403 Forbidden si el token no pertenece a "samuel" ni es ADMIN.
+GET http://localhost:8080/api/usuarios/samuel/favoritos/export
+Authorization: Bearer {{token}}
+Accept: text/csv

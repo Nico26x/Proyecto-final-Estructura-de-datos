@@ -1,5 +1,6 @@
 package co.edu.uniquindio.application.model;
 
+import java.io.*;
 import java.util.*;
 
 /**
@@ -76,5 +77,63 @@ public class GrafoSocial {
         }
 
         return sugerencias;
+    }
+
+    // 🔽🔽🔽 NUEVO: Métodos de persistencia 🔽🔽🔽
+
+    /**
+     * Guarda todas las relaciones en un archivo de texto.
+     * Cada línea representa una relación bidireccional: usuario1;usuario2
+     */
+    public void guardarRelacionesEnArchivo(String rutaArchivo) {
+        try (BufferedWriter bw = new BufferedWriter(new FileWriter(rutaArchivo))) {
+            for (String usuario : relaciones.keySet()) {
+                for (String amigo : relaciones.get(usuario)) {
+                    // Evitar duplicados escribiendo solo una vez cada par
+                    if (usuario.compareTo(amigo) < 0) {
+                        bw.write(usuario + ";" + amigo);
+                        bw.newLine();
+                    }
+                }
+            }
+        } catch (IOException e) {
+            System.err.println("❌ Error al guardar grafo social: " + e.getMessage());
+        }
+    }
+
+    /**
+     * Carga las relaciones desde un archivo existente.
+     * Si el archivo no existe, no hace nada.
+     */
+    public void cargarRelacionesDesdeArchivo(String rutaArchivo) {
+        File archivo = new File(rutaArchivo);
+        if (!archivo.exists()) return;
+
+        try (BufferedReader br = new BufferedReader(new FileReader(archivo))) {
+            String linea;
+            while ((linea = br.readLine()) != null) {
+                String[] partes = linea.split(";");
+                if (partes.length == 2) {
+                    String u1 = partes[0].trim();
+                    String u2 = partes[1].trim();
+
+                    // Crear usuarios si no existen
+                    agregarUsuario(u1);
+                    agregarUsuario(u2);
+
+                    // Reconstruir la relación
+                    seguirUsuario(u1, u2);
+                }
+            }
+        } catch (IOException e) {
+            System.err.println("❌ Error al cargar grafo social: " + e.getMessage());
+        }
+    }
+
+    // ✅ (Opcional) Método auxiliar para inspeccionar el grafo
+    public void imprimirRelaciones() {
+        relaciones.forEach((usuario, amigos) -> {
+            System.out.println(usuario + " -> " + amigos);
+        });
     }
 }

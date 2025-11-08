@@ -44,6 +44,21 @@ public class SecurityConfig {
                                 "/api/canciones/**/eliminar"
                         ).hasRole("ADMIN")
 
+                        // 🆕 Endpoints sociales (seguir, dejar de seguir, sugerencias)
+                        .requestMatchers(
+                                "/api/usuarios/seguir",
+                                "/api/usuarios/dejar-seguir",
+                                "/api/usuarios/*/seguidos",
+                                "/api/usuarios/*/sugerencias"
+                        ).hasAnyRole("USER", "ADMIN")
+
+                        // 🆕 Endpoints de recomendaciones, radio y playlists
+                        .requestMatchers(
+                                "/api/usuarios/*/descubrimiento",
+                                "/api/canciones/*/similares",
+                                "/api/canciones/radio"
+                        ).hasAnyRole("USER", "ADMIN")
+
                         // Todos los demás requieren estar autenticados (user o admin)
                         .anyRequest().authenticated()
                 )

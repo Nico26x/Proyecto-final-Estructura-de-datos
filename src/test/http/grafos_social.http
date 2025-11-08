@@ -1,22 +1,25 @@
-### Crear relaciones de seguimiento
-POST http://localhost:8080/api/usuarios/nico/seguir/deivid
+### 👥 SEGUIR A OTRO USUARIO
+POST http://localhost:8080/api/usuarios/seguir?username=nico&destino=deivid
 Authorization: Bearer {{token}}
 Content-Type: application/json
 
 ###
 
-POST http://localhost:8080/api/usuarios/deivid/seguir/nico
+### 🚫 DEJAR DE SEGUIR A UN USUARIO
+POST http://localhost:8080/api/usuarios/dejar-seguir?username=nico&destino=samuel
 Authorization: Bearer {{token}}
 Content-Type: application/json
 
 ###
 
-GET http://localhost:8080/api/usuarios/user1/seguidos
+### LISTAR USUARIOS SEGUIDOS
+GET http://localhost:8080/api/usuarios/nico/seguidos
 Authorization: Bearer {{token}}
 Accept: application/json
 
 ###
 
-GET http://localhost:8080/api/usuarios/user1/sugerencias?limite=5
+### 💡 SUGERIR USUARIOS PARA SEGUIR (amigos de amigos)
+GET http://localhost:8080/api/usuarios/nico/sugerencias?limite=5
 Authorization: Bearer {{token}}
 Accept: application/json
