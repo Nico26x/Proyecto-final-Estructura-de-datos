@@ -18,11 +18,20 @@ export function loginUser(username, password) {
 }
 
 // Registro: /api/usuarios/registrar?username=...&password=...&nombre=...
-export function registerUser({ username, password, nombre }) {
-    return http.post("/api/usuarios/registrar", null, {
-        params: { username, password, nombre },
-    });
+export async function registerUser({ username, password, nombre }) {
+    const url = `${API}/api/usuarios/registrar?username=${encodeURIComponent(username)}&password=${encodeURIComponent(password)}&nombre=${encodeURIComponent(nombre)}`;
+    try {
+        const res = await axios.post(url, null);
+        return { ok: true, message: res.data };
+    } catch (err) {
+        if (err.response && err.response.status === 409) {
+            // usuario duplicado
+            return { ok: false, message: err.response.data || "Usuario ya existe" };
+        }
+        throw err; // otros errores
+    }
 }
+
 
 // Sesión: requiere header Authorization: Bearer <token>
 export function getSession(token) {

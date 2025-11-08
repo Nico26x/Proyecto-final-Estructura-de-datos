@@ -36,14 +36,16 @@ public class UsuarioController {
 
     // 📌 Registrar usuario (ahora con contraseña encriptada)
     @PostMapping("/registrar")
-    public String registrar(@RequestParam String username,
-                            @RequestParam String password,
-                            @RequestParam String nombre) {
+    public ResponseEntity<String> registrar(@RequestParam String username,
+                                            @RequestParam String password,
+                                            @RequestParam String nombre) {
         boolean registrado = usuarioService.registrarUsuario(username, password, nombre);
         if (registrado) {
-            return "✅ Usuario registrado correctamente";
+            return ResponseEntity.status(HttpStatus.CREATED)
+                    .body("✅ Usuario registrado correctamente");
         } else {
-            return "⚠️ El usuario ya existe";
+            return ResponseEntity.status(HttpStatus.CONFLICT)
+                    .body("⚠️ El usuario ya existe");
         }
     }
 

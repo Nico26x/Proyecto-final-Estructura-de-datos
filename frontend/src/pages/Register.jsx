@@ -1,44 +1,63 @@
 import { useState } from "react";
+import { useNavigate } from "react-router-dom";
 import { registerUser } from "../api/auth";
-import { useNavigate, Link } from "react-router-dom";
 
 export default function Register() {
+    const navigate = useNavigate();
     const [form, setForm] = useState({ username: "", password: "", nombre: "" });
     const [loading, setLoading] = useState(false);
-    const [msg, setMsg] = useState(null);
-    const navigate = useNavigate();
+    const [errorMsg, setErrorMsg] = useState("");
 
-    const onChange = (e) => {
-        setForm({ ...form, [e.target.name]: e.target.value });
-    };
+    const onChange = (e) => setForm({ ...form, [e.target.name]: e.target.value });
 
     const onSubmit = async (e) => {
         e.preventDefault();
-        setMsg(null);
+        setErrorMsg("");
         setLoading(true);
         try {
-            const { data } = await registerUser(form);
-            // El backend devuelve texto tipo: "✅ Usuario registrado correctamente" o "⚠️ El usuario ya existe"
-            setMsg({ type: "success", text: data });
-            // si quieres, navega al login tras 1.2s
-            setTimeout(() => navigate("/login"), 1200);
+            // Llama al API
+            const result = await registerUser(form);
+
+            // Compatibilidad: si el API devuelve string (modo antiguo) o { ok, message } (modo nuevo)
+            let ok = false;
+            let message = "";
+
+            if (typeof result === "object" && result !== null && "ok" in result) {
+                ok = !!result.ok;
+                message = result.message || "";
+            } else if (typeof result === "string") {
+                message = result;
+                // Si contiene señales de fallo conocidas, lo tratamos como error
+                const esDuplicado =
+                    result.includes("El usuario ya existe") || result.includes("⚠️");
+                ok = !esDuplicado;
+            } else {
+                // Cualquier forma desconocida la tratamos como error
+                ok = false;
+            }
+
+            // Nueva lógica solicitada:
+            if (!ok) {
+                setErrorMsg(message || "El usuario ya existe");
+                return; // NO navegar
+            }
+
+            // Si todo bien, navegar a login
+            navigate("/login");
         } catch (err) {
-            const text =
-                err?.response?.data ??
-                "No se pudo registrar. Revisa el servidor.";
-            setMsg({ type: "danger", text: String(text) });
+            setErrorMsg("Error al registrar. Intenta de nuevo.");
         } finally {
             setLoading(false);
         }
     };
 
     return (
-        <div className="container py-4" style={{ maxWidth: 520 }}>
-            <h1 className="display-6 mb-3">Crear cuenta</h1>
+        <div className="container py-4" style={{ maxWidth: 480 }}>
+            <h1 className="h4 mb-3">Crear cuenta</h1>
 
-            {msg && (
-                <div className={`alert alert-${msg.type}`} role="alert">
-                    {msg.text}
+            {errorMsg && (
+                <div className="alert alert-danger" role="alert">
+                    {errorMsg}
                 </div>
             )}
 
@@ -50,8 +69,8 @@ export default function Register() {
                         name="username"
                         value={form.username}
                         onChange={onChange}
-                        autoComplete="username"
                         required
+                        autoComplete="username"
                     />
                 </div>
 
@@ -63,6 +82,7 @@ export default function Register() {
                         value={form.nombre}
                         onChange={onChange}
                         required
+                        autoComplete="name"
                     />
                 </div>
 
@@ -74,20 +94,15 @@ export default function Register() {
                         name="password"
                         value={form.password}
                         onChange={onChange}
-                        autoComplete="new-password"
                         required
+                        autoComplete="new-password"
                     />
                 </div>
 
                 <button className="btn btn-primary w-100" disabled={loading}>
-                    {loading ? "Registrando..." : "Crear cuenta"}
+                    {loading ? "Creando..." : "Registrarme"}
                 </button>
             </form>
-
-            <div className="text-center mt-3">
-                <span className="text-muted me-1">¿Ya tienes cuenta?</span>
-                <Link to="/login">Inicia sesión</Link>
-            </div>
         </div>
     );
 }
