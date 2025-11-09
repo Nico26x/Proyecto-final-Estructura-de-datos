@@ -11,10 +11,13 @@ export const http = axios.create({
 // --- ENDPOINTS (compatibles con tu backend actual sin DTO) ---
 
 // Login con parámetros query: /api/usuarios/login?username=...&password=...
-export function loginUser(username, password) {
-    return http.post(
-        `/api/usuarios/login?username=${encodeURIComponent(username)}&password=${encodeURIComponent(password)}`
-    );
+export async function loginUser({ username, password }) {
+    const url = `${API}/api/usuarios/login?username=${encodeURIComponent(username)}&password=${encodeURIComponent(password)}`;
+    const { data } = await axios.post(url);
+    // Normaliza a { ok, token, message }
+    if (data && data.token) return { ok: true, token: data.token };
+    if (data && data.error) return { ok: false, message: data.error };
+    return { ok: false, message: "Respuesta desconocida" };
 }
 
 // Registro: /api/usuarios/registrar?username=...&password=...&nombre=...

@@ -1,109 +1,135 @@
 // src/pages/Login.jsx
-import React, { useState } from "react";
+import { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
-
-const API_URL = process.env.REACT_APP_API_URL || "http://localhost:8080";
+import { loginUser } from "../api/auth"; // asegúrate que tu api exporte esta función
+import "../styles/login.css";
 
 export default function Login() {
     const navigate = useNavigate();
+
     const [form, setForm] = useState({ username: "", password: "" });
     const [loading, setLoading] = useState(false);
     const [errorMsg, setErrorMsg] = useState("");
+    const [touched, setTouched] = useState({});
 
-    const handleChange = (e) => {
+    const setField = (e) => {
         setForm((prev) => ({ ...prev, [e.target.name]: e.target.value }));
     };
 
-    const handleSubmit = async (e) => {
+    const markTouched = (e) => {
+        setTouched((prev) => ({ ...prev, [e.target.name]: true }));
+    };
+
+    const hasError = (name) => touched[name] && !String(form[name]).trim();
+
+    const onSubmit = async (e) => {
         e.preventDefault();
         setErrorMsg("");
         setLoading(true);
+        setTouched({ username: true, password: true });
+
+        if (!form.username.trim() || !form.password.trim()) {
+            setLoading(false);
+            return;
+        }
 
         try {
-            const url = `${API_URL}/api/usuarios/login?username=${encodeURIComponent(
-                form.username
-            )}&password=${encodeURIComponent(form.password)}`;
+            // Contrato esperado: loginUser devuelve { ok, token, message } o lanza error.
+            const res = await loginUser(form);
 
-            const res = await fetch(url, {
-                method: "POST",
-                headers: { "Content-Type": "application/json", Accept: "application/json" },
-            });
-
-            if (!res.ok) {
-                const body = await res.json().catch(() => ({}));
-                const msg =
-                    body?.error ||
-                    body?.mensaje ||
-                    `Error de autenticación (HTTP ${res.status})`;
-                throw new Error(msg);
+            if (typeof res === "string") {
+                // Por compatibilidad si tu API aún devuelve string de error
+                if (res.toLowerCase().includes("error") || res.toLowerCase().includes("incorrectas")) {
+                    setErrorMsg(res.replace("⚠️", "").trim() || "Credenciales incorrectas.");
+                    return;
+                }
+                // Si devuelve string “feliz”, navega
+                navigate("/");
+                return;
             }
 
-            const data = await res.json();
-            // guarda token y (opcional) usuario
-            if (data?.token) localStorage.setItem("token", data.token);
-            if (data?.usuario) localStorage.setItem("usuario", JSON.stringify(data.usuario));
+            if (!res || res.ok === false) {
+                setErrorMsg((res && res.message) || "Credenciales incorrectas.");
+                return;
+            }
 
-            navigate("/"); // redirige a Home (ajusta la ruta si quieres)
-        } catch (err) {
-            setErrorMsg(err.message || "No se pudo iniciar sesión");
+            // Si guardas token en localStorage/context, hazlo aquí si aplica
+            // localStorage.setItem("token", res.token);
+            navigate("/");
+        } catch {
+            setErrorMsg("No se pudo iniciar sesión. Intenta de nuevo.");
         } finally {
             setLoading(false);
         }
     };
 
     return (
-        <div className="container py-5">
-            <div className="row justify-content-center">
-                <div className="col-12 col-sm-10 col-md-6 col-lg-5">
-                    <h1 className="display-6 mb-4">Iniciar sesión</h1>
+        <div className="login-bg d-flex align-items-center justify-content-center">
+            <div className="auth-card shadow-lg">
+                {/* === Mismo encabezado/logo que Register === */}
+                <div className="text-center mb-3">
+                    <div className="logo-note">♫</div>
+                    <h1 className="app-title">SyncUp</h1>
+                    <p className="app-subtitle">Bienvenido de nuevo</p>
+                </div>
 
-                    <form onSubmit={handleSubmit} noValidate>
-                        <div className="mb-3">
-                            <label className="form-label">Usuario</label>
-                            <input
-                                type="text"
-                                name="username"
-                                className="form-control"
-                                value={form.username}
-                                onChange={handleChange}
-                                autoComplete="username"
-                                required
-                            />
-                        </div>
-
-                        <div className="mb-3">
-                            <label className="form-label">Contraseña</label>
-                            <input
-                                type="password"
-                                name="password"
-                                className="form-control"
-                                value={form.password}
-                                onChange={handleChange}
-                                autoComplete="current-password"
-                                required
-                            />
-                        </div>
-
-                        {errorMsg && (
-                            <div className="alert alert-danger py-2" role="alert">
-                                {errorMsg}
-                            </div>
-                        )}
-
-                        <button
-                            type="submit"
-                            className="btn btn-primary w-100"
-                            disabled={loading}
-                        >
-                            {loading ? "Entrando..." : "Entrar"}
-                        </button>
-                    </form>
-
-                    {/* ⬇️ Enlace a registro agregado */}
-                    <div className="text-center mt-3">
-                        <span className="text-muted me-1">¿No tienes cuenta?</span>
-                        <Link to="/register">Regístrate</Link>
+                {errorMsg && (
+                    <div className="alert alert-danger py-2" role="alert">
+                        {errorMsg}
                     </div>
+                )}
+
+                <form onSubmit={onSubmit} noValidate>
+                    {/* Username */}
+                    <div className="mb-3">
+                        <label className="form-label text-light-weak">Nombre de usuario</label>
+                        <input
+                            className={`form-control glass-input ${hasError("username") ? "is-soft-error" : ""}`}
+                            name="username"
+                            value={form.username}
+                            onChange={setField}
+                            onBlur={markTouched}
+                            placeholder="Nombre de usuario"
+                            autoComplete="off"
+                            spellCheck={false}
+                            autoCorrect="off"
+                            autoCapitalize="none"
+                            onFocus={(e) => e.currentTarget.setAttribute("autocomplete", "off")}
+                        />
+                        {hasError("username") && (
+                            <small className="text-danger-weak">Este campo es obligatorio.</small>
+                        )}
+                    </div>
+
+                    {/* Password */}
+                    <div className="mb-4">
+                        <label className="form-label text-light-weak">Contraseña</label>
+                        <input
+                            type="password"
+                            className={`form-control glass-input ${hasError("password") ? "is-soft-error" : ""}`}
+                            name="password"
+                            value={form.password}
+                            onChange={setField}
+                            onBlur={markTouched}
+                            placeholder="Contraseña"
+                            autoComplete="off"
+                            onFocus={(e) => e.currentTarget.setAttribute("autocomplete", "new-password")}
+                        />
+                        {hasError("password") && (
+                            <small className="text-danger-weak">La contraseña es obligatoria.</small>
+                        )}
+                    </div>
+
+                    <button className="btn btn-danger w-100 rounded-pill fw-semibold" disabled={loading}>
+                        {loading ? "Ingresando..." : "Iniciar sesión"}
+                    </button>
+                </form>
+
+                <div className="text-center mt-3">
+                    <span className="text-light-weak me-1">¿No tienes cuenta?</span>
+                    <Link to="/register" className="link-accent">
+                        Regístrate
+                    </Link>
                 </div>
             </div>
         </div>

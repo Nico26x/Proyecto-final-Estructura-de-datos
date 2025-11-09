@@ -1,0 +1,82 @@
+/* ===== Login (src/styles/login.css) ===== */
+
+/* Fondo y centrado a pantalla completa */
+.login-bg{
+    min-height: 100vh;
+    padding: 48px 16px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    /* fondo oscuro con leve degradado */
+    background: radial-gradient(1200px 600px at 50% 10%, rgba(255,60,60,0.06), transparent 60%),
+    #0f0f12;
+}
+
+/* Tarjeta */
+.auth-card{
+    width: 100%;
+    max-width: 520px;
+    padding: 28px 24px;
+    border-radius: 16px;
+
+    background: rgba(32, 34, 37, 0.86);
+    border: 1px solid rgba(255,255,255,0.06);
+    box-shadow: 0 18px 60px rgba(0,0,0,0.45);
+    backdrop-filter: blur(6px);
+}
+
+/* Encabezado/logo */
+.logo-note{
+    width: 56px; height: 56px; line-height: 56px;
+    margin: 0 auto 6px; text-align: center;
+    border-radius: 50%;
+    background: rgba(255, 71, 87, 0.18);
+    color: #ff4757; font-size: 24px;
+}
+.app-title{ margin: 0; font-weight: 700; color: #ff5a63; }
+.app-subtitle{ margin: 2px 0 10px; color: #b9b9bf; font-size: .95rem; }
+
+/* Inputs “glass” en tema oscuro */
+.form-control{
+    background-color: rgba(255,255,255,0.06) !important;
+    border-color: rgba(255,255,255,0.18) !important;
+    color: #fff !important;
+}
+.form-control::placeholder{ color: #c6c6cc; }
+.form-label{ color: #d9d9df; }
+
+/* Foco rojo translúcido (sin ponerse blanco) */
+.form-control:focus{
+    background-color: rgba(220,53,69,0.08) !important;
+    border-color: rgba(220,53,69,0.6) !important;
+    box-shadow: 0 0 0 .2rem rgba(220,53,69,0.25) !important;
+    color: #fff !important;
+}
+
+/* Estado de error suave (cuando quieras marcarlo) */
+.is-soft-error{
+    background-color: rgba(220,53,69,0.1) !important;
+    border-color: rgba(220,53,69,0.55) !important;
+}
+
+/* Botón principal */
+.btn-danger{
+    background: linear-gradient(180deg,#ff5a63,#e43a43) !important;
+    border: none !important;
+}
+.btn-danger:hover{ filter: brightness(1.03); }
+
+/* Enlaces secundarios */
+.text-light-weak{ color:#c7c7cd !important; }
+.link-accent{ color:#ff5a63; text-decoration:none; }
+.link-accent:hover{ text-decoration:underline; }
+
+/* Neutralizar autofill amarillo de Chrome */
+input:-webkit-autofill,
+input:-webkit-autofill:hover,
+input:-webkit-autofill:focus{
+    -webkit-text-fill-color:#fff;
+    -webkit-box-shadow: 0 0 0 1000px rgba(255,255,255,0.06) inset;
+    transition: background-color 9999s ease-in-out 0s;
+}
