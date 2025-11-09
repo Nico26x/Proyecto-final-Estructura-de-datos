@@ -1,4 +1,3 @@
-// src/pages/Login.jsx
 import { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { loginUser } from "../api/auth"; // asegúrate que tu api exporte esta función
@@ -44,7 +43,7 @@ export default function Login() {
                     return;
                 }
                 // Si devuelve string “feliz”, navega
-                navigate("/");
+                navigate("/home");  // Redirige al Home
                 return;
             }
 
@@ -55,7 +54,7 @@ export default function Login() {
 
             // Si guardas token en localStorage/context, hazlo aquí si aplica
             // localStorage.setItem("token", res.token);
-            navigate("/");
+            navigate("/home");  // Redirige al Home
         } catch {
             setErrorMsg("No se pudo iniciar sesión. Intenta de nuevo.");
         } finally {
