@@ -9,36 +9,63 @@ import { useAuth } from "../context/AuthContext";
 import AdminCanciones from "../pages/AdminCanciones";
 import AdminUsuarios from "../pages/AdminUsuarios";
 
+/* ===== Helpers de token (nuevos) ===== */
+function readRawToken() {
+    return localStorage.getItem("token") || localStorage.getItem("admin_token") || "";
+}
+function parseJwt(t) {
+    try {
+        const [, payload] = t.split(".");
+        return JSON.parse(atob(payload.replace(/-/g, "+").replace(/_/g, "/")));
+    } catch {
+        return null;
+    }
+}
+function isTokenValid(t) {
+    if (!t || t.split(".").length !== 3) return false;
+    const data = parseJwt(t);
+    if (!data) return false;
+    // Si trae exp (segundos UNIX), validar; si no trae, lo consideramos válido.
+    if (!data.exp) return true;
+    const now = Math.floor(Date.now() / 1000);
+    return data.exp > now;
+}
+function getActiveValidToken() {
+    const userTok = localStorage.getItem("token");
+    const adminTok = localStorage.getItem("admin_token");
+
+    if (isTokenValid(adminTok)) return adminTok;
+    if (adminTok) localStorage.removeItem("admin_token");
+
+    if (isTokenValid(userTok)) return userTok;
+    if (userTok) localStorage.removeItem("token");
+
+    return "";
+}
+
+/* ===== Tu PrivateRoute (con validación añadida) ===== */
 function PrivateRoute({ children }) {
     // tolerante: si el contexto aún no está listo, valida por localStorage
     const authCtx = useAuth?.();
     const ctxIsAuth = authCtx?.isAuthenticated ?? false;
 
-    // 🔁 Aceptar token de usuario o de admin
-    const hasUserToken = !!localStorage.getItem("token");
-    const hasAdminToken = !!localStorage.getItem("admin_token");
-    const hasAnyToken = hasUserToken || hasAdminToken;
+    // 🔁 Aceptar token válido de usuario o de admin
+    const validToken = !!getActiveValidToken();
+    const isAuthed = ctxIsAuth || validToken;
 
-    const isAuthed = ctxIsAuth || hasAnyToken;
     return isAuthed ? children : <Navigate to="/login" replace />;
 }
 
-// ⬇️ Helpers para proteger rutas admin SIN tocar PrivateRoute
+/* ===== Helpers admin (actualizados para usar el token válido) ===== */
 function isAdminFromLocal() {
     try {
-        const t =
-            localStorage.getItem("token") ||
-            localStorage.getItem("admin_token") ||
-            "";
-        if (!t || !t.includes(".")) return false;
-        const [, payload] = t.split(".");
-        const data = JSON.parse(
-            atob(payload.replace(/-/g, "+").replace(/_/g, "/"))
-        );
-        const roleRaw =
-            data.rol || data.role || data.authorities || data.Rol || data.Role || "";
-        const role = String(roleRaw).toUpperCase();
-        // Acepta 'ADMIN' o 'ROLE_ADMIN' o arrays que contengan ADMIN
+        const t = getActiveValidToken();
+        if (!t) return false;
+        const data = parseJwt(t);
+        const raw =
+            data?.rol || data?.role || data?.authorities || data?.Rol || data?.Role || "";
+        const role = String(raw).toUpperCase();
+        // Acepta 'ADMIN', 'ROLE_ADMIN' o arrays serializados que contengan ADMIN
         return role.includes("ADMIN");
     } catch {
         return false;
@@ -46,18 +73,15 @@ function isAdminFromLocal() {
 }
 
 function AdminRoute({ children }) {
-    const hasAnyToken = !!(
-        localStorage.getItem("token") || localStorage.getItem("admin_token")
-    );
-    if (!hasAnyToken) return <Navigate to="/login" replace />;
+    const t = getActiveValidToken();
+    if (!t) return <Navigate to="/login" replace />;
     if (!isAdminFromLocal()) return <Navigate to="/home" replace />;
     return children;
 }
 
 export default function AppRouter() {
-    // 🔁 clave dinámica considera ambos tokens
-    const token =
-        localStorage.getItem("token") || localStorage.getItem("admin_token");
+    // 🔁 clave dinámica considera ambos tokens, pero solo si son válidos
+    const token = getActiveValidToken();
     const key = token ? "auth" : "guest";
 
     return (

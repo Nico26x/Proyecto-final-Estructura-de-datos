@@ -1,21 +1,43 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { loginUser } from "../api/auth"; // asegúrate que tu api exporte esta función
 import "../styles/login.css";
 
 const API = "http://localhost:8080"; // respaldo por si hace falta llamar directo
 
-// === NUEVO: util para obtener rol desde el JWT si no viene explícito ===
-function decodeRoleFromToken(jwt) {
+// === NUEVO: utils de JWT (rol y expiración) ===
+function parseJwt(jwt) {
     try {
-        if (!jwt) return null;
         const [, payload] = jwt.split(".");
-        const data = JSON.parse(atob(payload.replace(/-/g, "+").replace(/_/g, "/")));
-        // back tuyo suele guardar rol como "rol" o "role"
-        return (data.rol || data.role || null);
+        return JSON.parse(atob(payload.replace(/-/g, "+").replace(/_/g, "/")));
     } catch {
         return null;
     }
+}
+function isTokenValid(jwt) {
+    if (!jwt || jwt.split(".").length !== 3) return false;
+    const data = parseJwt(jwt);
+    if (!data) return false;
+    if (!data.exp) return true; // si el backend no pone exp, lo consideramos válido
+    const now = Math.floor(Date.now() / 1000);
+    return data.exp > now;
+}
+// obtiene rol de varios posibles campos
+function decodeRoleFromToken(jwt) {
+    const data = parseJwt(jwt);
+    if (!data) return null;
+    // back tuyo suele guardar rol como "rol" o "role", pero contemplamos variantes
+    const raw = data.rol ?? data.role ?? data.Rol ?? data.Role ?? data.authorities ?? null;
+    if (Array.isArray(raw)) {
+        // authorities tipo ["ROLE_ADMIN", ...]
+        const str = raw.join(",").toUpperCase();
+        return str.includes("ADMIN") ? "ADMIN" : (str.includes("USER") ? "USER" : null);
+    }
+    const s = String(raw || "").toUpperCase();
+    if (!s) return null;
+    if (s.includes("ADMIN")) return "ADMIN";
+    if (s.includes("USER")) return "USER";
+    return raw || null;
 }
 
 export default function Login() {
@@ -25,6 +47,22 @@ export default function Login() {
     const [loading, setLoading] = useState(false);
     const [errorMsg, setErrorMsg] = useState("");
     const [touched, setTouched] = useState({});
+
+    // === NUEVO: al abrir login, purga tokens inválidos y redirige si ya hay token válido
+    useEffect(() => {
+        const userTok = localStorage.getItem("token");
+        const adminTok = localStorage.getItem("admin_token");
+
+        const validAdmin = isTokenValid(adminTok);
+        const validUser = isTokenValid(userTok);
+
+        if (!validAdmin && adminTok) localStorage.removeItem("admin_token");
+        if (!validUser && userTok) localStorage.removeItem("token");
+
+        if (validAdmin || validUser) {
+            navigate("/home", { replace: true });
+        }
+    }, [navigate]);
 
     const setField = (e) => {
         setForm((prev) => ({ ...prev, [e.target.name]: e.target.value }));
@@ -99,7 +137,13 @@ export default function Login() {
                 return;
             }
 
-            // === NUEVO: si no llegó el rol, lo deducimos del JWT ===
+            // === NUEVO: valida expiración antes de guardar
+            if (!isTokenValid(token)) {
+                setErrorMsg("Tu sesión ha expirado. Vuelve a intentarlo.");
+                return;
+            }
+
+            // === NUEVO: si no llegó el rol, lo deducimos del JWT
             if (!role) {
                 role = decodeRoleFromToken(token);
             }
