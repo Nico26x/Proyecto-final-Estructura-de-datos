@@ -149,9 +149,9 @@ function TopBar({ username, role, isAdmin, onGoAdminCanciones, onGoAdminUsuarios
                             gap: 8,
                         }}
                     >
-            <span>
-              Sesión: <b>{username || "—"}</b>
-            </span>
+                        <span>
+                            Sesión: <b>{username || "—"}</b>
+                        </span>
                         {role && (
                             <span
                                 style={{
@@ -162,8 +162,8 @@ function TopBar({ username, role, isAdmin, onGoAdminCanciones, onGoAdminUsuarios
                                     color: "#ddd",
                                 }}
                             >
-                {role}
-              </span>
+                                {role}
+                            </span>
                         )}
                     </div>
 
@@ -502,13 +502,14 @@ export default function Home() {
         setCurrent(songs[prevIdx]);
     };
 
-    const filtered = query
-        ? songs.filter((s) =>
-            `${s.titulo} ${s.artista} ${s.genero}`
-                .toLowerCase()
-                .includes(query.toLowerCase())
-        )
-        : songs;
+    const filtered =
+        query
+            ? songs.filter((s) =>
+                `${s.titulo} ${s.artista} ${s.genero}`
+                    .toLowerCase()
+                    .includes(query.toLowerCase())
+            )
+            : [];
 
     const favSongs = songs.filter((s) => favSet.has(idToStr(s.id)));
 
@@ -539,13 +540,7 @@ export default function Home() {
                 {tab === "home" && (
                     <>
                         <section className="section">
-                            <h2>¡Bienvenido!</h2>
-                            <div className="card">
-                                <div className="card-muted">
-                                    Reproduce tu música local desde <code>/public/music</code> y
-                                    gestiona favoritos / descubrimiento con tu backend.
-                                </div>
-                            </div>
+                            <h2>¡Bienvenido{username ? `, ${username}` : ""}!</h2>
                         </section>
                         <SectionRow
                             title="Reproducido recientemente"
@@ -562,13 +557,15 @@ export default function Home() {
                             <h2>Buscar</h2>
                             <input
                                 className="select"
-                                style={{ width: "100%", maxWidth: 420 }}
+                                style={{ width: "100%", maxWidth: 420, marginLeft: 12 }}
                                 placeholder="Busca por título, artista o género…"
                                 value={query}
                                 onChange={(e) => setQuery(e.target.value)}
                             />
                         </section>
-                        <SectionRow title="Resultados" items={filtered} onPick={setCurrent} />
+                        {query.trim().length > 0 && (
+                            <SectionRow title="Resultados" items={filtered} onPick={setCurrent} />
+                        )}
                     </>
                 )}
 

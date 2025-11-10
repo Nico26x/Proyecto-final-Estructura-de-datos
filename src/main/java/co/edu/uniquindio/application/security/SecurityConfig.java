@@ -59,12 +59,16 @@ public class SecurityConfig {
                         // ✅ Preflight CORS
                         .requestMatchers(HttpMethod.OPTIONS, "/**").permitAll()
 
-                        // 👑 ADMIN (como ya tenías)
-                        .requestMatchers(
-                                "/api/usuarios/listar",
-                                "/api/usuarios/**/eliminar",
-                                "/api/canciones/cargar"
-                        ).hasRole("ADMIN")
+                        // ======== SOLO ADMIN ========
+                        // Usuarios (listar y eliminar)
+                        .requestMatchers(HttpMethod.GET, "/api/usuarios/listar").hasRole("ADMIN")
+                        .requestMatchers(HttpMethod.DELETE, "/api/usuarios/eliminar").hasRole("ADMIN") // coincide con @DeleteMapping("/eliminar")
+
+                        // Canciones (carga masiva, crear, actualizar, eliminar)
+                        .requestMatchers(HttpMethod.POST, "/api/canciones/cargar").hasRole("ADMIN")
+                        .requestMatchers(HttpMethod.POST, "/api/canciones").hasRole("ADMIN")       // crear canción
+                        .requestMatchers(HttpMethod.PUT, "/api/canciones/**").hasRole("ADMIN")     // actualizar canción
+                        .requestMatchers(HttpMethod.DELETE, "/api/canciones/**").hasRole("ADMIN")  // eliminar canción
 
                         // USER/ADMIN (social y recomendaciones)
                         .requestMatchers(
