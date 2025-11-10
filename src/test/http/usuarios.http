@@ -62,7 +62,7 @@ Accept: application/json
 ###
 
 ### 🎵 AGREGAR CANCIÓN A FAVORITOS - NICO
-POST http://localhost:8080/api/usuarios/nico/favoritos/agregar?idCancion=28
+POST http://localhost:8080/api/usuarios/nico/favoritos/agregar?idCancion=1
 Authorization: Bearer {{token}}
 Content-Type: application/json
 
@@ -103,10 +103,9 @@ Accept: application/json
 
 ###
 
-### 🗑️ ELIMINAR CANCIÓN DE FAVORITOS
-DELETE http://localhost:8080/api/usuarios/deivid/favoritos/eliminar?idCancion=3
+### 4) Eliminar favorito (id=1)
+DELETE http://localhost:8080/api/usuarios/nico/favoritos/eliminar?idCancion=1
 Authorization: Bearer {{token}}
-Content-Type: application/json
 
 ###
 

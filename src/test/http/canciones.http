@@ -165,3 +165,30 @@ Content-Type: application/json
 GET http://localhost:8080/api/canciones/5/similares?limite=3
 Authorization: Bearer {{token}}
 Accept: application/json
+
+###
+
+###
+POST http://localhost:8080/api/canciones
+Authorization: Bearer {{token}}
+Content-Type: application/json
+
+{
+  "id": "1",
+  "titulo": "Yogurcito",
+  "artista": "Blessd",
+  "genero": "Urbano",
+  "anio": 2020,
+  "duracion": 3.25,
+  "fileName": "sisas.mp3"
+}
+
+### 2) Actualizar SOLO el fileName (requiere token si tu seguridad lo pide)
+# Reemplaza {{token}} si está protegido
+PUT http://localhost:8080/api/canciones/1/file?fileName=song1.mp3
+Authorization: Bearer {{token}}
+
+###
+
+### 4) Listar canciones (para que el front las consuma)
+GET http://localhost:8080/api/canciones

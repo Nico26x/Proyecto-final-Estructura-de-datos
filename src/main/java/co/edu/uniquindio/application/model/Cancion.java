@@ -10,6 +10,9 @@ public class Cancion {
     private int anio;
     private double duracion;
 
+    // 👇 NUEVO: nombre del archivo MP3 tal como existe en el front (public/music)
+    private String fileName; // ej: "song1.mp3"
+
     public Cancion() {}
 
     public Cancion(String id, String titulo, String artista, String genero, int anio, double duracion) {
@@ -19,6 +22,12 @@ public class Cancion {
         this.genero = genero;
         this.anio = anio;
         this.duracion = duracion;
+    }
+
+    // (opcional) Ctor que incluye fileName
+    public Cancion(String id, String titulo, String artista, String genero, int anio, double duracion, String fileName) {
+        this(id, titulo, artista, genero, anio, duracion);
+        this.fileName = fileName;
     }
 
     public String getId() { return id; }
@@ -39,6 +48,10 @@ public class Cancion {
     public double getDuracion() { return duracion; }
     public void setDuracion(double duracion) { this.duracion = duracion; }
 
+    // 👇 getters/setters nuevos
+    public String getFileName() { return fileName; }
+    public void setFileName(String fileName) { this.fileName = fileName; }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
@@ -54,17 +67,23 @@ public class Cancion {
 
     @Override
     public String toString() {
+        // Compatibilidad: si hay fileName, guardamos 7 columnas; si no, las 6 de siempre
+        if (fileName != null && !fileName.isBlank()) {
+            return id + ";" + titulo + ";" + artista + ";" + genero + ";" + anio + ";" + duracion + ";" + fileName;
+        }
         return id + ";" + titulo + ";" + artista + ";" + genero + ";" + anio + ";" + duracion;
     }
 
     /**
      * Convierte una línea del archivo canciones.txt a un objeto Cancion.
-     * Formato esperado: id;titulo;artista;genero;anio;duracion
+     * Formatos soportados:
+     *  - 6 campos: id;titulo;artista;genero;anio;duracion
+     *  - 7 campos: id;titulo;artista;genero;anio;duracion;fileName
      */
     public static Cancion fromString(String linea) {
         if (linea == null || linea.trim().isEmpty()) return null;
         String[] partes = linea.split(";");
-        if (partes.length != 6) return null;
+        if (partes.length < 6) return null;
 
         try {
             String id = partes[0].trim();
@@ -72,8 +91,13 @@ public class Cancion {
             String artista = partes[2].trim();
             String genero = partes[3].trim();
             int anio = Integer.parseInt(partes[4].trim());
-            double duracion = Double.parseDouble(partes[5].trim());
-            return new Cancion(id, titulo, artista, genero, anio, duracion);
+            double duracion = Double.parseDouble(partes[5].trim().replace(",", "."));
+
+            Cancion c = new Cancion(id, titulo, artista, genero, anio, duracion);
+            if (partes.length >= 7) {
+                c.setFileName(partes[6].trim());
+            }
+            return c;
         } catch (NumberFormatException ex) {
             ex.printStackTrace();
             return null;

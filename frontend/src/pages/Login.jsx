@@ -3,6 +3,21 @@ import { Link, useNavigate } from "react-router-dom";
 import { loginUser } from "../api/auth"; // asegúrate que tu api exporte esta función
 import "../styles/login.css";
 
+const API = "http://localhost:8080"; // respaldo por si hace falta llamar directo
+
+// === NUEVO: util para obtener rol desde el JWT si no viene explícito ===
+function decodeRoleFromToken(jwt) {
+    try {
+        if (!jwt) return null;
+        const [, payload] = jwt.split(".");
+        const data = JSON.parse(atob(payload.replace(/-/g, "+").replace(/_/g, "/")));
+        // back tuyo suele guardar rol como "rol" o "role"
+        return (data.rol || data.role || null);
+    } catch {
+        return null;
+    }
+}
+
 export default function Login() {
     const navigate = useNavigate();
 
@@ -33,28 +48,72 @@ export default function Login() {
         }
 
         try {
-            // Contrato esperado: loginUser devuelve { ok, token, message } o lanza error.
+            // 1) Intento principal: usar tu API util loginUser(form)
             const res = await loginUser(form);
 
-            if (typeof res === "string") {
-                // Por compatibilidad si tu API aún devuelve string de error
-                if (res.toLowerCase().includes("error") || res.toLowerCase().includes("incorrectas")) {
+            // Puede devolver string o un objeto. Probamos a leer el token de varias formas:
+            let token =
+                (res && (res.token || res?.data?.token)) ||
+                null;
+
+            // Además, intentamos capturar el rol si viene explícito
+            let role =
+                (res && (res.role || res.rol || res?.data?.role || res?.data?.rol || res?.usuario?.rol || res?.usuario?.role)) ||
+                null;
+
+            // Si recibiste string con mensaje de error
+            if (!token && typeof res === "string") {
+                const low = res.toLowerCase();
+                if (low.includes("error") || low.includes("incorrectas") || low.includes("inválid")) {
                     setErrorMsg(res.replace("⚠️", "").trim() || "Credenciales incorrectas.");
                     return;
                 }
-                // Si devuelve string “feliz”, navega
-                navigate("/home");  // Redirige al Home
+            }
+
+            // 2) Respaldo: si aún no hay token, intenta el endpoint directo del backend
+            if (!token) {
+                const r = await fetch(
+                    `${API}/api/usuarios/login?username=${encodeURIComponent(form.username)}&password=${encodeURIComponent(form.password)}`,
+                    { method: "POST" }
+                );
+                if (!r.ok) {
+                    // Intento alterno: body JSON (por si tu backend soporta ambas formas)
+                    const r2 = await fetch(`${API}/api/usuarios/login`, {
+                        method: "POST",
+                        headers: { "Content-Type": "application/json" },
+                        body: JSON.stringify({ username: form.username, password: form.password }),
+                    });
+                    if (!r2.ok) throw new Error(`Login ${r2.status}`);
+                    const json2 = await r2.json();
+                    token = json2.token || json2?.data?.token || null;
+                    role = role || json2.role || json2.rol || json2?.data?.role || json2?.data?.rol || json2?.usuario?.rol || json2?.usuario?.role || null;
+                } else {
+                    const json = await r.json();
+                    token = json.token || json?.data?.token || null;
+                    role = role || json.role || json.rol || json?.data?.role || json?.data?.rol || json?.usuario?.rol || json?.usuario?.role || null;
+                }
+            }
+
+            if (!token) {
+                setErrorMsg("El backend no retornó un token de sesión.");
                 return;
             }
 
-            if (!res || res.ok === false) {
-                setErrorMsg((res && res.message) || "Credenciales incorrectas.");
-                return;
+            // === NUEVO: si no llegó el rol, lo deducimos del JWT ===
+            if (!role) {
+                role = decodeRoleFromToken(token);
             }
 
-            // Si guardas token en localStorage/context, hazlo aquí si aplica
-            // localStorage.setItem("token", res.token);
-            navigate("/home");  // Redirige al Home
+            // ✅ Guardar token según rol (admin → admin_token, user → token)
+            if (String(role).toUpperCase() === "ADMIN") {
+                localStorage.removeItem("token");       // evitar choques
+                localStorage.setItem("admin_token", token);
+            } else {
+                localStorage.removeItem("admin_token"); // evitar choques
+                localStorage.setItem("token", token);
+            }
+
+            navigate("/home");
         } catch {
             setErrorMsg("No se pudo iniciar sesión. Intenta de nuevo.");
         } finally {

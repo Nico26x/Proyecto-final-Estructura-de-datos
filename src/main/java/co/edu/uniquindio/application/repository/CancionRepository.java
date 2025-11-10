@@ -32,8 +32,7 @@ public class CancionRepository {
         return canciones.values();
     }
 
-    // ✅ Agregar canción
-    // ✅ Agregar canción (ahora con control de IDs duplicados)
+    // ✅ Agregar canción (con control de IDs duplicados)
     public void agregarCancion(Cancion cancion) {
         String id = cancion.getId();
 
@@ -47,7 +46,6 @@ public class CancionRepository {
         canciones.put(id, cancion);
         guardarCancionesEnArchivo();
     }
-
 
     // ✅ Actualizar canción
     public boolean actualizarCancion(Cancion cancion) {
@@ -67,7 +65,7 @@ public class CancionRepository {
         return false;
     }
 
-    // 🔹 Cargar canciones desde archivo
+    // 🔹 Cargar canciones desde archivo (soporta 6 o 7 columnas)
     private void cargarCancionesDesdeArchivo() {
         File archivo = new File(FILE_PATH);
         if (!archivo.exists()) return;
@@ -76,15 +74,9 @@ public class CancionRepository {
                 new InputStreamReader(new FileInputStream(archivo), StandardCharsets.UTF_8))) {
             String linea;
             while ((linea = br.readLine()) != null) {
-                String[] partes = linea.split(";");
-                if (partes.length == 6) {
-                    String id = partes[0];
-                    String titulo = partes[1];
-                    String artista = partes[2];
-                    String genero = partes[3];
-                    int anio = Integer.parseInt(partes[4]);
-                    double duracion = Double.parseDouble(partes[5].replace(",", "."));
-                    canciones.put(id, new Cancion(id, titulo, artista, genero, anio, duracion));
+                Cancion c = Cancion.fromString(linea);
+                if (c != null) {
+                    canciones.put(c.getId(), c);
                 }
             }
         } catch (IOException e) {
@@ -92,15 +84,21 @@ public class CancionRepository {
         }
     }
 
-    // 💾 Guardar canciones en archivo
+    // 💾 Guardar canciones en archivo (escribe 6 o 7 columnas según haya fileName)
     private void guardarCancionesEnArchivo() {
         try (BufferedWriter bw = new BufferedWriter(
                 new OutputStreamWriter(new FileOutputStream(FILE_PATH), StandardCharsets.UTF_8))) {
 
             for (Cancion c : canciones.values()) {
-                bw.write(String.format("%s;%s;%s;%s;%d;%.2f",
-                        c.getId(), c.getTitulo(), c.getArtista(),
-                        c.getGenero(), c.getAnio(), c.getDuracion()));
+                if (c.getFileName() != null && !c.getFileName().isBlank()) {
+                    bw.write(String.format("%s;%s;%s;%s;%d;%.2f;%s",
+                            c.getId(), c.getTitulo(), c.getArtista(),
+                            c.getGenero(), c.getAnio(), c.getDuracion(), c.getFileName()));
+                } else {
+                    bw.write(String.format("%s;%s;%s;%s;%d;%.2f",
+                            c.getId(), c.getTitulo(), c.getArtista(),
+                            c.getGenero(), c.getAnio(), c.getDuracion()));
+                }
                 bw.newLine();
             }
 
@@ -134,7 +132,6 @@ public class CancionRepository {
         ExecutorService executor = Executors.newFixedThreadPool(4);
         List<Future<List<Cancion>>> tareas = new ArrayList<>();
 
-        // Crear tareas independientes por criterio
         if (titulo != null && !titulo.isBlank()) {
             tareas.add(executor.submit(() -> canciones.values().stream()
                     .filter(c -> c.getTitulo().toLowerCase().contains(titulo.toLowerCase()))
@@ -160,7 +157,6 @@ public class CancionRepository {
                     .collect(Collectors.toList())));
         }
 
-        // Esperar los resultados
         List<List<Cancion>> resultados = new ArrayList<>();
         for (Future<List<Cancion>> tarea : tareas) {
             try {
@@ -169,10 +165,8 @@ public class CancionRepository {
                 System.err.println("⚠️ Error en hilo de búsqueda: " + e.getMessage());
             }
         }
-
         executor.shutdown();
 
-        // Combinar resultados según operador lógico
         if (resultados.isEmpty()) return new ArrayList<>();
 
         Set<Cancion> combinado = new HashSet<>(resultados.get(0));
@@ -189,20 +183,16 @@ public class CancionRepository {
         return new ArrayList<>(combinado);
     }
 
-    // ✅ Agregar esta función auxiliar dentro de CancionRepository
+    // ✅ Auxiliar para IDs auto-incrementales numéricos
     private String obtenerSiguienteIdDisponible() {
         if (canciones.isEmpty()) {
             return "1";
         }
-
-        // Obtener el número máximo actual de IDs (asumiendo que son numéricos)
         int maxId = canciones.keySet().stream()
-                .filter(id -> id.matches("\\d+")) // solo números
+                .filter(id -> id.matches("\\d+"))
                 .mapToInt(Integer::parseInt)
                 .max()
                 .orElse(0);
-
         return String.valueOf(maxId + 1);
     }
-
 }

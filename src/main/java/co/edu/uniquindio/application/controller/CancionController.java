@@ -12,6 +12,8 @@ import java.util.List;
 /**
  * Controlador REST para la gestión del catálogo de canciones.
  * Cumple RF-010 (CRUD) y RF-003 (búsqueda por título/género).
+ *
+ * 👉 IMPORTANTE: ahora el JSON incluye "fileName" (nombre del MP3 en el front/public/music).
  */
 @RestController
 @RequestMapping("/api/canciones")
@@ -124,5 +126,17 @@ public class CancionController {
         List<Cancion> cola = cancionService.iniciarRadio(id, limite);
         return ResponseEntity.ok(cola);
     }
+
+    // 👇 NUEVO: Actualizar SOLO el fileName de una canción (útil para enlazar al MP3 del front)
+    @PutMapping("/{id}/file")
+    public ResponseEntity<?> actualizarFileName(@PathVariable String id, @RequestParam String fileName) {
+        Cancion c = cancionService.buscarPorId(id);
+        if (c == null) return ResponseEntity.notFound().build();
+        c.setFileName(fileName);
+        boolean ok = cancionService.actualizarCancion(c);
+        return ok ? ResponseEntity.ok("✅ fileName actualizado") :
+                ResponseEntity.status(500).body("❌ No se pudo actualizar fileName");
+    }
+
 
 }

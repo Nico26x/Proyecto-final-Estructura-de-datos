@@ -1,9 +1,12 @@
 package co.edu.uniquindio.application.security;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.autoconfigure.security.servlet.PathRequest;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.http.HttpMethod;
 import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.config.Customizer;
 import org.springframework.security.config.annotation.authentication.configuration.AuthenticationConfiguration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.http.SessionCreationPolicy;
@@ -11,10 +14,14 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
+import org.springframework.web.cors.CorsConfiguration;
+import org.springframework.web.cors.CorsConfigurationSource;
+import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
+
+import java.util.List;
 
 /**
  * 🔐 Configuración de seguridad basada en JWT.
- * Controla qué endpoints son públicos y cuáles requieren autenticación o rol específico.
  */
 @Configuration
 public class SecurityConfig {
@@ -25,60 +32,80 @@ public class SecurityConfig {
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         http
-                // 🚫 Deshabilitar CSRF (no necesario con JWT)
+                .cors(Customizer.withDefaults())
                 .csrf(csrf -> csrf.disable())
-
-                // ⚙️ Configurar autorizaciones por endpoint y rol
                 .authorizeHttpRequests(auth -> auth
-                        // Rutas públicas (sin token)
-                        .requestMatchers(
-                                "/api/usuarios/login",
-                                "/api/usuarios/registrar"
+                        // ✅ Recursos estáticos comunes del back (si los usas)
+                        .requestMatchers(PathRequest.toStaticResources().atCommonLocations()).permitAll()
+
+                        // ✅ Endpoints públicos de auth
+                        .requestMatchers("/api/usuarios/login", "/api/usuarios/registrar", "/api/usuarios/auth/**").permitAll()
+
+                        // ✅ (Opcional) Permitir leer canciones sin token (lista/detalle/búsquedas)
+                        .requestMatchers(HttpMethod.GET,
+                                "/api/canciones", "/api/canciones/*",
+                                "/api/canciones/buscar", "/api/canciones/buscar/**",
+                                "/api/canciones/*/similares", "/api/canciones/*/radio"
                         ).permitAll()
 
-                        // Endpoints accesibles solo por ADMIN
+                        // ✅ Favoritos: permitir GET/POST/DELETE con rol USER o ADMIN
+                        .requestMatchers(HttpMethod.GET,    "/api/usuarios/*/favoritos").hasAnyRole("USER","ADMIN")
+                        .requestMatchers(HttpMethod.POST,   "/api/usuarios/*/favoritos/agregar").hasAnyRole("USER","ADMIN")
+                        .requestMatchers(HttpMethod.DELETE, "/api/usuarios/*/favoritos/eliminar").hasAnyRole("USER","ADMIN")
+
+                        // ✅ (Opcional) si expones /music en el back algún día
+                        .requestMatchers(HttpMethod.GET, "/music/**").permitAll()
+
+                        // ✅ Preflight CORS
+                        .requestMatchers(HttpMethod.OPTIONS, "/**").permitAll()
+
+                        // 👑 ADMIN (como ya tenías)
                         .requestMatchers(
                                 "/api/usuarios/listar",
                                 "/api/usuarios/**/eliminar",
-                                "/api/canciones/cargar",
-                                "/api/canciones/**/eliminar"
+                                "/api/canciones/cargar"
                         ).hasRole("ADMIN")
 
-                        // 🆕 Endpoints sociales (seguir, dejar de seguir, sugerencias)
+                        // USER/ADMIN (social y recomendaciones)
                         .requestMatchers(
                                 "/api/usuarios/seguir",
                                 "/api/usuarios/dejar-seguir",
                                 "/api/usuarios/*/seguidos",
-                                "/api/usuarios/*/sugerencias"
+                                "/api/usuarios/*/sugerencias",
+                                "/api/usuarios/*/descubrimiento"
                         ).hasAnyRole("USER", "ADMIN")
 
-                        // 🆕 Endpoints de recomendaciones, radio y playlists
-                        .requestMatchers(
-                                "/api/usuarios/*/descubrimiento",
-                                "/api/canciones/*/similares",
-                                "/api/canciones/radio"
-                        ).hasAnyRole("USER", "ADMIN")
-
-                        // Todos los demás requieren estar autenticados (user o admin)
+                        // Resto autenticado
                         .anyRequest().authenticated()
                 )
-
-                // 🧩 Política de sesión sin estado (JWT)
                 .sessionManagement(sess -> sess.sessionCreationPolicy(SessionCreationPolicy.STATELESS));
 
-        // 🔄 Insertar el filtro JWT antes del filtro estándar de autenticación
         http.addFilterBefore(jwtFilter, UsernamePasswordAuthenticationFilter.class);
-
         return http.build();
     }
 
-    // 🔑 Encriptación de contraseñas
+    // ✅ CORS para el front
+    @Bean
+    public CorsConfigurationSource corsConfigurationSource() {
+        CorsConfiguration cfg = new CorsConfiguration();
+        cfg.setAllowCredentials(true);
+        cfg.setAllowedOrigins(List.of("http://localhost:3000"));
+        cfg.setAllowedMethods(List.of("GET", "POST", "PUT", "DELETE", "OPTIONS"));
+        cfg.setAllowedHeaders(List.of("*"));
+        cfg.setExposedHeaders(List.of("*"));
+
+        UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
+        source.registerCorsConfiguration("/**", cfg);
+        return source;
+    }
+
+    // 🔑 Encriptación
     @Bean
     public PasswordEncoder passwordEncoder() {
         return new BCryptPasswordEncoder();
     }
 
-    // ⚙️ Manejador de autenticación para compatibilidad con Spring
+    // ⚙️ Manager de autenticación
     @Bean
     public AuthenticationManager authenticationManager(AuthenticationConfiguration configuration) throws Exception {
         return configuration.getAuthenticationManager();
