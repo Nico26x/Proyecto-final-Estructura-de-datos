@@ -228,7 +228,8 @@ function TopBar({ username, role, isAdmin, onGoAdminCanciones, onGoAdminUsuarios
     );
 }
 
-function SectionRow({ title, items, onPick }) {
+// ⬇️ Añadimos el botón “Similares” en cada tarjeta
+function SectionRow({ title, items, onPick, onShowSimilares, showSimButton = true }) {
     return (
         <section className="section">
             <h2>{title}</h2>
@@ -241,12 +242,22 @@ function SectionRow({ title, items, onPick }) {
                         <div className="card-muted">
                             {s.artista} · {s.genero} · {s.anio}
                         </div>
-                        <button
-                            className="btn btn-sm btn-outline-light"
-                            onClick={() => onPick(s)}
-                        >
-                            Reproducir
-                        </button>
+                        <div style={{ display: "flex", gap: 6, flexWrap: "wrap" }}>
+                            <button
+                                className="btn btn-sm btn-outline-light"
+                                onClick={() => onPick(s)}
+                            >
+                                Reproducir
+                            </button>
+                            {showSimButton && (
+                                <button
+                                    className="btn btn-sm btn-outline-light"
+                                    onClick={() => onShowSimilares?.(s)}
+                                >
+                                    Similares
+                                </button>
+                            )}
+                        </div>
                     </div>
                 ))}
                 {items.length === 0 && (
@@ -415,6 +426,31 @@ export default function Home() {
 
     const [query, setQuery] = useState("");
 
+    // 👉 Autocompletar
+    const [suggestions, setSuggestions] = useState([]);
+    const [showSugg, setShowSugg] = useState(false);
+    const [searchLoading, setSearchLoading] = useState(false);
+
+    // 👉 Búsqueda avanzada
+    const [adv, setAdv] = useState({
+        titulo: "",
+        artista: "",
+        genero: "",
+        anioFrom: "",
+        anioTo: "",
+        op: "AND",
+    });
+    const [advLoading, setAdvLoading] = useState(false);
+    const [advError, setAdvError] = useState("");
+    const [advResults, setAdvResults] = useState([]);
+    const [advSearched, setAdvSearched] = useState(false);
+
+    // 👉 NUEVO: Similares (caché por canción)
+    const [simMap, setSimMap] = useState({}); // id(str) -> array de canciones
+    const [simFor, setSimFor] = useState(null); // { id, titulo }
+    const [simLoading, setSimLoading] = useState(false);
+    const [simError, setSimError] = useState("");
+
     // 🔄 Escuchar cambios de token en storage / foco / visibilidad
     useEffect(() => {
         const handleStorage = () => {
@@ -465,7 +501,7 @@ export default function Home() {
     // ¿La canción actual está en favoritos?
     const isFav = current ? favSet.has(idToStr(current.id)) : false;
 
-    // Toggle favorito → llama a los endpoints del UsuarioController con token
+    // Toggle favorito
     const toggleFav = async () => {
         if (!username || !current) return;
 
@@ -513,13 +549,107 @@ export default function Home() {
 
     const favSongs = songs.filter((s) => favSet.has(idToStr(s.id)));
 
-    // 🔒 Logout handler centralizado
+    // 🔎 Autocompletar (debounce)
+    useEffect(() => {
+        const q = query.trim();
+        if (q.length < 2) {
+            setSuggestions([]);
+            setShowSugg(false);
+            setSearchLoading(false);
+            return;
+        }
+        let alive = true;
+        setSearchLoading(true);
+        const timer = setTimeout(() => {
+            apiGet(`/api/canciones/autocompletar?prefijo=${encodeURIComponent(q)}`)
+                .then((list) => {
+                    if (!alive) return;
+                    if (Array.isArray(list)) {
+                        setSuggestions(list.slice(0, 8));
+                        setShowSugg(true);
+                    } else {
+                        setSuggestions([]);
+                        setShowSugg(false);
+                    }
+                })
+                .catch(() => {
+                    if (!alive) return;
+                    setSuggestions([]);
+                    setShowSugg(false);
+                })
+                .finally(() => alive && setSearchLoading(false));
+        }, 300);
+        return () => {
+            alive = false;
+            clearTimeout(timer);
+        };
+    }, [query]);
+
+    const handlePickSuggestion = (text) => {
+        setQuery(text);
+        setShowSugg(false);
+    };
+
+    // 🔍 Búsqueda avanzada
+    const onAdvChange = (e) => {
+        const { name, value } = e.target;
+        setAdv((p) => ({ ...p, [name]: value }));
+    };
+
+    const onAdvSearch = async (e) => {
+        e?.preventDefault?.();
+        setAdvError("");
+        setAdvLoading(true);
+        setAdvSearched(false);
+        setAdvResults([]);
+
+        const params = new URLSearchParams();
+        if (adv.titulo.trim()) params.append("titulo", adv.titulo.trim());
+        if (adv.artista.trim()) params.append("artista", adv.artista.trim());
+        if (adv.genero.trim()) params.append("genero", adv.genero.trim());
+        if (String(adv.anioFrom).trim()) params.append("anioFrom", Number(adv.anioFrom));
+        if (String(adv.anioTo).trim()) params.append("anioTo", Number(adv.anioTo));
+        if (adv.op) params.append("op", adv.op);
+
+        try {
+            const list = await apiGet(`/api/canciones/buscar/avanzado?${params.toString()}`);
+            setAdvResults(Array.isArray(list) ? list : []);
+            setAdvSearched(true);
+        } catch {
+            setAdvError("No se pudo realizar la búsqueda avanzada.");
+        } finally {
+            setAdvLoading(false);
+        }
+    };
+
+    // 🎵 NUEVO: handler para “Similares”
+    const handleShowSimilares = async (song) => {
+        if (!song) return;
+        const id = idToStr(song.id);
+        setSimError("");
+        setSimFor({ id, titulo: song.titulo || "" });
+
+        // si ya está en caché, no refetch
+        if (simMap[id]) return;
+
+        setSimLoading(true);
+        try {
+            const list = await apiGet(`/api/canciones/${encodeURIComponent(id)}/similares?limite=8`);
+            setSimMap((prev) => ({ ...prev, [id]: Array.isArray(list) ? list : [] }));
+        } catch {
+            setSimError("No se pudieron cargar canciones similares.");
+        } finally {
+            setSimLoading(false);
+        }
+    };
+
+    // 🔒 Logout handler
     const handleLogout = async () => {
         try {
             await apiPost("/api/usuarios/logout");
         } catch {}
         localStorage.removeItem("token");
-        localStorage.removeItem("admin_token"); // importante para admin
+        localStorage.removeItem("admin_token");
         setAuth({});
         window.location.href = "/login";
     };
@@ -546,26 +676,207 @@ export default function Home() {
                             title="Reproducido recientemente"
                             items={songs.slice(0, 8)}
                             onPick={setCurrent}
+                            onShowSimilares={handleShowSimilares}
+                            showSimButton
                         />
-                        <SectionRow title="Catálogo" items={songs} onPick={setCurrent} />
+                        <SectionRow
+                            title="Catálogo"
+                            items={songs}
+                            onPick={setCurrent}
+                            onShowSimilares={handleShowSimilares}
+                            showSimButton
+                        />
                     </>
                 )}
 
                 {tab === "buscar" && (
                     <>
+                        {/* Búsqueda simple + autocompletar */}
                         <section className="section">
                             <h2>Buscar</h2>
-                            <input
-                                className="select"
-                                style={{ width: "100%", maxWidth: 420, marginLeft: 12 }}
-                                placeholder="Busca por título, artista o género…"
-                                value={query}
-                                onChange={(e) => setQuery(e.target.value)}
-                            />
+                            <div style={{ position: "relative", width: "100%", maxWidth: 420, marginLeft: 12 }}>
+                                <input
+                                    className="select"
+                                    style={{ width: "100%" }}
+                                    placeholder="Busca por título, artista o género…"
+                                    value={query}
+                                    onChange={(e) => setQuery(e.target.value)}
+                                    onFocus={() => suggestions.length && setShowSugg(true)}
+                                    onBlur={() => setTimeout(() => setShowSugg(false), 120)}
+                                />
+                                {showSugg && suggestions.length > 0 && (
+                                    <div
+                                        className="dropdown"
+                                        style={{
+                                            position: "absolute",
+                                            left: 0,
+                                            top: "calc(100% + 6px)",
+                                            width: "100%",
+                                            background: "rgba(255,255,255,0.06)",
+                                            border: "1px solid rgba(255,255,255,0.1)",
+                                            backdropFilter: "blur(6px)",
+                                            borderRadius: 8,
+                                            padding: 6,
+                                            boxShadow: "0 6px 24px rgba(0,0,0,0.25)",
+                                            zIndex: 5,
+                                        }}
+                                    >
+                                        {suggestions.map((sug, i) => (
+                                            <button
+                                                key={`${sug}-${i}`}
+                                                className="btn btn-sm btn-outline-light"
+                                                style={{ width: "100%", textAlign: "left", marginBottom: 4 }}
+                                                onMouseDown={(e) => e.preventDefault()}
+                                                onClick={() => handlePickSuggestion(sug)}
+                                            >
+                                                {sug}
+                                            </button>
+                                        ))}
+                                    </div>
+                                )}
+                            </div>
+                            {searchLoading && (
+                                <div className="card" style={{ marginTop: 12, maxWidth: 420, marginLeft: 12 }}>
+                                    <div className="card-muted">Buscando…</div>
+                                </div>
+                            )}
                         </section>
+
                         {query.trim().length > 0 && (
-                            <SectionRow title="Resultados" items={filtered} onPick={setCurrent} />
+                            <SectionRow
+                                title="Resultados"
+                                items={filtered}
+                                onPick={setCurrent}
+                                onShowSimilares={handleShowSimilares}
+                                showSimButton
+                            />
                         )}
+
+                        {/* ======= Búsqueda avanzada ======= */}
+                        <section className="section">
+                            <h2>Búsqueda avanzada</h2>
+                            <div className="card" style={{ maxWidth: 900 }}>
+                                <form
+                                    onSubmit={onAdvSearch}
+                                    style={{
+                                        display: "grid",
+                                        gridTemplateColumns: "repeat(auto-fit, minmax(220px, 1fr))",
+                                        gap: 12,
+                                        alignItems: "end",
+                                    }}
+                                >
+                                    <div>
+                                        <label className="card-muted" style={{ display: "block", marginBottom: 6 }}>
+                                            Título
+                                        </label>
+                                        <input
+                                            className="select"
+                                            name="titulo"
+                                            value={adv.titulo}
+                                            onChange={onAdvChange}
+                                        />
+                                    </div>
+
+                                    <div>
+                                        <label className="card-muted" style={{ display: "block", marginBottom: 6 }}>
+                                            Artista
+                                        </label>
+                                        <input
+                                            className="select"
+                                            name="artista"
+                                            value={adv.artista}
+                                            onChange={onAdvChange}
+                                        />
+                                    </div>
+
+                                    <div>
+                                        <label className="card-muted" style={{ display: "block", marginBottom: 6 }}>
+                                            Género
+                                        </label>
+                                        <input
+                                            className="select"
+                                            name="genero"
+                                            value={adv.genero}
+                                            onChange={onAdvChange}
+                                        />
+                                    </div>
+
+                                    <div>
+                                        <label className="card-muted" style={{ display: "block", marginBottom: 6 }}>
+                                            Año desde
+                                        </label>
+                                        <input
+                                            className="select"
+                                            name="anioFrom"
+                                            value={adv.anioFrom}
+                                            onChange={onAdvChange}
+                                        />
+                                    </div>
+
+                                    <div>
+                                        <label className="card-muted" style={{ display: "block", marginBottom: 6 }}>
+                                            Año hasta
+                                        </label>
+                                        <input
+                                            className="select"
+                                            name="anioTo"
+                                            value={adv.anioTo}
+                                            onChange={onAdvChange}
+                                        />
+                                    </div>
+
+                                    <div>
+                                        <label className="card-muted" style={{ display: "block", marginBottom: 6 }}>
+                                            Operador
+                                        </label>
+                                        <select
+                                            className="select"
+                                            name="op"
+                                            value={adv.op}
+                                            onChange={onAdvChange}
+                                        >
+                                            <option value="AND">AND (todas)</option>
+                                            <option value="OR">OR (cualquiera)</option>
+                                        </select>
+                                    </div>
+
+                                    <div style={{ gridColumn: "1 / -1", display: "flex", justifyContent: "center" }}>
+                                        <button type="submit" className="btn btn-sm btn-outline-light">
+                                            {advLoading ? "Buscando..." : "Buscar"}
+                                        </button>
+                                    </div>
+                                </form>
+
+                                {advError && (
+                                    <div
+                                        className="alert alert-danger"
+                                        style={{
+                                            background: "#3d1414",
+                                            color: "#ffd7d7",
+                                            padding: "8px 10px",
+                                            borderRadius: 8,
+                                            marginTop: 10,
+                                            textAlign: "center",
+                                        }}
+                                    >
+                                        {advError}
+                                    </div>
+                                )}
+                            </div>
+                        </section>
+
+                        {advSearched && (
+                            <div style={{ marginTop: 28 }}>
+                                <SectionRow
+                                    title="Resultados avanzados"
+                                    items={advResults}
+                                    onPick={setCurrent}
+                                    onShowSimilares={handleShowSimilares}
+                                    showSimButton
+                                />
+                            </div>
+                        )}
+
                     </>
                 )}
 
@@ -578,6 +889,8 @@ export default function Home() {
                             title="Tus canciones favoritas"
                             items={favSongs}
                             onPick={setCurrent}
+                            onShowSimilares={handleShowSimilares}
+                            showSimButton
                         />
                     </>
                 )}
@@ -591,6 +904,8 @@ export default function Home() {
                             title="Recomendado para ti"
                             items={discover}
                             onPick={setCurrent}
+                            onShowSimilares={handleShowSimilares}
+                            showSimButton
                         />
                     </>
                 )}
@@ -606,6 +921,43 @@ export default function Home() {
                             </div>
                         </section>
                     </>
+                )}
+
+                {/* ======= NUEVO: Sección de similares seleccionada ======= */}
+                {simFor && (
+                    <div style={{ marginTop: 28 }}>
+                        {simError && (
+                            <div
+                                className="alert alert-danger"
+                                style={{
+                                    background: "#3d1414",
+                                    color: "#ffd7d7",
+                                    padding: "8px 10px",
+                                    borderRadius: 8,
+                                    marginBottom: 10,
+                                    textAlign: "center",
+                                }}
+                            >
+                                {simError}
+                            </div>
+                        )}
+                        {simLoading ? (
+                            <section className="section">
+                                <h2>Similares a “{simFor.titulo}”</h2>
+                                <div className="card">
+                                    <div className="card-muted">Cargando similares…</div>
+                                </div>
+                            </section>
+                        ) : (
+                            <SectionRow
+                                title={`Similares a “${simFor.titulo}”`}
+                                items={simMap[simFor.id] || []}
+                                onPick={setCurrent}
+                                onShowSimilares={handleShowSimilares}
+                                showSimButton
+                            />
+                        )}
+                    </div>
                 )}
 
                 <PlayerBar
