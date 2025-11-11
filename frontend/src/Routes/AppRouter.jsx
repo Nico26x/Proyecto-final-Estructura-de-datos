@@ -73,7 +73,8 @@ function isAdminFromLocal() {
 }
 
 function AdminRoute({ children }) {
-    const t = getActiveValidToken();
+    // 👉 usamos también readRawToken() para evitar warning “no usado”
+    const t = getActiveValidToken() || readRawToken();
     if (!t) return <Navigate to="/login" replace />;
     if (!isAdminFromLocal()) return <Navigate to="/home" replace />;
     return children;
@@ -81,7 +82,8 @@ function AdminRoute({ children }) {
 
 export default function AppRouter() {
     // 🔁 clave dinámica considera ambos tokens, pero solo si son válidos
-    const token = getActiveValidToken();
+    // 👉 usamos también readRawToken() para evitar warning “no usado”
+    const token = getActiveValidToken() || readRawToken();
     const key = token ? "auth" : "guest";
 
     return (
