@@ -228,8 +228,7 @@ function TopBar({ username, role, isAdmin, onGoAdminCanciones, onGoAdminUsuarios
     );
 }
 
-// ⬇️ Añadimos el botón “Similares” en cada tarjeta
-function SectionRow({ title, items, onPick, onShowSimilares, showSimButton = true }) {
+function SectionRow({ title, items, onPick }) {
     return (
         <section className="section">
             <h2>{title}</h2>
@@ -242,22 +241,12 @@ function SectionRow({ title, items, onPick, onShowSimilares, showSimButton = tru
                         <div className="card-muted">
                             {s.artista} · {s.genero} · {s.anio}
                         </div>
-                        <div style={{ display: "flex", gap: 6, flexWrap: "wrap" }}>
-                            <button
-                                className="btn btn-sm btn-outline-light"
-                                onClick={() => onPick(s)}
-                            >
-                                Reproducir
-                            </button>
-                            {showSimButton && (
-                                <button
-                                    className="btn btn-sm btn-outline-light"
-                                    onClick={() => onShowSimilares?.(s)}
-                                >
-                                    Similares
-                                </button>
-                            )}
-                        </div>
+                        <button
+                            className="btn btn-sm btn-outline-light"
+                            onClick={() => onPick(s)}
+                        >
+                            Reproducir
+                        </button>
                     </div>
                 ))}
                 {items.length === 0 && (
@@ -431,6 +420,10 @@ export default function Home() {
     const [showSugg, setShowSugg] = useState(false);
     const [searchLoading, setSearchLoading] = useState(false);
 
+    // 👉 Búsqueda simple (backend)
+    const [simpleResults, setSimpleResults] = useState([]);
+    const [simpleLoading, setSimpleLoading] = useState(false);
+
     // 👉 Búsqueda avanzada
     const [adv, setAdv] = useState({
         titulo: "",
@@ -444,12 +437,6 @@ export default function Home() {
     const [advError, setAdvError] = useState("");
     const [advResults, setAdvResults] = useState([]);
     const [advSearched, setAdvSearched] = useState(false);
-
-    // 👉 NUEVO: Similares (caché por canción)
-    const [simMap, setSimMap] = useState({}); // id(str) -> array de canciones
-    const [simFor, setSimFor] = useState(null); // { id, titulo }
-    const [simLoading, setSimLoading] = useState(false);
-    const [simError, setSimError] = useState("");
 
     // 🔄 Escuchar cambios de token en storage / foco / visibilidad
     useEffect(() => {
@@ -538,15 +525,6 @@ export default function Home() {
         setCurrent(songs[prevIdx]);
     };
 
-    const filtered =
-        query
-            ? songs.filter((s) =>
-                `${s.titulo} ${s.artista} ${s.genero}`
-                    .toLowerCase()
-                    .includes(query.toLowerCase())
-            )
-            : [];
-
     const favSongs = songs.filter((s) => favSet.has(idToStr(s.id)));
 
     // 🔎 Autocompletar (debounce)
@@ -590,6 +568,41 @@ export default function Home() {
         setShowSugg(false);
     };
 
+    // 🔎 Búsqueda simple (debounce): combinar título y género
+    useEffect(() => {
+        const q = query.trim();
+        if (!q) {
+            setSimpleResults([]);
+            setSimpleLoading(false);
+            return;
+        }
+        let alive = true;
+        setSimpleLoading(true);
+
+        const timer = setTimeout(() => {
+            Promise.allSettled([
+                apiGet(`/api/canciones/buscar?titulo=${encodeURIComponent(q)}`),
+                apiGet(`/api/canciones/buscar?genero=${encodeURIComponent(q)}`)
+            ])
+                .then(([byTitle, byGenre]) => {
+                    if (!alive) return;
+                    const listA = byTitle.status === "fulfilled" && Array.isArray(byTitle.value) ? byTitle.value : [];
+                    const listB = byGenre.status === "fulfilled" && Array.isArray(byGenre.value) ? byGenre.value : [];
+                    // unir por id
+                    const map = new Map();
+                    [...listA, ...listB].forEach(c => map.set(idToStr(c.id), c));
+                    setSimpleResults([...map.values()]);
+                })
+                .catch(() => setSimpleResults([]))
+                .finally(() => alive && setSimpleLoading(false));
+        }, 300);
+
+        return () => {
+            alive = false;
+            clearTimeout(timer);
+        };
+    }, [query]);
+
     // 🔍 Búsqueda avanzada
     const onAdvChange = (e) => {
         const { name, value } = e.target;
@@ -619,27 +632,6 @@ export default function Home() {
             setAdvError("No se pudo realizar la búsqueda avanzada.");
         } finally {
             setAdvLoading(false);
-        }
-    };
-
-    // 🎵 NUEVO: handler para “Similares”
-    const handleShowSimilares = async (song) => {
-        if (!song) return;
-        const id = idToStr(song.id);
-        setSimError("");
-        setSimFor({ id, titulo: song.titulo || "" });
-
-        // si ya está en caché, no refetch
-        if (simMap[id]) return;
-
-        setSimLoading(true);
-        try {
-            const list = await apiGet(`/api/canciones/${encodeURIComponent(id)}/similares?limite=8`);
-            setSimMap((prev) => ({ ...prev, [id]: Array.isArray(list) ? list : [] }));
-        } catch {
-            setSimError("No se pudieron cargar canciones similares.");
-        } finally {
-            setSimLoading(false);
         }
     };
 
@@ -676,16 +668,8 @@ export default function Home() {
                             title="Reproducido recientemente"
                             items={songs.slice(0, 8)}
                             onPick={setCurrent}
-                            onShowSimilares={handleShowSimilares}
-                            showSimButton
                         />
-                        <SectionRow
-                            title="Catálogo"
-                            items={songs}
-                            onPick={setCurrent}
-                            onShowSimilares={handleShowSimilares}
-                            showSimButton
-                        />
+                        <SectionRow title="Catálogo" items={songs} onPick={setCurrent} />
                     </>
                 )}
 
@@ -735,7 +719,7 @@ export default function Home() {
                                     </div>
                                 )}
                             </div>
-                            {searchLoading && (
+                            {(searchLoading || simpleLoading) && (
                                 <div className="card" style={{ marginTop: 12, maxWidth: 420, marginLeft: 12 }}>
                                     <div className="card-muted">Buscando…</div>
                                 </div>
@@ -743,13 +727,7 @@ export default function Home() {
                         </section>
 
                         {query.trim().length > 0 && (
-                            <SectionRow
-                                title="Resultados"
-                                items={filtered}
-                                onPick={setCurrent}
-                                onShowSimilares={handleShowSimilares}
-                                showSimButton
-                            />
+                            <SectionRow title="Resultados" items={simpleResults} onPick={setCurrent} />
                         )}
 
                         {/* ======= Búsqueda avanzada ======= */}
@@ -871,8 +849,6 @@ export default function Home() {
                                     title="Resultados avanzados"
                                     items={advResults}
                                     onPick={setCurrent}
-                                    onShowSimilares={handleShowSimilares}
-                                    showSimButton
                                 />
                             </div>
                         )}
@@ -889,8 +865,6 @@ export default function Home() {
                             title="Tus canciones favoritas"
                             items={favSongs}
                             onPick={setCurrent}
-                            onShowSimilares={handleShowSimilares}
-                            showSimButton
                         />
                     </>
                 )}
@@ -904,8 +878,6 @@ export default function Home() {
                             title="Recomendado para ti"
                             items={discover}
                             onPick={setCurrent}
-                            onShowSimilares={handleShowSimilares}
-                            showSimButton
                         />
                     </>
                 )}
@@ -921,43 +893,6 @@ export default function Home() {
                             </div>
                         </section>
                     </>
-                )}
-
-                {/* ======= NUEVO: Sección de similares seleccionada ======= */}
-                {simFor && (
-                    <div style={{ marginTop: 28 }}>
-                        {simError && (
-                            <div
-                                className="alert alert-danger"
-                                style={{
-                                    background: "#3d1414",
-                                    color: "#ffd7d7",
-                                    padding: "8px 10px",
-                                    borderRadius: 8,
-                                    marginBottom: 10,
-                                    textAlign: "center",
-                                }}
-                            >
-                                {simError}
-                            </div>
-                        )}
-                        {simLoading ? (
-                            <section className="section">
-                                <h2>Similares a “{simFor.titulo}”</h2>
-                                <div className="card">
-                                    <div className="card-muted">Cargando similares…</div>
-                                </div>
-                            </section>
-                        ) : (
-                            <SectionRow
-                                title={`Similares a “${simFor.titulo}”`}
-                                items={simMap[simFor.id] || []}
-                                onPick={setCurrent}
-                                onShowSimilares={handleShowSimilares}
-                                showSimButton
-                            />
-                        )}
-                    </div>
                 )}
 
                 <PlayerBar
