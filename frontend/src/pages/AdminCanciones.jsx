@@ -25,6 +25,19 @@ async function apiPostJson(path, body) {
         return true;
     }
 }
+async function apiPutJson(path, body) {
+    const r = await fetch(`${API}${path}`, {
+        method: "PUT",
+        headers: authHeaders(),
+        body: JSON.stringify(body),
+    });
+    if (!r.ok) throw new Error(`PUT ${path} -> ${r.status}`);
+    try {
+        return await r.json();
+    } catch {
+        return true;
+    }
+}
 async function apiDelete(path) {
     const r = await fetch(`${API}${path}`, {
         method: "DELETE",
@@ -141,6 +154,79 @@ export default function AdminCanciones() {
         }
     };
 
+    // ====== Formulario EDITAR (PUT) ======
+    const [editMsg, setEditMsg] = useState("");
+    const [editErr, setEditErr] = useState("");
+    const [editForm, setEditForm] = useState({
+        id: "",
+        titulo: "",
+        artista: "",
+        genero: "",
+        anio: "",
+        duracion: "",
+        fileName: "",
+    });
+    const setEditField = (e) => {
+        const { name, value } = e.target;
+        setEditForm((p) => ({ ...p, [name]: value }));
+    };
+
+    const onSubmitEdit = async (e) => {
+        e.preventDefault();
+        setEditMsg("");
+        setEditErr("");
+
+        if (!editForm.id.trim()) {
+            setEditErr("El ID es obligatorio para editar.");
+            return;
+        }
+        if (!editForm.titulo.trim() || !editForm.artista.trim() || !editForm.fileName.trim()) {
+            setEditErr("Título, Artista y fileName son obligatorios.");
+            return;
+        }
+        if (!editForm.anio || isNaN(Number(editForm.anio))) {
+            setEditErr("Año debe ser un número.");
+            return;
+        }
+        if (!editForm.duracion || isNaN(Number(editForm.duracion))) {
+            setEditErr("Duración debe ser un número (minutos.decimales).");
+            return;
+        }
+
+        try {
+            const payload = {
+                id: editForm.id.trim(),
+                titulo: editForm.titulo.trim(),
+                artista: editForm.artista.trim(),
+                genero: editForm.genero.trim(),
+                anio: Number(editForm.anio),
+                duracion: Number(String(editForm.duracion).replace(",", ".")),
+                fileName: editForm.fileName.trim(),
+            };
+
+            const resp = await apiPutJson(
+                `/api/canciones/${encodeURIComponent(editForm.id.trim())}`,
+                payload
+            );
+            const okMsg =
+                typeof resp === "string" ? resp : "✏️ Canción editada correctamente.";
+            setEditMsg(okMsg);
+            setEditForm({
+                id: "",
+                titulo: "",
+                artista: "",
+                genero: "",
+                anio: "",
+                duracion: "",
+                fileName: "",
+            });
+        } catch {
+            setEditErr(
+                "No se pudo editar la canción. Verifica el ID, el token de admin y el backend."
+            );
+        }
+    };
+
     // ====== Formulario ELIMINAR ======
     const [delId, setDelId] = useState("");
     const [delMsg, setDelMsg] = useState("");
@@ -179,7 +265,7 @@ export default function AdminCanciones() {
                 style={{
                     paddingBottom: 140,
                     display: "grid",
-                    gridTemplateRows: "auto auto",
+                    gridTemplateRows: "auto auto auto",
                     gap: 18,
                 }}
             >
@@ -191,7 +277,7 @@ export default function AdminCanciones() {
                         </h2>
 
                         <div className="card" style={{ maxWidth: 900, margin: "0 auto" }}>
-                            {/* Título (ahora rojo) */}
+                            {/* Título (rojo) */}
                             <h3
                                 style={{
                                     marginTop: 0,
@@ -304,6 +390,123 @@ export default function AdminCanciones() {
                             >
                                 1) Copia el <b>.mp3</b> a <code>front/public/music/</code>.<br />
                                 2) Registra los datos aquí (el <code>fileName</code> debe coincidir con el nombre real del archivo).
+                            </div>
+                        </div>
+                    </div>
+                </section>
+
+                {/* ====== Card: Editar canción (PUT) ====== */}
+                <section className="section" style={{ display: "grid", placeItems: "center" }}>
+                    <div style={{ width: "100%", maxWidth: 900 }}>
+                        <div className="card" style={{ margin: "0 auto" }}>
+                            <h3
+                                style={{
+                                    marginTop: 0,
+                                    marginBottom: 10,
+                                    textAlign: "center",
+                                    color: "#ff4d4d",
+                                }}
+                            >
+                                Editar canción
+                            </h3>
+
+                            {editMsg && (
+                                <div
+                                    className="alert alert-success"
+                                    style={{
+                                        background: "#143d2b",
+                                        color: "#b7ffd7",
+                                        padding: "8px 10px",
+                                        borderRadius: 8,
+                                        marginBottom: 10,
+                                        textAlign: "center",
+                                    }}
+                                >
+                                    {editMsg}
+                                </div>
+                            )}
+                            {editErr && (
+                                <div
+                                    className="alert alert-danger"
+                                    style={{
+                                        background: "#3d1414",
+                                        color: "#ffd7d7",
+                                        padding: "8px 10px",
+                                        borderRadius: 8,
+                                        marginBottom: 10,
+                                        textAlign: "center",
+                                    }}
+                                >
+                                    {editErr}
+                                </div>
+                            )}
+
+                            <form
+                                onSubmit={onSubmitEdit}
+                                style={{
+                                    display: "grid",
+                                    gridTemplateColumns: "repeat(auto-fit, minmax(240px, 1fr))",
+                                    gap: 16,
+                                    alignItems: "start",
+                                }}
+                            >
+                                <div>
+                                    <label className="card-muted" style={{ display: "block", marginBottom: 6 }}>
+                                        ID *
+                                    </label>
+                                    <input className="select" name="id" value={editForm.id} onChange={setEditField} required />
+                                </div>
+
+                                <div>
+                                    <label className="card-muted" style={{ display: "block", marginBottom: 6 }}>
+                                        Título *
+                                    </label>
+                                    <input className="select" name="titulo" value={editForm.titulo} onChange={setEditField} required />
+                                </div>
+
+                                <div>
+                                    <label className="card-muted" style={{ display: "block", marginBottom: 6 }}>
+                                        Artista *
+                                    </label>
+                                    <input className="select" name="artista" value={editForm.artista} onChange={setEditField} required />
+                                </div>
+
+                                <div>
+                                    <label className="card-muted" style={{ display: "block", marginBottom: 6 }}>
+                                        Género
+                                    </label>
+                                    <input className="select" name="genero" value={editForm.genero} onChange={setEditField} />
+                                </div>
+
+                                <div>
+                                    <label className="card-muted" style={{ display: "block", marginBottom: 6 }}>
+                                        Año *
+                                    </label>
+                                    <input className="select" name="anio" value={editForm.anio} onChange={setEditField} required />
+                                </div>
+
+                                <div>
+                                    <label className="card-muted" style={{ display: "block", marginBottom: 6 }}>
+                                        Duración (min) *
+                                    </label>
+                                    <input className="select" name="duracion" value={editForm.duracion} onChange={setEditField} required />
+                                </div>
+
+                                <div style={{ gridColumn: "1 / -1" }}>
+                                    <label className="card-muted" style={{ display: "block", marginBottom: 6 }}>
+                                        fileName (*.mp3) *
+                                    </label>
+                                    <input className="select" name="fileName" value={editForm.fileName} onChange={setEditField} required />
+                                </div>
+
+                                <div style={{ gridColumn: "1 / -1", display: "flex", justifyContent: "center", marginTop: 4 }}>
+                                    <button type="submit" className="btn btn-sm btn-outline-light">Guardar cambios</button>
+                                </div>
+                            </form>
+
+                            {/* Nota informativa (igual estilo que eliminar) */}
+                            <div className="card-muted" style={{ marginTop: 8, fontSize: 12 }}>
+                                * Esta acción actualiza la información de la canción en el archivo <code>canciones.txt</code> del backend (no mueve ni borra el .mp3 del front).
                             </div>
                         </div>
                     </div>
