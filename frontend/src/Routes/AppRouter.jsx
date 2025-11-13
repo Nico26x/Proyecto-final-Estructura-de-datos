@@ -86,15 +86,10 @@ export default function AppRouter() {
 
     return (
         <Routes key={key}>
-            {/* Si entras a /, manda a /home (si autenticado) o /login */}
-            <Route
-                path="/"
-                element={
-                    token ? <Navigate to="/home" replace /> : <Navigate to="/login" replace />
-                }
-            />
+            {/* Redirige siempre a /login si no hay token válido */}
+            <Route path="/" element={<Navigate to="/login" replace />} />
 
-            {/* /login: si ya tienes token, no te deja volver a ver el login */}
+            {/* Ruta para /login, no redirige si ya hay un token */}
             <Route
                 path="/login"
                 element={token ? <Navigate to="/home" replace /> : <Login />}
@@ -149,6 +144,7 @@ export default function AppRouter() {
                 }
             />
 
+            {/* Ruta catch-all (si no existe ruta válida, redirige al login) */}
             <Route
                 path="*"
                 element={<Navigate to={token ? "/home" : "/login"} replace />}
