@@ -1,3 +1,5 @@
 1;Yogurcito;Blessd;Urbano;2020;3,25;song1.mp3
 2;Parche Tranqui;GreezyDee - Blessd;Urbano;2025;3,41;Parche Tranqui.mp3
 3;Diomedez;Blessd;Urbano;2025;3,41;Diomedez.mp3
+4;Duele mas;Grupo niche;Salsa;1990;5,41;Duele mas.mp3
+5;La chispa adecuada;Heroes del silencio;rock;1995;5,28;La chispa adecuada.mp3

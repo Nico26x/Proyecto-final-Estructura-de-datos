@@ -110,24 +110,56 @@ public class CancionService {
 
             String linea;
             while ((linea = br.readLine()) != null) {
-                String[] partes = linea.split(";");
-                if (partes.length == 6) {
-                    String id = partes[0].trim();
-                    String titulo = partes[1].trim();
-                    String artista = partes[2].trim();
-                    String genero = partes[3].trim();
-                    int anio = Integer.parseInt(partes[4].trim());
-                    double duracion = Double.parseDouble(partes[5].trim().replace(",", "."));
+                if (linea.isBlank() || linea.trim().startsWith("#")) continue;
 
-                    Cancion nueva = new Cancion(id, titulo, artista, genero, anio, duracion);
-                    cancionRepository.agregarCancion(nueva);
-                    trieAutocompletado.insertarPalabra(titulo);
-                    contador++;
+                String[] partes = linea.split(";");
+                for (int i = 0; i < partes.length; i++) partes[i] = partes[i].trim();
+
+                if (partes.length != 6 && partes.length != 7) {
+                    // formato inválido -> saltar fila
+                    continue;
                 }
+
+                String id      = partes[0];
+                String titulo  = partes[1];
+                String artista = partes[2];
+                String genero  = partes[3];
+                int anio       = Integer.parseInt(partes[4]);
+
+                Double duracion = null;
+                String fileName;
+
+                if (partes.length == 7) {
+                    // id;titulo;artista;genero;anio;duracion;fileName
+                    String durRaw = partes[5].replace(',', '.');
+                    duracion = Double.valueOf(durRaw);
+                    fileName = partes[6];
+                } else {
+                    // 6 columnas → asumimos que es fileName
+                    // id;titulo;artista;genero;anio;fileName
+                    fileName = partes[5];
+                }
+
+                // Crea la entidad y asigna el fileName
+                Cancion nueva = new Cancion(id, titulo, artista, genero, anio,
+                        duracion != null ? duracion : 0.0);
+                // Asegúrate de que tu entidad tenga setter; si no, agrega un constructor con fileName
+                nueva.setFileName(fileName);
+
+                // Persistir
+                cancionRepository.agregarCancion(nueva);
+
+                // Autocompletar (puedes incluir artista si quieres)
+                trieAutocompletado.insertarPalabra(titulo);
+
+                contador++;
             }
 
             // reconstruimos el grafo después de la carga masiva
             construirGrafoDeSimilitud();
+
+            // Si tu repositorio necesita reescribir canciones.txt explícitamente, llama aquí:
+            // cancionRepository.reconstruirArchivoCanciones();
 
         } catch (Exception e) {
             throw new Exception("Error al procesar el archivo: " + e.getMessage());
@@ -135,6 +167,7 @@ public class CancionService {
 
         return contador;
     }
+
 
     // Construcción y consulta del grafo de similitud
     public void construirGrafoDeSimilitud() {

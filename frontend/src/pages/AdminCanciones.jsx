@@ -48,6 +48,20 @@ async function apiDelete(path) {
     return ct.includes("application/json") ? r.json() : r.text();
 }
 
+// ➕ NUEVO: helper para subir archivo (multipart/form-data)
+async function apiPostFile(path, formData) {
+    const headers =
+        getToken() ? { Authorization: `Bearer ${getToken()}` } : {};
+    const r = await fetch(`${API}${path}`, {
+        method: "POST",
+        headers, // ¡no pongas Content-Type; el navegador lo setea con el boundary!
+        body: formData,
+    });
+    const text = await r.text(); // el endpoint devuelve String
+    if (!r.ok) throw new Error(text || `POST ${path} -> ${r.status}`);
+    return text;
+}
+
 // === Sidebar compacta con estilo de Home ===
 function AdminSidebar({ active = "canciones" }) {
     const nav = useNavigate();
@@ -253,6 +267,45 @@ export default function AdminCanciones() {
             setDelErr(
                 "No se pudo eliminar la canción. Verifica el ID y el token de admin."
             );
+        }
+    };
+
+    // ====== NUEVO: Cargar canciones masivamente (.txt) ======
+    const [bulkMsg, setBulkMsg] = useState("");
+    const [bulkErr, setBulkErr] = useState("");
+    const [bulkLoading, setBulkLoading] = useState(false);
+    const [bulkFile, setBulkFile] = useState(null);
+
+    const onSubmitBulk = async (e) => {
+        e.preventDefault();
+        setBulkMsg("");
+        setBulkErr("");
+
+        if (!bulkFile) {
+            setBulkErr("Selecciona un archivo .txt.");
+            return;
+        }
+        const isTxt =
+            bulkFile.type === "text/plain" ||
+            /\.txt$/i.test(bulkFile.name || "");
+        if (!isTxt) {
+            setBulkErr("El archivo debe ser .txt (texto plano).");
+            return;
+        }
+
+        const fd = new FormData();
+        fd.append("archivo", bulkFile);
+
+        try {
+            setBulkLoading(true);
+            const msg = await apiPostFile("/api/canciones/cargar", fd);
+            setBulkMsg(msg || "✅ Carga masiva realizada.");
+            setBulkFile(null);
+            // Opcional: refrescar catálogo aquí si tienes un estado global/listado
+        } catch (err) {
+            setBulkErr(String(err.message || err) || "❌ Error al cargar canciones.");
+        } finally {
+            setBulkLoading(false);
         }
     };
 
@@ -507,6 +560,95 @@ export default function AdminCanciones() {
                             {/* Nota informativa (igual estilo que eliminar) */}
                             <div className="card-muted" style={{ marginTop: 8, fontSize: 12 }}>
                                 * Esta acción actualiza la información de la canción en el archivo <code>canciones.txt</code> del backend (no mueve ni borra el .mp3 del front).
+                            </div>
+                        </div>
+                    </div>
+                </section>
+
+                {/* ====== NUEVO: Cargar canciones masivamente ====== */}
+                <section className="section" style={{ display: "grid", placeItems: "center" }}>
+                    <div style={{ width: "100%", maxWidth: 900 }}>
+                        <div className="card" style={{ margin: "0 auto" }}>
+                            <h3
+                                style={{
+                                    marginTop: 0,
+                                    marginBottom: 10,
+                                    textAlign: "center",
+                                    color: "#ff4d4d",
+                                }}
+                            >
+                                Cargar canciones masivamente (.txt)
+                            </h3>
+
+                            {bulkMsg && (
+                                <div
+                                    className="alert alert-success"
+                                    style={{
+                                        background: "#143d2b",
+                                        color: "#b7ffd7",
+                                        padding: "8px 10px",
+                                        borderRadius: 8,
+                                        marginBottom: 10,
+                                        textAlign: "center",
+                                    }}
+                                >
+                                    {bulkMsg}
+                                </div>
+                            )}
+                            {bulkErr && (
+                                <div
+                                    className="alert alert-danger"
+                                    style={{
+                                        background: "#3d1414",
+                                        color: "#ffd7d7",
+                                        padding: "8px 10px",
+                                        borderRadius: 8,
+                                        marginBottom: 10,
+                                        textAlign: "center",
+                                    }}
+                                >
+                                    {bulkErr}
+                                </div>
+                            )}
+
+                            <form
+                                onSubmit={onSubmitBulk}
+                                style={{
+                                    display: "grid",
+                                    gridTemplateColumns: "1fr auto",
+                                    gap: 12,
+                                    alignItems: "end",
+                                }}
+                            >
+                                <div>
+                                    <label className="card-muted" style={{ display: "block", marginBottom: 6 }}>
+                                        Archivo .txt
+                                    </label>
+                                    <input
+                                        className="select"
+                                        type="file"
+                                        accept=".txt,text/plain"
+                                        onChange={(e) => setBulkFile(e.target.files?.[0] || null)}
+                                    />
+                                </div>
+
+                                <div>
+                                    <button
+                                        type="submit"
+                                        className="btn btn-sm btn-outline-light"
+                                        disabled={bulkLoading}
+                                        style={{ whiteSpace: "nowrap" }}
+                                    >
+                                        {bulkLoading ? "Cargando..." : "Subir"}
+                                    </button>
+                                </div>
+                            </form>
+
+                            <div className="card-muted" style={{ marginTop: 10, fontSize: 12 }}>
+                                * Sube un <b>.txt</b> con las canciones. El backend procesará el archivo y
+                                actualizará <code>canciones.txt</code>. <br />
+                                * Formato recomendado (con punto y coma):<br />
+                                <code>id;titulo;artista;genero;anio;fileName</code>
                             </div>
                         </div>
                     </div>

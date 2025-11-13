@@ -67,6 +67,7 @@ function Sidebar({ tab, setTab }) {
         { id: "buscar", label: "Buscar", icon: "🔎" },
         { id: "favoritos", label: "Favoritos", icon: "❤️" },
         { id: "descubrimiento", label: "Descubrimiento", icon: "🧭" },
+        { id: "radio", label: "Radio", icon: "📻" }, // ← NUEVO
         { id: "social", label: "Social", icon: "👥" },
     ];
     return (
@@ -88,12 +89,18 @@ function Sidebar({ tab, setTab }) {
     );
 }
 
-function TopBar({ username, role, isAdmin, onGoAdminCanciones, onGoAdminUsuarios, onLogout }) {
+function TopBar({
+                    username,
+                    role,
+                    isAdmin,
+                    onGoAdminCanciones,
+                    onGoAdminUsuarios,
+                    onLogout,
+                }) {
     const [open, setOpen] = useState(false);
     const [adminOpen, setAdminOpen] = useState(false);
     const ref = useRef(null);
 
-    // Cerrar al hacer click fuera
     useEffect(() => {
         const handler = (e) => {
             if (ref.current && !ref.current.contains(e.target)) {
@@ -149,9 +156,9 @@ function TopBar({ username, role, isAdmin, onGoAdminCanciones, onGoAdminUsuarios
                             gap: 8,
                         }}
                     >
-                        <span>
-                            Sesión: <b>{username || "—"}</b>
-                        </span>
+            <span>
+              Sesión: <b>{username || "—"}</b>
+            </span>
                         {role && (
                             <span
                                 style={{
@@ -162,12 +169,11 @@ function TopBar({ username, role, isAdmin, onGoAdminCanciones, onGoAdminUsuarios
                                     color: "#ddd",
                                 }}
                             >
-                                {role}
-                            </span>
+                {role}
+              </span>
                         )}
                     </div>
 
-                    {/* Bloque Admin (solo si es admin) */}
                     {isAdmin && (
                         <div
                             style={{
@@ -228,7 +234,7 @@ function TopBar({ username, role, isAdmin, onGoAdminCanciones, onGoAdminUsuarios
     );
 }
 
-function SectionRow({ title, items, onPick }) {
+function SectionRow({ title, items, onPick, onSimilar }) {
     return (
         <section className="section">
             <h2>{title}</h2>
@@ -241,12 +247,23 @@ function SectionRow({ title, items, onPick }) {
                         <div className="card-muted">
                             {s.artista} · {s.genero} · {s.anio}
                         </div>
-                        <button
-                            className="btn btn-sm btn-outline-light"
-                            onClick={() => onPick(s)}
-                        >
-                            Reproducir
-                        </button>
+                        <div style={{ display: "flex", gap: 8, marginTop: 8 }}>
+                            <button
+                                className="btn btn-sm btn-outline-light"
+                                onClick={() => onPick(s)}
+                            >
+                                Reproducir
+                            </button>
+                            {onSimilar && (
+                                <button
+                                    className="btn btn-sm btn-outline-light"
+                                    onClick={() => onSimilar(s)}
+                                    title="Ver canciones similares"
+                                >
+                                    Similares
+                                </button>
+                            )}
+                        </div>
                     </div>
                 ))}
                 {items.length === 0 && (
@@ -410,21 +427,18 @@ export default function Home() {
     const [discover, setDiscover] = useState([]);
     const [current, setCurrent] = useState(null);
 
-    // Guardamos favoritos como Set<string> para búsquedas O(1)
+    // Favoritos
     const [favSet, setFavSet] = useState(() => new Set());
 
+    // Búsqueda
     const [query, setQuery] = useState("");
-
-    // 👉 Autocompletar
     const [suggestions, setSuggestions] = useState([]);
     const [showSugg, setShowSugg] = useState(false);
     const [searchLoading, setSearchLoading] = useState(false);
-
-    // 👉 Búsqueda simple (backend)
     const [simpleResults, setSimpleResults] = useState([]);
     const [simpleLoading, setSimpleLoading] = useState(false);
 
-    // 👉 Búsqueda avanzada
+    // Avanzada
     const [adv, setAdv] = useState({
         titulo: "",
         artista: "",
@@ -438,17 +452,25 @@ export default function Home() {
     const [advResults, setAdvResults] = useState([]);
     const [advSearched, setAdvSearched] = useState(false);
 
-    // 🔄 Escuchar cambios de token en storage / foco / visibilidad
-    useEffect(() => {
-        const handleStorage = () => {
-            setAuth(decodeToken());
-        };
-        const refresh = () => setAuth(decodeToken());
+    // Similares
+    const [similarOf, setSimilarOf] = useState(null);
+    const [similarResults, setSimilarResults] = useState([]);
+    const [similarLoading, setSimilarLoading] = useState(false);
+    const [similarError, setSimilarError] = useState("");
 
+    // 📻 Radio (NUEVO)
+    const [radioMode, setRadioMode] = useState(false);
+    const [radioQueue, setRadioQueue] = useState([]);
+    const [radioLoading, setRadioLoading] = useState(false);
+    const [radioError, setRadioError] = useState("");
+
+    // 🔄 token reactive
+    useEffect(() => {
+        const handleStorage = () => setAuth(decodeToken());
+        const refresh = () => setAuth(decodeToken());
         window.addEventListener("storage", handleStorage);
         window.addEventListener("focus", refresh);
         document.addEventListener("visibilitychange", refresh);
-
         return () => {
             window.removeEventListener("storage", handleStorage);
             window.removeEventListener("focus", refresh);
@@ -456,22 +478,20 @@ export default function Home() {
         };
     }, []);
 
-    // Cargar catálogo
+    // Catálogo
     useEffect(() => {
         apiGet("/api/canciones")
             .then((list) => {
                 setSongs(list);
-                if (!current && list.length) setCurrent(list[0]); // sin autoplay
+                if (!current && list.length) setCurrent(list[0]);
             })
             .catch(() => setSongs([]));
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);
 
-    // Cargar favoritos y descubrimiento (con token)
+    // Favoritos + descubrimiento
     useEffect(() => {
         if (!username) return;
-
-        // Favoritos del usuario
         apiGet(`/api/usuarios/${encodeURIComponent(username)}/favoritos`)
             .then((list) => {
                 const ids = new Set(list.map((c) => idToStr(c.id)));
@@ -479,22 +499,17 @@ export default function Home() {
             })
             .catch(() => setFavSet(new Set()));
 
-        // Descubrimiento
         apiGet(`/api/usuarios/${encodeURIComponent(username)}/descubrimiento?size=12`)
             .then((list) => Array.isArray(list) && setDiscover(list))
             .catch(() => setDiscover([]));
     }, [username]);
 
-    // ¿La canción actual está en favoritos?
     const isFav = current ? favSet.has(idToStr(current.id)) : false;
 
-    // Toggle favorito
     const toggleFav = async () => {
         if (!username || !current) return;
-
         const songId = encodeURIComponent(idToStr(current.id));
         const base = `/api/usuarios/${encodeURIComponent(username)}/favoritos`;
-
         try {
             if (favSet.has(idToStr(current.id))) {
                 await apiDelete(`${base}/eliminar?idCancion=${songId}`);
@@ -512,22 +527,42 @@ export default function Home() {
         }
     };
 
+    // ========= Reproducción: usa radio si está activo =========
+    const getActiveList = () => (radioMode ? radioQueue : songs);
+
     const next = () => {
-        if (!songs.length || !current) return;
-        const idx = songs.findIndex((s) => idToStr(s.id) === idToStr(current.id));
-        const nextIdx = (idx + 1) % songs.length;
-        setCurrent(songs[nextIdx]);
+        const list = getActiveList();
+        if (!list.length || !current) return;
+
+        if (radioMode) {
+            const idx = list.findIndex((s) => idToStr(s.id) === idToStr(current.id));
+            const nextIdx = idx === -1 ? 0 : (idx + 1) % list.length;
+            setCurrent(list[nextIdx]);
+        } else {
+            const idx = list.findIndex((s) => idToStr(s.id) === idToStr(current.id));
+            const nextIdx = (idx + 1) % list.length;
+            setCurrent(list[nextIdx]);
+        }
     };
+
     const prev = () => {
-        if (!songs.length || !current) return;
-        const idx = songs.findIndex((s) => idToStr(s.id) === idToStr(current.id));
-        const prevIdx = (idx - 1 + songs.length) % songs.length;
-        setCurrent(songs[prevIdx]);
+        const list = getActiveList();
+        if (!list.length || !current) return;
+
+        if (radioMode) {
+            const idx = list.findIndex((s) => idToStr(s.id) === idToStr(current.id));
+            const prevIdx = idx === -1 ? 0 : (idx - 1 + list.length) % list.length;
+            setCurrent(list[prevIdx]);
+        } else {
+            const idx = list.findIndex((s) => idToStr(s.id) === idToStr(current.id));
+            const prevIdx = (idx - 1 + list.length) % list.length;
+            setCurrent(list[prevIdx]);
+        }
     };
 
     const favSongs = songs.filter((s) => favSet.has(idToStr(s.id)));
 
-    // 🔎 Autocompletar (debounce)
+    // Autocompletar (debounce)
     useEffect(() => {
         const q = query.trim();
         if (q.length < 2) {
@@ -568,7 +603,7 @@ export default function Home() {
         setShowSugg(false);
     };
 
-    // 🔎 Búsqueda simple (debounce) -> usar buscar/avanzado con titulo/artista/genero = query y op=OR
+    // Búsqueda simple (título/género y artista vía avanzado)
     useEffect(() => {
         const q = query.trim();
         if (!q) {
@@ -576,40 +611,39 @@ export default function Home() {
             setSimpleLoading(false);
             return;
         }
-
         let alive = true;
         setSimpleLoading(true);
 
-        const timer = setTimeout(async () => {
-            try {
-                const params = new URLSearchParams();
-                params.append("titulo", q);
-                params.append("artista", q);
-                params.append("genero", q);
-                params.append("op", "OR");
-
-                const list = await apiGet(`/api/canciones/buscar/avanzado?${params.toString()}`);
-
-                if (!alive) return;
-
-                // De-duplicar por id (por si coincide en varios campos)
-                const seen = new Set();
-                const uniq = Array.isArray(list)
-                    ? list.filter(c => {
-                        const k = idToStr(c?.id);
-                        if (seen.has(k)) return false;
-                        seen.add(k);
-                        return true;
-                    })
-                    : [];
-
-                setSimpleResults(uniq);
-            } catch {
-                if (!alive) return;
-                setSimpleResults([]);
-            } finally {
-                if (alive) setSimpleLoading(false);
-            }
+        const timer = setTimeout(() => {
+            Promise.allSettled([
+                apiGet(`/api/canciones/buscar?titulo=${encodeURIComponent(q)}`),
+                apiGet(`/api/canciones/buscar?genero=${encodeURIComponent(q)}`),
+                apiGet(
+                    `/api/canciones/buscar/avanzado?artista=${encodeURIComponent(q)}&op=OR`
+                ),
+            ])
+                .then(([byTitle, byGenre, byArtist]) => {
+                    if (!alive) return;
+                    const listA =
+                        byTitle.status === "fulfilled" && Array.isArray(byTitle.value)
+                            ? byTitle.value
+                            : [];
+                    const listB =
+                        byGenre.status === "fulfilled" && Array.isArray(byGenre.value)
+                            ? byGenre.value
+                            : [];
+                    const listC =
+                        byArtist.status === "fulfilled" && Array.isArray(byArtist.value)
+                            ? byArtist.value
+                            : [];
+                    const map = new Map();
+                    [...listA, ...listB, ...listC].forEach((c) =>
+                        map.set(idToStr(c.id), c)
+                    );
+                    setSimpleResults([...map.values()]);
+                })
+                .catch(() => setSimpleResults([]))
+                .finally(() => alive && setSimpleLoading(false));
         }, 300);
 
         return () => {
@@ -618,7 +652,7 @@ export default function Home() {
         };
     }, [query]);
 
-    // 🔍 Búsqueda avanzada
+    // Avanzada
     const onAdvChange = (e) => {
         const { name, value } = e.target;
         setAdv((p) => ({ ...p, [name]: value }));
@@ -635,14 +669,26 @@ export default function Home() {
         if (adv.titulo.trim()) params.append("titulo", adv.titulo.trim());
         if (adv.artista.trim()) params.append("artista", adv.artista.trim());
         if (adv.genero.trim()) params.append("genero", adv.genero.trim());
-        if (String(adv.anioFrom).trim()) params.append("anioFrom", Number(adv.anioFrom));
+        if (String(adv.anioFrom).trim())
+            params.append("anioFrom", Number(adv.anioFrom));
         if (String(adv.anioTo).trim()) params.append("anioTo", Number(adv.anioTo));
         if (adv.op) params.append("op", adv.op);
 
         try {
-            const list = await apiGet(`/api/canciones/buscar/avanzado?${params.toString()}`);
+            const list = await apiGet(
+                `/api/canciones/buscar/avanzado?${params.toString()}`
+            );
             setAdvResults(Array.isArray(list) ? list : []);
             setAdvSearched(true);
+            // limpiar campos
+            setAdv((p) => ({
+                ...p,
+                titulo: "",
+                artista: "",
+                genero: "",
+                anioFrom: "",
+                anioTo: "",
+            }));
         } catch {
             setAdvError("No se pudo realizar la búsqueda avanzada.");
         } finally {
@@ -650,7 +696,75 @@ export default function Home() {
         }
     };
 
-    // 🔒 Logout handler
+    // Similares
+    const fetchSimilares = async (song, limit = 12) => {
+        if (!song?.id) return;
+        setSimilarError("");
+        setSimilarLoading(true);
+        setSimilarOf(song);
+        setSimilarResults([]);
+        try {
+            const list = await apiGet(
+                `/api/canciones/${encodeURIComponent(idToStr(song.id))}/similares?limite=${limit}`
+            );
+            setSimilarResults(Array.isArray(list) ? list : []);
+        } catch (e) {
+            setSimilarError("No se pudieron cargar canciones similares.");
+            setSimilarResults([]);
+        } finally {
+            setSimilarLoading(false);
+        }
+    };
+
+    const clearSimilares = () => {
+        setSimilarOf(null);
+        setSimilarResults([]);
+        setSimilarLoading(false);
+        setSimilarError("");
+    };
+
+    // 📻 Radio
+    const startRadio = async () => {
+        if (!current?.id) {
+            setRadioError("Primero selecciona una canción para iniciar la radio.");
+            setRadioMode(false);
+            setRadioQueue([]);
+            return;
+        }
+        setRadioLoading(true);
+        setRadioError("");
+        try {
+            const list = await apiGet(
+                `/api/canciones/${encodeURIComponent(
+                    idToStr(current.id)
+                )}/radio?limite=20`
+            );
+            const queue = Array.isArray(list) ? list : [];
+            if (!queue.length) {
+                setRadioError("No se encontraron canciones para la radio.");
+                setRadioMode(false);
+                setRadioQueue([]);
+                return;
+            }
+            setRadioQueue(queue);
+            setRadioMode(true);
+            setCurrent(queue[0]); // reproducimos solo la cola de radio
+        } catch (e) {
+            setRadioError("No se pudo iniciar la radio.");
+            setRadioMode(false);
+            setRadioQueue([]);
+        } finally {
+            setRadioLoading(false);
+        }
+    };
+
+    const stopRadio = () => {
+        setRadioMode(false);
+        setRadioQueue([]);
+        setRadioError("");
+    };
+
+    // Logout
     const handleLogout = async () => {
         try {
             await apiPost("/api/usuarios/logout");
@@ -677,14 +791,22 @@ export default function Home() {
                 {tab === "home" && (
                     <>
                         <section className="section">
-                            <h2>¡Bienvenido{username ? `, ${username}` : ""}!</h2>
+                            <h2>
+                                ¡Bienvenido{username ? `, ${username}` : ""}!
+                            </h2>
                         </section>
                         <SectionRow
                             title="Reproducido recientemente"
                             items={songs.slice(0, 8)}
                             onPick={setCurrent}
+                            onSimilar={fetchSimilares}
                         />
-                        <SectionRow title="Catálogo" items={songs} onPick={setCurrent} />
+                        <SectionRow
+                            title="Catálogo"
+                            items={songs}
+                            onPick={setCurrent}
+                            onSimilar={fetchSimilares}
+                        />
                     </>
                 )}
 
@@ -693,7 +815,14 @@ export default function Home() {
                         {/* Búsqueda simple + autocompletar */}
                         <section className="section">
                             <h2>Buscar</h2>
-                            <div style={{ position: "relative", width: "100%", maxWidth: 420, marginLeft: 12 }}>
+                            <div
+                                style={{
+                                    position: "relative",
+                                    width: "100%",
+                                    maxWidth: 420,
+                                    marginLeft: 12,
+                                }}
+                            >
                                 <input
                                     className="select"
                                     style={{ width: "100%" }}
@@ -724,7 +853,11 @@ export default function Home() {
                                             <button
                                                 key={`${sug}-${i}`}
                                                 className="btn btn-sm btn-outline-light"
-                                                style={{ width: "100%", textAlign: "left", marginBottom: 4 }}
+                                                style={{
+                                                    width: "100%",
+                                                    textAlign: "left",
+                                                    marginBottom: 4,
+                                                }}
                                                 onMouseDown={(e) => e.preventDefault()}
                                                 onClick={() => handlePickSuggestion(sug)}
                                             >
@@ -735,17 +868,25 @@ export default function Home() {
                                 )}
                             </div>
                             {(searchLoading || simpleLoading) && (
-                                <div className="card" style={{ marginTop: 12, maxWidth: 420, marginLeft: 12 }}>
+                                <div
+                                    className="card"
+                                    style={{ marginTop: 12, maxWidth: 420, marginLeft: 12 }}
+                                >
                                     <div className="card-muted">Buscando…</div>
                                 </div>
                             )}
                         </section>
 
                         {query.trim().length > 0 && (
-                            <SectionRow title="Resultados" items={simpleResults} onPick={setCurrent} />
+                            <SectionRow
+                                title="Resultados"
+                                items={simpleResults}
+                                onPick={setCurrent}
+                                onSimilar={fetchSimilares}
+                            />
                         )}
 
-                        {/* ======= Búsqueda avanzada ======= */}
+                        {/* Avanzada */}
                         <section className="section">
                             <h2>Búsqueda avanzada</h2>
                             <div className="card" style={{ maxWidth: 900 }}>
@@ -753,13 +894,17 @@ export default function Home() {
                                     onSubmit={onAdvSearch}
                                     style={{
                                         display: "grid",
-                                        gridTemplateColumns: "repeat(auto-fit, minmax(220px, 1fr))",
+                                        gridTemplateColumns:
+                                            "repeat(auto-fit, minmax(220px, 1fr))",
                                         gap: 12,
                                         alignItems: "end",
                                     }}
                                 >
                                     <div>
-                                        <label className="card-muted" style={{ display: "block", marginBottom: 6 }}>
+                                        <label
+                                            className="card-muted"
+                                            style={{ display: "block", marginBottom: 6 }}
+                                        >
                                             Título
                                         </label>
                                         <input
@@ -771,7 +916,10 @@ export default function Home() {
                                     </div>
 
                                     <div>
-                                        <label className="card-muted" style={{ display: "block", marginBottom: 6 }}>
+                                        <label
+                                            className="card-muted"
+                                            style={{ display: "block", marginBottom: 6 }}
+                                        >
                                             Artista
                                         </label>
                                         <input
@@ -783,7 +931,10 @@ export default function Home() {
                                     </div>
 
                                     <div>
-                                        <label className="card-muted" style={{ display: "block", marginBottom: 6 }}>
+                                        <label
+                                            className="card-muted"
+                                            style={{ display: "block", marginBottom: 6 }}
+                                        >
                                             Género
                                         </label>
                                         <input
@@ -795,7 +946,10 @@ export default function Home() {
                                     </div>
 
                                     <div>
-                                        <label className="card-muted" style={{ display: "block", marginBottom: 6 }}>
+                                        <label
+                                            className="card-muted"
+                                            style={{ display: "block", marginBottom: 6 }}
+                                        >
                                             Año desde
                                         </label>
                                         <input
@@ -807,7 +961,10 @@ export default function Home() {
                                     </div>
 
                                     <div>
-                                        <label className="card-muted" style={{ display: "block", marginBottom: 6 }}>
+                                        <label
+                                            className="card-muted"
+                                            style={{ display: "block", marginBottom: 6 }}
+                                        >
                                             Año hasta
                                         </label>
                                         <input
@@ -819,7 +976,10 @@ export default function Home() {
                                     </div>
 
                                     <div>
-                                        <label className="card-muted" style={{ display: "block", marginBottom: 6 }}>
+                                        <label
+                                            className="card-muted"
+                                            style={{ display: "block", marginBottom: 6 }}
+                                        >
                                             Operador
                                         </label>
                                         <select
@@ -833,8 +993,17 @@ export default function Home() {
                                         </select>
                                     </div>
 
-                                    <div style={{ gridColumn: "1 / -1", display: "flex", justifyContent: "center" }}>
-                                        <button type="submit" className="btn btn-sm btn-outline-light">
+                                    <div
+                                        style={{
+                                            gridColumn: "1 / -1",
+                                            display: "flex",
+                                            justifyContent: "center",
+                                        }}
+                                    >
+                                        <button
+                                            type="submit"
+                                            className="btn btn-sm btn-outline-light"
+                                        >
                                             {advLoading ? "Buscando..." : "Buscar"}
                                         </button>
                                     </div>
@@ -864,10 +1033,10 @@ export default function Home() {
                                     title="Resultados avanzados"
                                     items={advResults}
                                     onPick={setCurrent}
+                                    onSimilar={fetchSimilares}
                                 />
                             </div>
                         )}
-
                     </>
                 )}
 
@@ -880,6 +1049,7 @@ export default function Home() {
                             title="Tus canciones favoritas"
                             items={favSongs}
                             onPick={setCurrent}
+                            onSimilar={fetchSimilares}
                         />
                     </>
                 )}
@@ -893,21 +1063,144 @@ export default function Home() {
                             title="Recomendado para ti"
                             items={discover}
                             onPick={setCurrent}
+                            onSimilar={fetchSimilares}
                         />
                     </>
                 )}
 
-                {tab === "social" && (
-                    <>
-                        <section className="section">
-                            <h2>Social</h2>
+                {/* ====== Bloque de Similares ====== */}
+                {similarOf && (
+                    <section className="section">
+                        <div
+                            style={{
+                                display: "flex",
+                                justifyContent: "space-between",
+                                alignItems: "center",
+                            }}
+                        >
+                            <h2>{`Similares a "${similarOf.titulo}"`}</h2>
+                            <button className="btn btn-sm btn-outline-light" onClick={clearSimilares}>
+                                ✖ Ocultar
+                            </button>
+                        </div>
+
+                        {similarLoading && (
                             <div className="card">
-                                <div className="card-muted">
-                                    Aquí irán “Seguir / Dejar de seguir / Seguidos / Sugerencias”.
-                                </div>
+                                <div className="card-muted">Cargando similares…</div>
                             </div>
-                        </section>
-                    </>
+                        )}
+
+                        {similarError && (
+                            <div
+                                className="alert alert-danger"
+                                style={{
+                                    background: "#3d1414",
+                                    color: "#ffd7d7",
+                                    padding: "8px 10px",
+                                    borderRadius: 8,
+                                    marginTop: 10,
+                                    textAlign: "center",
+                                }}
+                            >
+                                {similarError}
+                            </div>
+                        )}
+
+                        {!similarLoading && !similarError && (
+                            <SectionRow
+                                title="También te puede gustar"
+                                items={similarResults}
+                                onPick={setCurrent}
+                                onSimilar={fetchSimilares}
+                            />
+                        )}
+                    </section>
+                )}
+
+                {/* ====== Página Radio ====== */}
+                {tab === "radio" && (
+                    <section className="section">
+                        <h2>Radio</h2>
+
+                        {!radioMode && (
+                            <div className="card" style={{ maxWidth: 700 }}>
+                                <div className="card-muted" style={{ marginBottom: 10 }}>
+                                    Inicia una radio basada en la canción seleccionada actualmente.
+                                </div>
+                                <div style={{ display: "flex", gap: 10, alignItems: "center" }}>
+                                    <button
+                                        className="btn btn-sm btn-outline-light"
+                                        onClick={startRadio}
+                                        disabled={radioLoading}
+                                        title={
+                                            current?.titulo
+                                                ? `Iniciar radio desde "${current.titulo}"`
+                                                : "Selecciona una canción primero"
+                                        }
+                                    >
+                                        {radioLoading ? "Creando radio..." : "Iniciar radio"}
+                                    </button>
+                                    {current?.titulo && (
+                                        <span className="card-muted">
+                      Origen: <b>{current.titulo}</b>
+                    </span>
+                                    )}
+                                </div>
+                                {radioError && (
+                                    <div
+                                        className="alert alert-danger"
+                                        style={{
+                                            background: "#3d1414",
+                                            color: "#ffd7d7",
+                                            padding: "8px 10px",
+                                            borderRadius: 8,
+                                            marginTop: 10,
+                                            textAlign: "center",
+                                        }}
+                                    >
+                                        {radioError}
+                                    </div>
+                                )}
+                            </div>
+                        )}
+
+                        {radioMode && (
+                            <>
+                                <div
+                                    className="card"
+                                    style={{
+                                        maxWidth: 900,
+                                        display: "flex",
+                                        justifyContent: "space-between",
+                                        alignItems: "center",
+                                        marginBottom: 12,
+                                    }}
+                                >
+                                    <div>
+                                        <div style={{ fontWeight: 700 }}>Radio activa</div>
+                                        <div className="card-muted" style={{ fontSize: 12 }}>
+                                            Reproduciendo solo canciones de esta cola.
+                                        </div>
+                                    </div>
+                                    <button
+                                        className="btn btn-sm btn-outline-light"
+                                        onClick={stopRadio}
+                                    >
+                                        Detener radio
+                                    </button>
+                                </div>
+
+                                <SectionRow
+                                    title="Cola de radio"
+                                    items={radioQueue}
+                                    onPick={(s) => {
+                                        setCurrent(s);
+                                    }}
+                                    onSimilar={fetchSimilares}
+                                />
+                            </>
+                        )}
+                    </section>
                 )}
 
                 <PlayerBar
