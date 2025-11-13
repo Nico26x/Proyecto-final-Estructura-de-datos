@@ -22,24 +22,47 @@ public class GrafoSocial {
      * Crea una conexión bidireccional entre dos usuarios.
      */
     public boolean seguirUsuario(String origen, String destino) {
+        // Evitar que un usuario se siga a sí mismo
         if (origen.equals(destino)) return false;
+
+        // Verificar que ambos usuarios existen en el grafo
         if (!relaciones.containsKey(origen) || !relaciones.containsKey(destino)) return false;
 
+        // Si ya sigue al destino, podemos retornar true, para actualizar la relación y proceder normalmente.
+        if (relaciones.get(origen).contains(destino)) {
+            return true;  // No hace falta agregarlo nuevamente, pero la relación ya está presente
+        }
+
+        // Agregar la relación bidireccional en el grafo
         relaciones.get(origen).add(destino);
-        relaciones.get(destino).add(origen);
-        return true;
+
+        return true;  // La relación se creó correctamente
     }
+
+
 
     /**
      * Elimina la conexión entre dos usuarios (dejar de seguir).
      */
     public boolean dejarDeSeguir(String origen, String destino) {
+        // Evitar que un usuario se deje de seguir a sí mismo
+        if (origen.equals(destino)) return false;
+
+        // Verificar que ambos usuarios existen en el grafo
         if (!relaciones.containsKey(origen) || !relaciones.containsKey(destino)) return false;
 
+        // Verificar si existe una relación de "seguir"
+        if (!relaciones.get(origen).contains(destino)) {
+            return false;  // No existe una relación de "seguir", por lo que no se puede eliminar
+        }
+
+        // Eliminar la relación bidireccional en el grafo
         relaciones.get(origen).remove(destino);
         relaciones.get(destino).remove(origen);
-        return true;
+
+        return true;  // La relación se eliminó correctamente
     }
+
 
     /**
      * Obtiene los usuarios seguidos por un usuario.
@@ -109,17 +132,16 @@ public class GrafoSocial {
         try (BufferedWriter bw = new BufferedWriter(new FileWriter(rutaArchivo))) {
             for (String usuario : relaciones.keySet()) {
                 for (String amigo : relaciones.get(usuario)) {
-                    // Evitar duplicados escribiendo solo una vez cada par
-                    if (usuario.compareTo(amigo) < 0) {
-                        bw.write(usuario + ";" + amigo);
-                        bw.newLine();
-                    }
+                    // Guardar todas las relaciones, sin excluir ninguna
+                    bw.write(usuario + ";" + amigo);
+                    bw.newLine();
                 }
             }
         } catch (IOException e) {
             System.err.println("❌ Error al guardar grafo social: " + e.getMessage());
         }
     }
+
 
     /**
      * Carga las relaciones desde un archivo existente.

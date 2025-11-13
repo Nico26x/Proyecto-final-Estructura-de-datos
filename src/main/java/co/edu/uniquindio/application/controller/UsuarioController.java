@@ -246,31 +246,72 @@ public class UsuarioController {
         return ResponseEntity.ok(playlist);
     }
 
-    // 👥 Seguir a otro usuario
+    // Endpoint para seguir a un usuario
     @PostMapping("/seguir")
-    public ResponseEntity<String> seguirUsuario(
-            @RequestParam String username,
-            @RequestParam String destino) {
+    public ResponseEntity<Map<String, String>> seguirUsuario(@RequestBody Map<String, String> body) {
+        String username = body.get("username");
+        String destino = body.get("destino");
+
+        // Llamamos al servicio para seguir al usuario
         String resultado = usuarioService.seguirUsuario(username, destino);
-        return ResponseEntity.ok(resultado);
+
+        // Preparamos la respuesta en formato JSON
+        Map<String, String> response = new HashMap<>();
+        response.put("mensaje", resultado);
+
+        // Si la respuesta empieza con "✅", significa que fue exitosa
+        if (resultado.startsWith("✅")) {
+            return ResponseEntity.ok(response);  // Si fue exitoso, retornamos OK
+        } else {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(response);  // Si hubo un error, retornamos BAD_REQUEST con el mensaje
+        }
     }
+
+
+
 
     // 🚫 Dejar de seguir
     @PostMapping("/dejar-seguir")
-    public ResponseEntity<String> dejarDeSeguir(
-            @RequestParam String username,
-            @RequestParam String destino) {
+    public ResponseEntity<Map<String, String>> dejarDeSeguir(@RequestBody Map<String, String> body) {
+        String username = body.get("username");
+        String destino = body.get("destino");
+
+        // Llamamos al servicio para dejar de seguir al usuario
         String resultado = usuarioService.dejarDeSeguir(username, destino);
-        return ResponseEntity.ok(resultado);
+
+        // Preparamos la respuesta en formato JSON
+        Map<String, String> response = new HashMap<>();
+        response.put("mensaje", resultado);
+
+        // Si la respuesta empieza con "✅", significa que fue exitoso
+        if (resultado.startsWith("✅")) {
+            return ResponseEntity.ok(response);  // Si fue exitoso, retornamos OK
+        } else {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(response);  // Si hubo un error, retornamos BAD_REQUEST con el mensaje
+        }
     }
+
 
     // 📜 Listar seguidos
     @GetMapping("/{username}/seguidos")
     public ResponseEntity<Set<String>> listarSeguidos(
-            @PathVariable String username) {
+            @PathVariable String username,
+            @RequestHeader(value = "Authorization", required = false) String authHeader) {
+
+        // Validación del token JWT (asegurarse de que el usuario está autenticado)
+        if (authHeader == null || !authHeader.startsWith("Bearer ")) {
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(null);
+        }
+        String token = authHeader.substring(7);
+        if (!jwtUtil.validarToken(token)) {
+            return ResponseEntity.status(HttpStatus.FORBIDDEN).body(null);
+        }
+
+        // Listar seguidos
         Set<String> seguidos = usuarioService.listarSeguidos(username);
         return ResponseEntity.ok(seguidos);
     }
+
 
     // Endpoint para sugerir usuarios basados en canciones favoritas
     @PostMapping("/{username}/sugerir-usuarios")

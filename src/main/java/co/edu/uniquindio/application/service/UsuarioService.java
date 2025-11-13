@@ -268,23 +268,52 @@ public class UsuarioService {
         Usuario origen = usuarioRepository.buscarPorUsername(username);
         Usuario objetivo = usuarioRepository.buscarPorUsername(destino);
 
-        if (origen == null || objetivo == null) return "❌ Usuario no encontrado";
+        if (origen == null || objetivo == null) {
+            return "❌ Usuario no encontrado";
+        }
 
+        // Asegurarse de que los usuarios estén registrados en el grafo
         grafoSocial.agregarUsuario(username);
         grafoSocial.agregarUsuario(destino);
 
+        // Intentar seguir al usuario
         boolean exito = grafoSocial.seguirUsuario(username, destino);
-        if (exito) grafoSocial.guardarRelacionesEnArchivo(RUTA_GRAFO);
 
-        return exito ? "✅ Ahora sigues a " + destino : "⚠️ No se pudo seguir al usuario.";
+        if (exito) {
+            // Guardar las relaciones actualizadas en el archivo del grafo
+            grafoSocial.guardarRelacionesEnArchivo(RUTA_GRAFO);
+            return "✅ Ahora sigues a " + destino;
+        } else {
+            return "⚠️ Ya estás siguiendo a " + destino; // O un mensaje adecuado si no se agregó la relación
+        }
     }
+
 
     // 🚫 Dejar de seguir
     public String dejarDeSeguir(String username, String destino) {
+        Usuario origen = usuarioRepository.buscarPorUsername(username);
+        Usuario objetivo = usuarioRepository.buscarPorUsername(destino);
+
+        if (origen == null || objetivo == null) {
+            return "❌ Usuario no encontrado";
+        }
+
+        // Asegurarse de que los usuarios estén registrados en el grafo
+        grafoSocial.agregarUsuario(username);
+        grafoSocial.agregarUsuario(destino);
+
+        // Intentar dejar de seguir al usuario
         boolean exito = grafoSocial.dejarDeSeguir(username, destino);
-        if (exito) grafoSocial.guardarRelacionesEnArchivo(RUTA_GRAFO);
-        return exito ? "🗑️ Has dejado de seguir a " + destino : "⚠️ No seguías a ese usuario.";
+
+        if (exito) {
+            // Guardar las relaciones actualizadas en el archivo del grafo
+            grafoSocial.guardarRelacionesEnArchivo(RUTA_GRAFO);
+            return "✅ Has dejado de seguir a " + destino;
+        } else {
+            return "⚠️ No seguías a " + destino; // O un mensaje adecuado si no se eliminó la relación
+        }
     }
+
 
     // 📜 Listar seguidos
     public Set<String> listarSeguidos(String username) {
