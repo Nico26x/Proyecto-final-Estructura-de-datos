@@ -9,6 +9,9 @@ import { useAuth } from "../context/AuthContext";
 import AdminCanciones from "../pages/AdminCanciones";
 import AdminUsuarios from "../pages/AdminUsuarios";
 
+// ⬇️ NUEVO: Perfil (usuario no admin)
+import Perfil from "../pages/Perfil";
+
 /* ===== Helpers de token (nuevos) ===== */
 function readRawToken() {
     return localStorage.getItem("token") || localStorage.getItem("admin_token") || "";
@@ -88,7 +91,7 @@ export default function AppRouter() {
 
     return (
         <Routes key={key}>
-            {/* si entras a /, manda a /login (o /home si ya estás autenticado) */}
+            {/* si entras a /, manda a /home (si autenticado) o /login */}
             <Route
                 path="/"
                 element={
@@ -109,6 +112,16 @@ export default function AppRouter() {
                 element={
                     <PrivateRoute>
                         <Home />
+                    </PrivateRoute>
+                }
+            />
+
+            {/* ⬇️ NUEVO: Perfil (solo usuarios NO admin) */}
+            <Route
+                path="/perfil"
+                element={
+                    <PrivateRoute>
+                        {isAdminFromLocal() ? <Navigate to="/home" replace /> : <Perfil />}
                     </PrivateRoute>
                 }
             />

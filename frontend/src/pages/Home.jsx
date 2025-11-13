@@ -95,6 +95,7 @@ function TopBar({
                     isAdmin,
                     onGoAdminCanciones,
                     onGoAdminUsuarios,
+                    onGoPerfil, // ← NUEVO: navegación interna a /perfil
                     onLogout,
                 }) {
     const [open, setOpen] = useState(false);
@@ -173,6 +174,21 @@ function TopBar({
               </span>
                         )}
                     </div>
+
+                    {/* Solo NO admin: Editar perfil (misma pestaña con navigate) */}
+                    {!isAdmin && (
+                        <button
+                            className="btn btn-sm btn-outline-light"
+                            style={{ width: "100%", marginBottom: 6 }}
+                            onClick={() => {
+                                onGoPerfil?.(); // usa navigate("/perfil")
+                                setOpen(false);
+                                setAdminOpen(false);
+                            }}
+                        >
+                            ✏️ Editar perfil
+                        </button>
+                    )}
 
                     {isAdmin && (
                         <div
@@ -499,7 +515,9 @@ export default function Home() {
             })
             .catch(() => setFavSet(new Set()));
 
-        apiGet(`/api/usuarios/${encodeURIComponent(username)}/descubrimiento?size=12`)
+        apiGet(
+            `/api/usuarios/${encodeURIComponent(username)}/descubrimiento?size=12`
+        )
             .then((list) => Array.isArray(list) && setDiscover(list))
             .catch(() => setDiscover([]));
     }, [username]);
@@ -785,15 +803,14 @@ export default function Home() {
                     isAdmin={isAdmin}
                     onGoAdminCanciones={() => navigate("/admin/canciones")}
                     onGoAdminUsuarios={() => navigate("/admin/usuarios")}
+                    onGoPerfil={() => navigate("/perfil")} // ← AHORA misma pestaña
                     onLogout={handleLogout}
                 />
 
                 {tab === "home" && (
                     <>
                         <section className="section">
-                            <h2>
-                                ¡Bienvenido{username ? `, ${username}` : ""}!
-                            </h2>
+                            <h2>¡Bienvenido{username ? `, ${username}` : ""}!</h2>
                         </section>
                         <SectionRow
                             title="Reproducido recientemente"
@@ -894,8 +911,7 @@ export default function Home() {
                                     onSubmit={onAdvSearch}
                                     style={{
                                         display: "grid",
-                                        gridTemplateColumns:
-                                            "repeat(auto-fit, minmax(220px, 1fr))",
+                                        gridTemplateColumns: "repeat(auto-fit, minmax(220px, 1fr))",
                                         gap: 12,
                                         alignItems: "end",
                                     }}
@@ -1000,10 +1016,7 @@ export default function Home() {
                                             justifyContent: "center",
                                         }}
                                     >
-                                        <button
-                                            type="submit"
-                                            className="btn btn-sm btn-outline-light"
-                                        >
+                                        <button type="submit" className="btn btn-sm btn-outline-light">
                                             {advLoading ? "Buscando..." : "Buscar"}
                                         </button>
                                     </div>

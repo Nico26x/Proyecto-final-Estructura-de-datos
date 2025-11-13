@@ -1,9 +1,2 @@
-sorner11d;$2a$10$WEKeeEupTT4y2u3bqBm39eYdDCPRinO/T6kRojLMlllaspZr4vSJC;Alex;USER;
-nico;$2a$10$KR2cqelv/b.jh8wDUV6y2ufqV0TPK6vn365bu/6nOVT3uFm5NXxrO;Deivid;USER;1
-dqwdqw;$2a$10$r4bfp7EQjN3aRJrs9phEzezxBo4CIxpUuzFdhvTueken4jSU0zrw6;dqwdq;USER;
-robinson;$2a$10$0r1hxiwKLVZg7ssnh86Wy.yzG/8vjasP.5wamsMHR/6lv.93fGFSe;Deivid;USER;
-juancho;$2a$10$a8Z0rtfdjpavWAPUBs2fvOaVc88YFyiF9h42u0YLU5HZuIBsLyR.K;juan mejia;USER;
+Nico26x;$2a$10$ZK4ZbJX3if2BxbZ9LQGtI.KYBxMxinQRPigMHnS0Fb.v/SAQZ6kFG;Nicolas Loaiza;USER;
 admin;$2a$10$Tb9ktjIlotHFDlFyDMVxleat.Jm/MUJnsCPp/8pUUriQ6v.qa0LTG;Administrador;ADMIN;
-prueba;$2a$10$TsQcJtLIO6UgIOHZhPpCfe0d/pBxxeVIUv4VfKUU26/kUcY5wa216;prueba;USER;
-deivid;$2a$10$uu/SCjvadvpR3W9HlZnqOOXcFYttZaMmnHtg80dtpeUv4A3jX7L12;Deivid Mateo;USER;1
-Flame;$2a$10$2akyXVC9gHJ2uMBOo3BrMOxFQkRmEpqzo4u7A..lEAKw2haXAvO/G;deivid;USER;
