@@ -272,14 +272,21 @@ public class UsuarioController {
         return ResponseEntity.ok(seguidos);
     }
 
-    // 💡 Sugerencias de usuarios a seguir
-    @GetMapping("/{username}/sugerencias")
-    public ResponseEntity<List<String>> sugerirUsuarios(
+    // Endpoint para sugerir usuarios basados en canciones favoritas
+    @PostMapping("/{username}/sugerir-usuarios")
+    public ResponseEntity<List<String>> sugerirUsuariosPorFavoritos(
             @PathVariable String username,
             @RequestParam(defaultValue = "5") int limite) {
-        List<String> sugerencias = usuarioService.sugerirUsuarios(username, limite);
-        return ResponseEntity.ok(sugerencias);
+
+        List<String> sugerencias = usuarioService.sugerirUsuariosPorFavoritos(username, limite);
+
+        if (sugerencias.isEmpty()) {
+            return ResponseEntity.status(HttpStatus.NO_CONTENT).body(sugerencias); // Si no hay sugerencias, retornamos vacío
+        }
+
+        return ResponseEntity.ok(sugerencias); // Devolvemos la lista de usuarios sugeridos
     }
+
 
     // =========================
     // RF-009 — Exportar y GUARDAR CSV (depende del usuario logueado)

@@ -466,4 +466,45 @@ public class UsuarioService {
         String username = obtenerUsernameActual();
         return exportarFavoritosCsv(username);
     }
+
+    // Método para sugerir usuarios basados en canciones favoritas
+    public List<String> sugerirUsuariosPorFavoritos(String username, int limite) {
+        // Obtener el usuario autenticado
+        Usuario usuario = usuarioRepository.buscarPorUsername(username);
+        if (usuario == null) return Collections.emptyList(); // Si no se encuentra el usuario, retornamos vacío
+
+        // Obtener lista de canciones favoritas del usuario
+        Collection<Cancion> favoritosUsuario = usuario.getListaFavoritos();
+        if (favoritosUsuario.isEmpty()) return Collections.emptyList(); // Si no tiene favoritos, no hay sugerencias
+
+        // Crear un mapa que almacene el número de canciones favoritas comunes
+        Map<String, Integer> coincidencias = new HashMap<>();
+
+        // Recorrer todos los usuarios y comparar sus favoritos
+        for (Usuario otroUsuario : usuarioRepository.listarUsuarios().values()) {
+            if (otroUsuario.getUsername().equals(username)) continue; // No comparar consigo mismo
+
+            Collection<Cancion> favoritosOtroUsuario = otroUsuario.getListaFavoritos();
+            if (favoritosOtroUsuario.isEmpty()) continue;
+
+            // Comparar las canciones favoritas: contar las coincidencias
+            long comunes = favoritosUsuario.stream()
+                    .filter(cancion -> favoritosOtroUsuario.stream()
+                            .anyMatch(c -> c.getId().equals(cancion.getId()))) // Comparar por ID o por otro atributo
+                    .count();
+
+            // Si hay coincidencias, agregar al mapa
+            if (comunes > 0) {
+                coincidencias.put(otroUsuario.getUsername(), (int) comunes);
+            }
+        }
+
+        // Ordenar a los usuarios por el número de coincidencias y devolver los más relevantes
+        return coincidencias.entrySet().stream()
+                .sorted(Map.Entry.<String, Integer>comparingByValue().reversed())
+                .limit(limite)
+                .map(Map.Entry::getKey)
+                .collect(Collectors.toList());
+    }
+
 }
