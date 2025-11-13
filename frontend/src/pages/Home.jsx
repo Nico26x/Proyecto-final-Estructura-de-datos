@@ -568,7 +568,7 @@ export default function Home() {
         setShowSugg(false);
     };
 
-    // 🔎 Búsqueda simple (debounce): combinar título y género
+    // 🔎 Búsqueda simple (debounce) -> usar buscar/avanzado con titulo/artista/genero = query y op=OR
     useEffect(() => {
         const q = query.trim();
         if (!q) {
@@ -576,25 +576,40 @@ export default function Home() {
             setSimpleLoading(false);
             return;
         }
+
         let alive = true;
         setSimpleLoading(true);
 
-        const timer = setTimeout(() => {
-            Promise.allSettled([
-                apiGet(`/api/canciones/buscar?titulo=${encodeURIComponent(q)}`),
-                apiGet(`/api/canciones/buscar?genero=${encodeURIComponent(q)}`)
-            ])
-                .then(([byTitle, byGenre]) => {
-                    if (!alive) return;
-                    const listA = byTitle.status === "fulfilled" && Array.isArray(byTitle.value) ? byTitle.value : [];
-                    const listB = byGenre.status === "fulfilled" && Array.isArray(byGenre.value) ? byGenre.value : [];
-                    // unir por id
-                    const map = new Map();
-                    [...listA, ...listB].forEach(c => map.set(idToStr(c.id), c));
-                    setSimpleResults([...map.values()]);
-                })
-                .catch(() => setSimpleResults([]))
-                .finally(() => alive && setSimpleLoading(false));
+        const timer = setTimeout(async () => {
+            try {
+                const params = new URLSearchParams();
+                params.append("titulo", q);
+                params.append("artista", q);
+                params.append("genero", q);
+                params.append("op", "OR");
+
+                const list = await apiGet(`/api/canciones/buscar/avanzado?${params.toString()}`);
+
+                if (!alive) return;
+
+                // De-duplicar por id (por si coincide en varios campos)
+                const seen = new Set();
+                const uniq = Array.isArray(list)
+                    ? list.filter(c => {
+                        const k = idToStr(c?.id);
+                        if (seen.has(k)) return false;
+                        seen.add(k);
+                        return true;
+                    })
+                    : [];
+
+                setSimpleResults(uniq);
+            } catch {
+                if (!alive) return;
+                setSimpleResults([]);
+            } finally {
+                if (alive) setSimpleLoading(false);
+            }
         }, 300);
 
         return () => {
