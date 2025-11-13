@@ -62,6 +62,7 @@ const idToStr = (id) => (id == null ? "" : String(id));
 
 // =================== UI ===================
 function Sidebar({ tab, setTab }) {
+    const navigate = useNavigate();
     const items = [
         { id: "home", label: "Home", icon: "🏠" },
         { id: "buscar", label: "Buscar", icon: "🔎" },
@@ -78,7 +79,9 @@ function Sidebar({ tab, setTab }) {
                     <button
                         key={i.id}
                         className={`navbtn ${tab === i.id ? "active" : ""}`}
-                        onClick={() => setTab(i.id)}
+                        onClick={() =>
+                            i.id === "social" ? navigate("/social") : setTab(i.id)
+                        }
                     >
                         <span style={{ width: 20, textAlign: "center" }}>{i.icon}</span>
                         {i.label}
@@ -157,9 +160,9 @@ function TopBar({
                             gap: 8,
                         }}
                     >
-            <span>
-              Sesión: <b>{username || "—"}</b>
-            </span>
+                        <span>
+                            Sesión: <b>{username || "—"}</b>
+                        </span>
                         {role && (
                             <span
                                 style={{
@@ -170,8 +173,8 @@ function TopBar({
                                     color: "#ddd",
                                 }}
                             >
-                {role}
-              </span>
+                                {role}
+                            </span>
                         )}
                     </div>
 
@@ -1155,8 +1158,8 @@ export default function Home() {
                                     </button>
                                     {current?.titulo && (
                                         <span className="card-muted">
-                      Origen: <b>{current.titulo}</b>
-                    </span>
+                                            Origen: <b>{current.titulo}</b>
+                                        </span>
                                     )}
                                 </div>
                                 {radioError && (

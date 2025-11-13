@@ -11,6 +11,8 @@ import AdminUsuarios from "../pages/AdminUsuarios";
 
 // ⬇️ NUEVO: Perfil (usuario no admin)
 import Perfil from "../pages/Perfil";
+// ⬇️ NUEVO: Social (página social)
+import Social from "../pages/Social";  // Importa el componente Social
 
 /* ===== Helpers de token (nuevos) ===== */
 function readRawToken() {
@@ -48,11 +50,8 @@ function getActiveValidToken() {
 
 /* ===== Tu PrivateRoute (con validación añadida) ===== */
 function PrivateRoute({ children }) {
-    // tolerante: si el contexto aún no está listo, valida por localStorage
     const authCtx = useAuth?.();
     const ctxIsAuth = authCtx?.isAuthenticated ?? false;
-
-    // 🔁 Aceptar token válido de usuario o de admin
     const validToken = !!getActiveValidToken();
     const isAuthed = ctxIsAuth || validToken;
 
@@ -68,7 +67,6 @@ function isAdminFromLocal() {
         const raw =
             data?.rol || data?.role || data?.authorities || data?.Rol || data?.Role || "";
         const role = String(raw).toUpperCase();
-        // Acepta 'ADMIN', 'ROLE_ADMIN' o arrays serializados que contengan ADMIN
         return role.includes("ADMIN");
     } catch {
         return false;
@@ -76,7 +74,6 @@ function isAdminFromLocal() {
 }
 
 function AdminRoute({ children }) {
-    // 👉 usamos también readRawToken() para evitar warning “no usado”
     const t = getActiveValidToken() || readRawToken();
     if (!t) return <Navigate to="/login" replace />;
     if (!isAdminFromLocal()) return <Navigate to="/home" replace />;
@@ -84,14 +81,12 @@ function AdminRoute({ children }) {
 }
 
 export default function AppRouter() {
-    // 🔁 clave dinámica considera ambos tokens, pero solo si son válidos
-    // 👉 usamos también readRawToken() para evitar warning “no usado”
     const token = getActiveValidToken() || readRawToken();
     const key = token ? "auth" : "guest";
 
     return (
         <Routes key={key}>
-            {/* si entras a /, manda a /home (si autenticado) o /login */}
+            {/* Si entras a /, manda a /home (si autenticado) o /login */}
             <Route
                 path="/"
                 element={
@@ -122,6 +117,16 @@ export default function AppRouter() {
                 element={
                     <PrivateRoute>
                         {isAdminFromLocal() ? <Navigate to="/home" replace /> : <Perfil />}
+                    </PrivateRoute>
+                }
+            />
+
+            {/* ⬇️ NUEVO: Ruta para Social */}
+            <Route
+                path="/social"
+                element={
+                    <PrivateRoute>
+                        <Social />
                     </PrivateRoute>
                 }
             />
