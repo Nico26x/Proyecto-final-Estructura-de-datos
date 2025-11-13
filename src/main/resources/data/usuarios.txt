@@ -1,5 +1,3 @@
-user1;$2a$10$/NLCTjcg3rhvG1OqecRrKuUUGD3A3ODHNYsafMAcbz6GhPxBaLORK;Usuario Prueba;USER;
-sorner11d;$2a$10$WEKeeEupTT4y2u3bqBm39eYdDCPRinO/T6kRojLMlllaspZr4vSJC;Alex;USER;
 nico;$2a$10$KR2cqelv/b.jh8wDUV6y2ufqV0TPK6vn365bu/6nOVT3uFm5NXxrO;Deivid;USER;1
 dqwdqw;$2a$10$r4bfp7EQjN3aRJrs9phEzezxBo4CIxpUuzFdhvTueken4jSU0zrw6;dqwdq;USER;
 robinson;$2a$10$0r1hxiwKLVZg7ssnh86Wy.yzG/8vjasP.5wamsMHR/6lv.93fGFSe;Deivid;USER;
