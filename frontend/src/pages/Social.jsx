@@ -1,4 +1,5 @@
-import React, { useState, useEffect, useCallback } from "react";
+import React, { useState, useEffect, useCallback, useRef } from "react";
+import { useNavigate } from "react-router-dom"; // Importamos el hook useNavigate
 import "../styles/home.css";  // Importar el CSS de Home para mantener el diseño
 
 const API_URL = "http://localhost:8080/api/usuarios";
@@ -31,9 +32,14 @@ const Social = () => {
     const [limite, setLimite] = useState(5); // Limite de sugerencias
     const [seguido, setSeguido] = useState(new Set()); // Usuarios seguidos
     const [mensaje, setMensaje] = useState(""); // Mensaje para mostrar al seguir o dejar de seguir
+    const [open, setOpen] = useState(false); // Controlar la visibilidad del menú desplegable
 
     const token = getActiveToken();
     const username = getUsernameFromToken();
+    const role = parseJwt(token)?.rol || ""; // Obtener el rol del token
+    const navigate = useNavigate(); // Usamos el hook useNavigate
+
+    const ref = useRef(null);
 
     const obtenerSugerencias = useCallback(async () => {
         if (!token || !username) {
@@ -175,6 +181,36 @@ const Social = () => {
         }
     };
 
+    // Cerrar sesión
+    const handleLogout = async () => {
+        try {
+            // Realizamos la llamada para cerrar sesión en el backend si es necesario
+            await fetch(`${API_URL}/logout`, {
+                method: "POST",
+                headers: {
+                    Authorization: `Bearer ${token}`,
+                },
+            });
+        } catch (e) {
+            console.error("Error al cerrar sesión:", e);
+        }
+        // Eliminar tokens y redirigir al login
+        localStorage.removeItem("token");
+        localStorage.removeItem("admin_token");
+        navigate("/login", { replace: true });  // Redirigimos al login
+    };
+
+    // Detectar clics fuera del menú
+    useEffect(() => {
+        const handler = (e) => {
+            if (ref.current && !ref.current.contains(e.target)) {
+                setOpen(false);
+            }
+        };
+        document.addEventListener("mousedown", handler);
+        return () => document.removeEventListener("mousedown", handler);
+    }, []);
+
     return (
         <div className="app-shell">
             {/* Barra lateral */}
@@ -193,36 +229,109 @@ const Social = () => {
                 <div className="topbar">
                     <button
                         className="profile"
-                        onClick={() => window.history.back()}
-                    >
-                        ← Volver
-                    </button>
-
-                    {/* Botón de perfil */}
-                    <button
-                        className="profile"
-                        onClick={() => alert('Abrir menú de perfil')} // Placeholder para abrir el menú de perfil
+                        onClick={() => setOpen((prev) => !prev)} // Cambia el estado de 'open' para mostrar/ocultar el menú
                     >
                         👤 {username || "Perfil"}
                     </button>
+
+                    {/* Menú desplegable */}
+                    {open && (
+                        <div
+                            ref={ref} // Necesitamos el ref para cerrar el menú si se hace clic fuera
+                            className="dropdown-menu"
+                            style={{
+                                position: "absolute",
+                                right: 0,
+                                top: "100%",
+                                background: "rgba(255,255,255,0.06)",
+                                border: "1px solid rgba(255,255,255,0.1)",
+                                backdropFilter: "blur(6px)",
+                                borderRadius: 8,
+                                padding: 8,
+                                minWidth: 200,
+                                boxShadow: "0 6px 24px rgba(0,0,0,0.25)",
+                                zIndex: 10,
+                            }}
+                        >
+                            {/* Mostrar Admin si es admin */}
+                            {role === "admin" && (
+                                <button
+                                    className="btn btn-sm btn-outline-light"
+                                    onClick={() => navigate("/admin")}
+                                >
+                                    Admin
+                                </button>
+                            )}
+
+                            {/* Mostrar Editar perfil si no es admin */}
+                            {role !== "admin" && (
+                                <button
+                                    className="btn btn-sm btn-outline-light"
+                                    onClick={() => navigate("/perfil/editar")}
+                                >
+                                    Editar perfil
+                                </button>
+                            )}
+
+                            {/* Cerrar sesión */}
+                            <button
+                                className="btn btn-sm btn-outline-light"
+                                onClick={handleLogout}
+                            >
+                                🚪 Cerrar sesión
+                            </button>
+                        </div>
+                    )}
                 </div>
 
                 <section className="section">
                     <h1>Bienvenido a la página Social</h1>
                     <p>¡Aquí podrás interactuar con otros usuarios y compartir contenido!</p>
-                    <div style={{ display: "flex", gap: 8, alignItems: "center", margin: "12px 0" }}>
-                        <label htmlFor="limite">Número de sugerencias:</label>
-                        <input
-                            type="number"
-                            id="limite"
-                            value={limite}
-                            onChange={(e) => setLimite(Number(e.target.value || 0))}
-                            min="1"
-                            style={{ width: 80 }}
-                        />
-                        <button onClick={obtenerSugerencias} disabled={loading}>
-                            {loading ? "Cargando..." : "Obtener sugerencias"}
-                        </button>
+                    {/* Caja de formulario para sugerencias */}
+                    <div className="card" style={{ padding: "16px", display: "flex", flexDirection: "column", gap: "16px", maxHeight: 160, maxWidth: 400 }}>
+                        <h3 style={{ color: "white", marginBottom: "12px" }}>Número de sugerencias</h3>
+
+                        <div style={{ display: "flex", alignItems: "center", gap: "12px" }}>
+                            <label htmlFor="limite" style={{ color: "var(--muted)", fontSize: "16px", flex: "0 0 auto" }}>
+                                Limite:
+                            </label>
+
+                            <input
+                                type="number"
+                                id="limite"
+                                value={limite}
+                                onChange={(e) => setLimite(Number(e.target.value || 0))}
+                                min="1"
+                                style={{
+                                    padding: "10px",
+                                    borderRadius: "8px",
+                                    border: "1px solid var(--panel)",
+                                    backgroundColor: "var(--panel)",
+                                    color: "white",
+                                    fontSize: "16px",
+                                    width: "80px",
+                                    textAlign: "center",
+                                    transition: "border-color 0.3s ease",
+                                }}
+                            />
+
+                            <button
+                                onClick={obtenerSugerencias}
+                                disabled={loading}
+                                style={{
+                                    padding: "10px 16px",
+                                    borderRadius: "8px",
+                                    backgroundColor: "var(--accent)",
+                                    color: "white",
+                                    fontSize: "16px",
+                                    border: "none",
+                                    cursor: loading ? "not-allowed" : "pointer",
+                                    transition: "background-color 0.3s ease",
+                                }}
+                            >
+                                {loading ? "Cargando..." : "Obtener sugerencias"}
+                            </button>
+                        </div>
                     </div>
 
                     {error && <div className="error" style={{ color: "#ffb3b3" }}>{error}</div>}
@@ -234,53 +343,65 @@ const Social = () => {
                             <div className="card-muted">No hay sugerencias por ahora.</div>
                         )}
                         {sugerencias.length > 0 && (
-                            <ul>
+                            <div className="row-scroll">
                                 {sugerencias.map((u, i) => (
-                                    <li key={`${u}-${i}`}>
-                                        {u}
-                                        <button
-                                            onClick={() => toggleSeguir(u)}
-                                            style={{
-                                                backgroundColor: seguido.has(u) ? "red" : "green",
-                                                color: "white",
-                                                padding: "5px",
-                                            }}
-                                        >
-                                            Seguir
-                                        </button>
-                                        {seguido.has(u) && (
-                                            <button
-                                                onClick={() => toggleDejarDeSeguir(u)}
-                                                style={{
-                                                    backgroundColor: "gray",
-                                                    color: "white",
-                                                    padding: "5px",
-                                                    marginLeft: "10px",
-                                                }}
-                                            >
-                                                Dejar de seguir
-                                            </button>
-                                        )}
-                                    </li>
+                                    <div className="card" key={`${u}-${i}`} style={{ padding: '16px', display: 'flex', flexDirection: 'column', gap: '12px' }}>
+                                        <h3 style={{ color: 'white' }}>{u}</h3> {/* Nombre de usuario en blanco */}
+                                        <div style={{ display: 'flex', gap: '10px' }}>
+                                            {/* Botón "Seguir" solo si no se sigue al usuario */}
+                                            {!seguido.has(u) ? (
+                                                <button
+                                                    onClick={() => toggleSeguir(u)}
+                                                    style={{
+                                                        backgroundColor: "green",
+                                                        color: "white",
+                                                        padding: "8px 12px",
+                                                        borderRadius: "8px",
+                                                        cursor: "pointer",
+                                                        transition: "background-color 0.3s ease",
+                                                    }}
+                                                >
+                                                    Seguir
+                                                </button>
+                                            ) : (
+                                                <button
+                                                    onClick={() => toggleDejarDeSeguir(u)}
+                                                    style={{
+                                                        backgroundColor: "gray",
+                                                        color: "white",
+                                                        padding: "8px 12px",
+                                                        borderRadius: "8px",
+                                                    }}
+                                                >
+                                                    Dejar de seguir
+                                                </button>
+                                            )}
+                                        </div>
+                                    </div>
                                 ))}
-                            </ul>
+                            </div>
                         )}
                     </div>
 
                     {/* Mostrar lista de usuarios seguidos */}
                     <div style={{ marginTop: 12 }}>
                         <h2>Usuarios seguidos:</h2>
-                        {seguido.size === 0 && (
-                            <div className="card-muted">No estás siguiendo a nadie.</div>
-                        )}
-                        {seguido.size > 0 && (
-                            <ul>
+                        {seguido.size === 0 ? (
+                            <div className="card-muted" style={{ padding: '16px', textAlign: 'center' }}>
+                                No estás siguiendo a nadie.
+                            </div>
+                        ) : (
+                            <div className="row-scroll">
                                 {Array.from(seguido).map((usuario, i) => (
-                                    <li key={`${usuario}-${i}`}>{usuario}</li>
+                                    <div className="card" key={`${usuario}-${i}`} style={{ padding: '16px', display: 'flex', flexDirection: 'column', gap: '12px' }}>
+                                        <h3 style={{ color: 'white' }}>{usuario}</h3> {/* Solo el nombre del usuario */}
+                                    </div>
                                 ))}
-                            </ul>
+                            </div>
                         )}
                     </div>
+
+
                 </section>
             </main>
         </div>
