@@ -8,6 +8,7 @@ import { useAuth } from "../context/AuthContext";
 // ⬇️ Páginas admin (tus nombres)
 import AdminCanciones from "../pages/AdminCanciones";
 import AdminUsuarios from "../pages/AdminUsuarios";
+import MetricasPage from "../pages/Metrics/MetricsPage"; // ← NUEVO
 
 // ⬇️ NUEVO: Perfil (usuario no admin)
 import Perfil from "../pages/Perfil";
@@ -140,6 +141,14 @@ export default function AppRouter() {
                 element={
                     <AdminRoute>
                         <AdminUsuarios />
+                    </AdminRoute>
+                }
+            />
+            <Route
+                path="/admin/metricas"
+                element={
+                    <AdminRoute>
+                        <MetricasPage />
                     </AdminRoute>
                 }
             />

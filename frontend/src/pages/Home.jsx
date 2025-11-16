@@ -115,7 +115,8 @@ function TopBar({
                     isAdmin,
                     onGoAdminCanciones,
                     onGoAdminUsuarios,
-                    onGoPerfil, // ← NUEVO: navegación interna a /perfil
+                    onGoPerfil,
+                    onGoMetricas, // ← NUEVO
                     onLogout,
                 }) {
     const [open, setOpen] = useState(false);
@@ -247,6 +248,16 @@ function TopBar({
                                         }}
                                     >
                                         👥 Usuarios
+                                    </button>
+                                    <button
+                                        className="btn btn-sm btn-outline-light"
+                                        onClick={() => {
+                                            onGoMetricas?.();
+                                            setOpen(false);
+                                            setAdminOpen(false);
+                                        }}
+                                    >
+                                        📊 Métricas
                                     </button>
                                 </div>
                             )}
@@ -847,7 +858,8 @@ export default function Home() {
                     isAdmin={isAdmin}
                     onGoAdminCanciones={() => navigate("/admin/canciones")}
                     onGoAdminUsuarios={() => navigate("/admin/usuarios")}
-                    onGoPerfil={() => navigate("/perfil")} // ← AHORA misma pestaña
+                    onGoMetricas={() => navigate("/admin/metricas")} // ← NUEVO
+                    onGoPerfil={() => navigate("/perfil")}
                     onLogout={handleLogout}
                 />
 
