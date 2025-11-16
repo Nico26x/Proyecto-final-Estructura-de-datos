@@ -41,6 +41,23 @@ async function apiDelete(path) {
     }
 }
 
+// Agregar esta función helper después de las funciones apiGet, apiPost, apiDelete
+async function apiDownloadFile(path, filename) {
+    const r = await fetch(`${API}${path}`, {
+        headers: { ...authHeaders() },
+    });
+    if (!r.ok) throw new Error(`GET ${path} -> ${r.status}`);
+    const blob = await r.blob();
+    const url = window.URL.createObjectURL(blob);
+    const a = document.createElement("a");
+    a.href = url;
+    a.download = filename;
+    document.body.appendChild(a);
+    a.click();
+    window.URL.revokeObjectURL(url);
+    document.body.removeChild(a);
+}
+
 function decodeToken() {
     try {
         const t = getToken();
@@ -483,6 +500,10 @@ export default function Home() {
     const [radioLoading, setRadioLoading] = useState(false);
     const [radioError, setRadioError] = useState("");
 
+    // Exportar CSV
+    const [exportLoading, setExportLoading] = useState(false);
+    const [exportError, setExportError] = useState("");
+
     // 🔄 token reactive
     useEffect(() => {
         const handleStorage = () => setAuth(decodeToken());
@@ -796,6 +817,26 @@ export default function Home() {
         window.location.href = "/login";
     };
 
+    // Función para descargar CSV
+    const handleExportFavorites = async () => {
+        if (!username) return;
+        setExportLoading(true);
+        setExportError("");
+        try {
+            const timestamp = new Date().toISOString().split("T")[0];
+            const filename = `favoritos_${username}_${timestamp}.csv`;
+            await apiDownloadFile(
+                `/api/usuarios/${encodeURIComponent(username)}/favoritos/export`,
+                filename
+            );
+        } catch (e) {
+            setExportError("No se pudo descargar el archivo CSV.");
+            console.error("Export error:", e);
+        } finally {
+            setExportLoading(false);
+        }
+    };
+
     return (
         <div className="app-shell">
             <Sidebar tab={tab} setTab={setTab} />
@@ -1059,7 +1100,31 @@ export default function Home() {
                 {tab === "favoritos" && (
                     <>
                         <section className="section">
-                            <h2>Favoritos</h2>
+                            <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
+                                <h2>Favoritos</h2>
+                                <button
+                                    className="btn btn-sm btn-outline-light"
+                                    onClick={handleExportFavorites}
+                                    disabled={exportLoading || favSongs.length === 0}
+                                    title={favSongs.length === 0 ? "No hay favoritos para exportar" : "Descargar como CSV"}
+                                >
+                                    {exportLoading ? "📥 Descargando..." : "📥 Descargar CSV"}
+                                </button>
+                            </div>
+                            {exportError && (
+                                <div
+                                    className="alert alert-danger"
+                                    style={{
+                                        background: "#3d1414",
+                                        color: "#ffd7d7",
+                                        padding: "8px 10px",
+                                        borderRadius: 8,
+                                        marginTop: 10,
+                                    }}
+                                >
+                                    {exportError}
+                                </div>
+                            )}
                         </section>
                         <SectionRow
                             title="Tus canciones favoritas"
