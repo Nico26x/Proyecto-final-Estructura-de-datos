@@ -1,4 +1,4 @@
-Nico26x;$2a$10$ZK4ZbJX3if2BxbZ9LQGtI.KYBxMxinQRPigMHnS0Fb.v/SAQZ6kFG;Nicolas Loaiza;USER;1,2,3
+Nico26x;$2a$10$ZK4ZbJX3if2BxbZ9LQGtI.KYBxMxinQRPigMHnS0Fb.v/SAQZ6kFG;Nicolas Loaiza;USER;1,2,3,4
 admin;$2a$10$Tb9ktjIlotHFDlFyDMVxleat.Jm/MUJnsCPp/8pUUriQ6v.qa0LTG;Administrador;ADMIN;
 juan;$2a$10$8f3wwl.99qU6qFsKIvrRauJtnuLu4tVefNVK9twTPzWdIlpaprOl.;Juan;USER;1,2,3
 alex1;$2a$10$ICBesePZVMKM/YfluVmYk.nSs.oMuOymuTZo7o90irM/mnQmQBGc6;Alex david;USER;1,2,3

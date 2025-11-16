@@ -239,7 +239,7 @@ export default function MetricsPage() {
                     )}
 
                     {/* Card: Descargas por día */}
-                    <div className="card" style={{ maxWidth: 820, margin: "0 auto 15px" }}>
+                    <div className="card" style={{ maxWidth: 820, margin: "0 auto 15px", height: "auto" }}>
                         <h3
                             style={{
                                 marginTop: 0,
@@ -311,7 +311,7 @@ export default function MetricsPage() {
                     </div>
 
                     {/* Card: Top Exportadores */}
-                    <div className="card" style={{ maxWidth: 820, margin: "0 auto 15px" }}>
+                    <div className="card" style={{ maxWidth: 820, margin: "0 auto 15px", height: "auto" }}>
                         <h3
                             style={{
                                 marginTop: 0,
@@ -383,7 +383,7 @@ export default function MetricsPage() {
                     </div>
 
                     {/* Card: Top Artistas */}
-                    <div className="card" style={{ maxWidth: 820, margin: "0 auto 15px" }}>
+                    <div className="card" style={{ maxWidth: 820, margin: "0 auto 15px", height: "auto" }}>
                         <h3
                             style={{
                                 marginTop: 0,
@@ -455,7 +455,7 @@ export default function MetricsPage() {
                     </div>
 
                     {/* Card: Top Géneros */}
-                    <div className="card" style={{ maxWidth: 820, margin: "0 auto 15px" }}>
+                    <div className="card" style={{ maxWidth: 820, margin: "0 auto 15px", height: "auto" }}>
                         <h3
                             style={{
                                 marginTop: 0,
