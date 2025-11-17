@@ -15,6 +15,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 
 import java.util.Collection;
 import java.util.List;
+import java.util.Map;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
@@ -98,5 +99,76 @@ class UsuarioServiceTest {
         assertEquals(2, res.size());
         assertEquals("10", res.get(0).getId());
         assertEquals("11", res.get(1).getId());
+    }
+
+    @Test
+    void sugerirUsuariosPorFavoritos_encuentraUsuariosConFavoritosComunes() {
+        // Usuario principal
+        String user = "ana";
+        Usuario ana = new Usuario(user, "pass", "Ana", Rol.USER);
+        
+        // Otros usuarios
+        Usuario bob = new Usuario("bob", "pass", "Bob", Rol.USER);
+        Usuario carl = new Usuario("carl", "pass", "Carl", Rol.USER);
+        Usuario dave = new Usuario("dave", "pass", "Dave", Rol.USER);
+        
+        // Canciones
+        Cancion c1 = new Cancion("1", "Song1", "Artist1", "Pop", 2020, 3.0);
+        Cancion c2 = new Cancion("2", "Song2", "Artist2", "Rock", 2021, 4.0);
+        Cancion c3 = new Cancion("3", "Song3", "Artist3", "Jazz", 2019, 3.5);
+        
+        // ana tiene c1 y c2 como favoritos
+        ana.agregarFavorito(c1);
+        ana.agregarFavorito(c2);
+        
+        // bob tiene c1 y c2 (2 coincidencias con ana)
+        bob.agregarFavorito(c1);
+        bob.agregarFavorito(c2);
+        
+        // carl tiene solo c1 (1 coincidencia con ana)
+        carl.agregarFavorito(c1);
+        
+        // dave tiene c3 (0 coincidencias con ana)
+        dave.agregarFavorito(c3);
+        
+        // Mock del repositorio
+        when(usuarioRepository.buscarPorUsername(user)).thenReturn(ana);
+        when(usuarioRepository.listarUsuarios()).thenReturn(
+            Map.of("ana", ana, "bob", bob, "carl", carl, "dave", dave)
+        );
+        
+        // Ejecutar
+        List<String> sugerencias = usuarioService.sugerirUsuariosPorFavoritos(user, 3);
+        
+        // Verificar: bob debería estar primero (2 coincidencias), luego carl (1 coincidencia)
+        assertTrue(sugerencias.size() >= 2);
+        assertEquals("bob", sugerencias.get(0)); // más coincidencias
+        assertEquals("carl", sugerencias.get(1)); // menos coincidencias
+        assertFalse(sugerencias.contains("dave")); // sin coincidencias
+        assertFalse(sugerencias.contains("ana")); // no se sugiere a sí mismo
+    }
+
+    @Test
+    void exportarFavoritosCsv_generaCsvConFormatoCorrect() {
+        String user = "laura";
+        Usuario laura = new Usuario(user, "pass", "Laura", Rol.USER);
+        
+        Cancion c1 = new Cancion("101", "Himno", "Artista A", "Pop", 2020, 3.5);
+        Cancion c2 = new Cancion("102", "Melodía", "Artista B", "Rock", 2021, 4.2);
+        laura.agregarFavorito(c1);
+        laura.agregarFavorito(c2);
+        
+        when(usuarioRepository.buscarPorUsername(user)).thenReturn(laura);
+        // Mock para listarFavoritos que es llamado por exportarFavoritosCsv
+        when(usuarioRepository.listarFavoritos(user)).thenReturn(laura.getListaFavoritos());
+        
+        byte[] csv = usuarioService.exportarFavoritosCsv(user);
+        String contenido = new String(csv);
+        
+        // Verificar encabezado
+        assertTrue(contenido.contains("id,titulo,artista,genero,anio,duracion_seg"));
+        // Verificar datos
+        assertTrue(contenido.contains("101,Himno,Artista A,Pop,2020,3.5"));
+        assertTrue(contenido.contains("102,Melodía,Artista B,Rock,2021,4.2"));
     }
 }
