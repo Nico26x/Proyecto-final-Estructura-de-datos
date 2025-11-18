@@ -30,6 +30,7 @@ loadScripts(document, 'script');</script>
 <li><a href="package-summary.html">Package</a></li>
 <li class="nav-bar-cell1-rev">Class</li>
 <li><a href="package-tree.html">Tree</a></li>
+<li><a href="../../../../../deprecated-list.html">Deprecated</a></li>
 <li><a href="../../../../../index-all.html">Index</a></li>
 <li><a href="../../../../../help-doc.html#class">Help</a></li>
 </ul>
@@ -92,6 +93,21 @@ loadScripts(document, 'script');</script>
 <div class="type-signature"><span class="annotations">@Service
 </span><span class="modifiers">public class </span><span class="element-name type-name-label">MetricasService</span>
 <span class="extends-implements">extends <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a></span></div>
+<div class="block">Servicio de gestión de métricas y análisis de datos del sistema.
+ <p>
+ Proporciona funcionalidades para registrar eventos, analizar exportaciones de favoritos,
+ y generar reportes estadísticos sobre artistas, géneros y canciones más populares.
+ </p>
+ <p>
+ Características principales:
+ </p>
+ <ul>
+   <li>Registro de eventos en archivo CSV centralizado (metricas.csv)</li>
+   <li>Análisis de exportaciones de favoritos por usuario y día</li>
+   <li>Estadísticas de artistas, géneros y canciones más descargados</li>
+   <li>Consultas con rango de fechas</li>
+   <li>Acceso thread-safe mediante ReentrantLock</li>
+ </ul></div>
 </section>
 <section class="summary">
 <ul class="summary-list">
@@ -106,7 +122,9 @@ loadScripts(document, 'script');</script>
 <div class="table-header col-last">Description</div>
 <div class="col-first even-row-color"><code>static class&nbsp;</code></div>
 <div class="col-second even-row-color"><code><a href="MetricasService.EventoDTO.html" class="type-name-link" title="class in co.edu.uniquindio.application.service">MetricasService.EventoDTO</a></code></div>
-<div class="col-last even-row-color">&nbsp;</div>
+<div class="col-last even-row-color">
+<div class="block">DTO que representa un evento registrado en las métricas.</div>
+</div>
 </div>
 </section>
 </li>
@@ -137,78 +155,78 @@ loadScripts(document, 'script');</script>
 <div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/util/Map.html" title="class or interface in java.util" class="external-link">Map</a><wbr>&lt;<a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>,<wbr><a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/Long.html" title="class or interface in java.lang" class="external-link">Long</a>&gt;</code></div>
 <div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#descargasFavoritosPorDia()" class="member-name-link">descargasFavoritosPorDia</a>()</code></div>
 <div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
-<div class="block">Conteo de EXPORT_FAVORITOS por día (yyyy-MM-dd)</div>
+<div class="block">Conteo de exportaciones de favoritos agrupadas por día (formato yyyy-MM-dd).</div>
 </div>
 <div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/util/Map.html" title="class or interface in java.util" class="external-link">Map</a><wbr>&lt;<a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>,<wbr><a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/Long.html" title="class or interface in java.lang" class="external-link">Long</a>&gt;</code></div>
 <div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#descargasFavoritosPorRango(java.lang.String,java.lang.String)" class="member-name-link">descargasFavoritosPorRango</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;desde,
  <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;hasta)</code></div>
 <div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
-<div class="block">Conteo por día de EXPORT_FAVORITOS en rango [desde, hasta], formato yyyy-MM-dd.</div>
+<div class="block">Conteo de exportaciones de favoritos por día dentro de un rango de fechas.</div>
 </div>
 <div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/util/Map.html" title="class or interface in java.util" class="external-link">Map</a><wbr>&lt;<a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>,<wbr><a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/Long.html" title="class or interface in java.lang" class="external-link">Long</a>&gt;</code></div>
 <div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#descargasFavoritosPorUsuario()" class="member-name-link">descargasFavoritosPorUsuario</a>()</code></div>
 <div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
-<div class="block">Mapa username -&gt; total de EXPORT_FAVORITOS.</div>
+<div class="block">Obtiene un mapa de usuarios y su cantidad de exportaciones de favoritos.</div>
 </div>
 <div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>double</code></div>
 <div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#promedioFavoritosPorExport()" class="member-name-link">promedioFavoritosPorExport</a>()</code></div>
 <div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
-<div class="block">Promedio de favoritos exportados por evento (usa detalle "count=X").</div>
+<div class="block">Calcula el promedio de canciones favoritas exportadas por evento.</div>
 </div>
 <div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>void</code></div>
 <div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#registrarEvento(java.lang.String,java.lang.String,java.lang.String)" class="member-name-link">registrarEvento</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;username,
  <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;accion,
  <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;detalle)</code></div>
 <div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
-<div class="block">Registra una línea en metricas.csv</div>
+<div class="block">Registra un evento en el archivo maestro de métricas.</div>
 </div>
 <div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>void</code></div>
 <div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#registrarExportFavoritos(java.lang.String,int)" class="member-name-link">registrarExportFavoritos</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;username,
  int&nbsp;cantidadFavoritos)</code></div>
 <div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
-<div class="block">Conveniencia específica para exportación de favoritos</div>
+<div class="block">Registra específicamente una exportación de favoritos.</div>
 </div>
 <div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/util/Map.html" title="class or interface in java.util" class="external-link">Map</a><wbr>&lt;<a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>,<wbr><a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/Long.html" title="class or interface in java.lang" class="external-link">Long</a>&gt;</code></div>
 <div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#topArtistasDesdeFavoritos(int)" class="member-name-link">topArtistasDesdeFavoritos</a><wbr>(int&nbsp;limit)</code></div>
 <div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
-<div class="block">Lee TODOS los CSV de favoritos per-user en:
-   src/main/resources/data/reportes/favoritos_*.csv
- y calcula top artistas / géneros.</div>
+<div class="block">Obtiene los artistas más descargados desde todos los archivos de favoritos.</div>
 </div>
 <div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/util/Map.html" title="class or interface in java.util" class="external-link">Map</a><wbr>&lt;<a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>,<wbr><a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/Long.html" title="class or interface in java.lang" class="external-link">Long</a>&gt;</code></div>
 <div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#topArtistasPorUsuario(java.lang.String,int)" class="member-name-link">topArtistasPorUsuario</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;username,
  int&nbsp;limit)</code></div>
 <div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
-<div class="block">Top artistas dentro del CSV de favoritos de UN usuario.</div>
+<div class="block">Obtiene los artistas más descargados dentro del archivo de favoritos de un usuario específico.</div>
 </div>
 <div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/util/Map.html" title="class or interface in java.util" class="external-link">Map</a><wbr>&lt;<a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>,<wbr><a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/Long.html" title="class or interface in java.lang" class="external-link">Long</a>&gt;</code></div>
 <div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#topCancionesDesdeFavoritos(int)" class="member-name-link">topCancionesDesdeFavoritos</a><wbr>(int&nbsp;limit)</code></div>
 <div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
-<div class="block">Top canciones global desde TODOS los CSV de favoritos (por título).</div>
+<div class="block">Obtiene las canciones más descargadas globalmente desde todos los archivos de favoritos.</div>
 </div>
 <div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/util/Map.html" title="class or interface in java.util" class="external-link">Map</a><wbr>&lt;<a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>,<wbr><a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/Long.html" title="class or interface in java.lang" class="external-link">Long</a>&gt;</code></div>
 <div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#topGenerosDesdeFavoritos(int)" class="member-name-link">topGenerosDesdeFavoritos</a><wbr>(int&nbsp;limit)</code></div>
-<div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">&nbsp;</div>
+<div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
+<div class="block">Obtiene los géneros más descargados desde todos los archivos de favoritos.</div>
+</div>
 <div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/util/Map.html" title="class or interface in java.util" class="external-link">Map</a><wbr>&lt;<a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>,<wbr><a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/Long.html" title="class or interface in java.lang" class="external-link">Long</a>&gt;</code></div>
 <div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#topGenerosPorUsuario(java.lang.String,int)" class="member-name-link">topGenerosPorUsuario</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;username,
  int&nbsp;limit)</code></div>
 <div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
-<div class="block">Top géneros dentro del CSV de favoritos de UN usuario.</div>
+<div class="block">Obtiene los géneros más descargados dentro del archivo de favoritos de un usuario específico.</div>
 </div>
 <div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/util/List.html" title="class or interface in java.util" class="external-link">List</a><wbr>&lt;<a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/util/Map.Entry.html" title="class or interface in java.util" class="external-link">Map.Entry</a>&lt;<a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>,<wbr><a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/Long.html" title="class or interface in java.lang" class="external-link">Long</a>&gt;&gt;</code></div>
 <div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#topUsuariosExportadores(int)" class="member-name-link">topUsuariosExportadores</a><wbr>(int&nbsp;limit)</code></div>
 <div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
-<div class="block">Top usuarios por cantidad de EXPORT_FAVORITOS</div>
+<div class="block">Obtiene los usuarios con más exportaciones de favoritos.</div>
 </div>
 <div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>long</code></div>
 <div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#totalDescargasFavoritos()" class="member-name-link">totalDescargasFavoritos</a>()</code></div>
 <div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
-<div class="block">Total de eventos EXPORT_FAVORITOS registrados.</div>
+<div class="block">Obtiene el total de eventos EXPORT_FAVORITOS registrados.</div>
 </div>
 <div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/util/List.html" title="class or interface in java.util" class="external-link">List</a><wbr>&lt;<a href="MetricasService.EventoDTO.html" title="class in co.edu.uniquindio.application.service">MetricasService.EventoDTO</a>&gt;</code></div>
 <div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#ultimasExportaciones(int)" class="member-name-link">ultimasExportaciones</a><wbr>(int&nbsp;n)</code></div>
 <div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
-<div class="block">Últimos N eventos (cualquier acción), orden cronológico descendente.</div>
+<div class="block">Obtiene los últimos N eventos de exportación de favoritos.</div>
 </div>
 </div>
 </div>
@@ -247,7 +265,17 @@ loadScripts(document, 'script');</script>
 <div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">void</span>&nbsp;<span class="element-name">registrarEvento</span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;username,
  <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;accion,
  <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;detalle)</span></div>
-<div class="block">Registra una línea en metricas.csv</div>
+<div class="block">Registra un evento en el archivo maestro de métricas.
+ <p>
+ Añade una nueva línea con timestamp, usuario, acción y detalles.
+ Acceso sincronizado mediante ReentrantLock para thread-safety.
+ </p></div>
+<dl class="notes">
+<dt>Parameters:</dt>
+<dd><code>username</code> - el usuario que realiza la acción</dd>
+<dd><code>accion</code> - la acción realizada (ej: "EXPORT_FAVORITOS")</dd>
+<dd><code>detalle</code> - información adicional sobre la acción</dd>
+</dl>
 </section>
 </li>
 <li>
@@ -255,50 +283,93 @@ loadScripts(document, 'script');</script>
 <h3>registrarExportFavoritos</h3>
 <div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">void</span>&nbsp;<span class="element-name">registrarExportFavoritos</span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;username,
  int&nbsp;cantidadFavoritos)</span></div>
-<div class="block">Conveniencia específica para exportación de favoritos</div>
+<div class="block">Registra específicamente una exportación de favoritos.
+ <p>
+ Conveniencia para registrar eventos de exportación con la cantidad de favoritos.
+ </p></div>
+<dl class="notes">
+<dt>Parameters:</dt>
+<dd><code>username</code> - el usuario que realiza la exportación</dd>
+<dd><code>cantidadFavoritos</code> - el número de canciones favoritas exportadas</dd>
+</dl>
 </section>
 </li>
 <li>
 <section class="detail" id="descargasFavoritosPorDia()">
 <h3>descargasFavoritosPorDia</h3>
 <div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/util/Map.html" title="class or interface in java.util" class="external-link">Map</a>&lt;<a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>,<wbr><a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/Long.html" title="class or interface in java.lang" class="external-link">Long</a>&gt;</span>&nbsp;<span class="element-name">descargasFavoritosPorDia</span>()</div>
-<div class="block">Conteo de EXPORT_FAVORITOS por día (yyyy-MM-dd)</div>
+<div class="block">Conteo de exportaciones de favoritos agrupadas por día (formato yyyy-MM-dd).</div>
+<dl class="notes">
+<dt>Returns:</dt>
+<dd>mapa con fechas como clave y cantidad de exportaciones como valor</dd>
+</dl>
 </section>
 </li>
 <li>
 <section class="detail" id="topUsuariosExportadores(int)">
 <h3>topUsuariosExportadores</h3>
 <div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/util/List.html" title="class or interface in java.util" class="external-link">List</a>&lt;<a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/util/Map.Entry.html" title="class or interface in java.util" class="external-link">Map.Entry</a>&lt;<a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>,<wbr><a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/Long.html" title="class or interface in java.lang" class="external-link">Long</a>&gt;&gt;</span>&nbsp;<span class="element-name">topUsuariosExportadores</span><wbr><span class="parameters">(int&nbsp;limit)</span></div>
-<div class="block">Top usuarios por cantidad de EXPORT_FAVORITOS</div>
+<div class="block">Obtiene los usuarios con más exportaciones de favoritos.</div>
+<dl class="notes">
+<dt>Parameters:</dt>
+<dd><code>limit</code> - el número máximo de usuarios a retornar</dd>
+<dt>Returns:</dt>
+<dd>lista de pares usuario-cantidad ordenados descendentemente</dd>
+</dl>
 </section>
 </li>
 <li>
 <section class="detail" id="topArtistasDesdeFavoritos(int)">
 <h3>topArtistasDesdeFavoritos</h3>
 <div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/util/Map.html" title="class or interface in java.util" class="external-link">Map</a>&lt;<a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>,<wbr><a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/Long.html" title="class or interface in java.lang" class="external-link">Long</a>&gt;</span>&nbsp;<span class="element-name">topArtistasDesdeFavoritos</span><wbr><span class="parameters">(int&nbsp;limit)</span></div>
-<div class="block">Lee TODOS los CSV de favoritos per-user en:
-   src/main/resources/data/reportes/favoritos_*.csv
- y calcula top artistas / géneros.</div>
+<div class="block">Obtiene los artistas más descargados desde todos los archivos de favoritos.
+ <p>
+ Lee los archivos favoritos_*.csv y agrega el conteo por artista.
+ </p></div>
+<dl class="notes">
+<dt>Parameters:</dt>
+<dd><code>limit</code> - el número máximo de artistas a retornar</dd>
+<dt>Returns:</dt>
+<dd>mapa ordenado descendentemente por cantidad de descargas</dd>
+</dl>
 </section>
 </li>
 <li>
 <section class="detail" id="topGenerosDesdeFavoritos(int)">
 <h3>topGenerosDesdeFavoritos</h3>
 <div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/util/Map.html" title="class or interface in java.util" class="external-link">Map</a>&lt;<a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>,<wbr><a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/Long.html" title="class or interface in java.lang" class="external-link">Long</a>&gt;</span>&nbsp;<span class="element-name">topGenerosDesdeFavoritos</span><wbr><span class="parameters">(int&nbsp;limit)</span></div>
+<div class="block">Obtiene los géneros más descargados desde todos los archivos de favoritos.
+ <p>
+ Lee los archivos favoritos_*.csv y agrega el conteo por género.
+ </p></div>
+<dl class="notes">
+<dt>Parameters:</dt>
+<dd><code>limit</code> - el número máximo de géneros a retornar</dd>
+<dt>Returns:</dt>
+<dd>mapa ordenado descendentemente por cantidad de descargas</dd>
+</dl>
 </section>
 </li>
 <li>
 <section class="detail" id="totalDescargasFavoritos()">
 <h3>totalDescargasFavoritos</h3>
 <div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">long</span>&nbsp;<span class="element-name">totalDescargasFavoritos</span>()</div>
-<div class="block">Total de eventos EXPORT_FAVORITOS registrados.</div>
+<div class="block">Obtiene el total de eventos EXPORT_FAVORITOS registrados.</div>
+<dl class="notes">
+<dt>Returns:</dt>
+<dd>cantidad total de exportaciones de favoritos</dd>
+</dl>
 </section>
 </li>
 <li>
 <section class="detail" id="descargasFavoritosPorUsuario()">
 <h3>descargasFavoritosPorUsuario</h3>
 <div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/util/Map.html" title="class or interface in java.util" class="external-link">Map</a>&lt;<a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>,<wbr><a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/Long.html" title="class or interface in java.lang" class="external-link">Long</a>&gt;</span>&nbsp;<span class="element-name">descargasFavoritosPorUsuario</span>()</div>
-<div class="block">Mapa username -&gt; total de EXPORT_FAVORITOS.</div>
+<div class="block">Obtiene un mapa de usuarios y su cantidad de exportaciones de favoritos.</div>
+<dl class="notes">
+<dt>Returns:</dt>
+<dd>mapa con username como clave y cantidad de exportaciones como valor</dd>
+</dl>
 </section>
 </li>
 <li>
@@ -306,31 +377,63 @@ loadScripts(document, 'script');</script>
 <h3>descargasFavoritosPorRango</h3>
 <div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/util/Map.html" title="class or interface in java.util" class="external-link">Map</a>&lt;<a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>,<wbr><a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/Long.html" title="class or interface in java.lang" class="external-link">Long</a>&gt;</span>&nbsp;<span class="element-name">descargasFavoritosPorRango</span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;desde,
  <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;hasta)</span></div>
-<div class="block">Conteo por día de EXPORT_FAVORITOS en rango [desde, hasta], formato yyyy-MM-dd.
- Incluye días sin eventos con conteo 0 para facilitar gráficos continuos.</div>
+<div class="block">Conteo de exportaciones de favoritos por día dentro de un rango de fechas.
+ <p>
+ Incluye días sin eventos con conteo 0 para facilitar gráficos continuos.
+ </p></div>
+<dl class="notes">
+<dt>Parameters:</dt>
+<dd><code>desde</code> - fecha de inicio (formato yyyy-MM-dd)</dd>
+<dd><code>hasta</code> - fecha de fin (formato yyyy-MM-dd)</dd>
+<dt>Returns:</dt>
+<dd>mapa con fechas completas del rango y sus conteos</dd>
+</dl>
 </section>
 </li>
 <li>
 <section class="detail" id="promedioFavoritosPorExport()">
 <h3>promedioFavoritosPorExport</h3>
 <div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">double</span>&nbsp;<span class="element-name">promedioFavoritosPorExport</span>()</div>
-<div class="block">Promedio de favoritos exportados por evento (usa detalle "count=X").
- Si no hay datos, devuelve 0.0</div>
+<div class="block">Calcula el promedio de canciones favoritas exportadas por evento.
+ <p>
+ Extrae el conteo del campo detalle (formato "count=X") y calcula el promedio.
+ </p></div>
+<dl class="notes">
+<dt>Returns:</dt>
+<dd>el promedio de favoritos por exportación, o 0.0 si no hay datos</dd>
+</dl>
 </section>
 </li>
 <li>
 <section class="detail" id="ultimasExportaciones(int)">
 <h3>ultimasExportaciones</h3>
 <div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/util/List.html" title="class or interface in java.util" class="external-link">List</a>&lt;<a href="MetricasService.EventoDTO.html" title="class in co.edu.uniquindio.application.service">MetricasService.EventoDTO</a>&gt;</span>&nbsp;<span class="element-name">ultimasExportaciones</span><wbr><span class="parameters">(int&nbsp;n)</span></div>
-<div class="block">Últimos N eventos (cualquier acción), orden cronológico descendente.</div>
+<div class="block">Obtiene los últimos N eventos de exportación de favoritos.
+ <p>
+ Ordena cronológicamente en orden descendente.
+ </p></div>
+<dl class="notes">
+<dt>Parameters:</dt>
+<dd><code>n</code> - el número máximo de eventos a retornar</dd>
+<dt>Returns:</dt>
+<dd>lista de eventos ordenados descendentemente por timestamp</dd>
+</dl>
 </section>
 </li>
 <li>
 <section class="detail" id="topCancionesDesdeFavoritos(int)">
 <h3>topCancionesDesdeFavoritos</h3>
 <div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/util/Map.html" title="class or interface in java.util" class="external-link">Map</a>&lt;<a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>,<wbr><a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/Long.html" title="class or interface in java.lang" class="external-link">Long</a>&gt;</span>&nbsp;<span class="element-name">topCancionesDesdeFavoritos</span><wbr><span class="parameters">(int&nbsp;limit)</span></div>
-<div class="block">Top canciones global desde TODOS los CSV de favoritos (por título).
- Si quieres por ID (más confiable), cambia el índice 1-&gt;0 abajo.</div>
+<div class="block">Obtiene las canciones más descargadas globalmente desde todos los archivos de favoritos.
+ <p>
+ Agrega el conteo por título de canción desde todos los archivos favoritos_*.csv.
+ </p></div>
+<dl class="notes">
+<dt>Parameters:</dt>
+<dd><code>limit</code> - el número máximo de canciones a retornar</dd>
+<dt>Returns:</dt>
+<dd>mapa ordenado descendentemente por cantidad de descargas</dd>
+</dl>
 </section>
 </li>
 <li>
@@ -338,7 +441,14 @@ loadScripts(document, 'script');</script>
 <h3>topArtistasPorUsuario</h3>
 <div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/util/Map.html" title="class or interface in java.util" class="external-link">Map</a>&lt;<a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>,<wbr><a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/Long.html" title="class or interface in java.lang" class="external-link">Long</a>&gt;</span>&nbsp;<span class="element-name">topArtistasPorUsuario</span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;username,
  int&nbsp;limit)</span></div>
-<div class="block">Top artistas dentro del CSV de favoritos de UN usuario.</div>
+<div class="block">Obtiene los artistas más descargados dentro del archivo de favoritos de un usuario específico.</div>
+<dl class="notes">
+<dt>Parameters:</dt>
+<dd><code>username</code> - el nombre del usuario</dd>
+<dd><code>limit</code> - el número máximo de artistas a retornar</dd>
+<dt>Returns:</dt>
+<dd>mapa ordenado descendentemente por cantidad de descargas, o vacío si el archivo no existe</dd>
+</dl>
 </section>
 </li>
 <li>
@@ -346,7 +456,14 @@ loadScripts(document, 'script');</script>
 <h3>topGenerosPorUsuario</h3>
 <div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/util/Map.html" title="class or interface in java.util" class="external-link">Map</a>&lt;<a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>,<wbr><a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/Long.html" title="class or interface in java.lang" class="external-link">Long</a>&gt;</span>&nbsp;<span class="element-name">topGenerosPorUsuario</span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;username,
  int&nbsp;limit)</span></div>
-<div class="block">Top géneros dentro del CSV de favoritos de UN usuario.</div>
+<div class="block">Obtiene los géneros más descargados dentro del archivo de favoritos de un usuario específico.</div>
+<dl class="notes">
+<dt>Parameters:</dt>
+<dd><code>username</code> - el nombre del usuario</dd>
+<dd><code>limit</code> - el número máximo de géneros a retornar</dd>
+<dt>Returns:</dt>
+<dd>mapa ordenado descendentemente por cantidad de descargas, o vacío si el archivo no existe</dd>
+</dl>
 </section>
 </li>
 </ul>

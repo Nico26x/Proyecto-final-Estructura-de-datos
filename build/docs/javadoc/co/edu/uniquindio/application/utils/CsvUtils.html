@@ -30,6 +30,7 @@ loadScripts(document, 'script');</script>
 <li><a href="package-summary.html">Package</a></li>
 <li class="nav-bar-cell1-rev">Class</li>
 <li><a href="package-tree.html">Tree</a></li>
+<li><a href="../../../../../deprecated-list.html">Deprecated</a></li>
 <li><a href="../../../../../index-all.html">Index</a></li>
 <li><a href="../../../../../help-doc.html#class">Help</a></li>
 </ul>
@@ -91,6 +92,11 @@ loadScripts(document, 'script');</script>
 <hr>
 <div class="type-signature"><span class="modifiers">public final class </span><span class="element-name type-name-label">CsvUtils</span>
 <span class="extends-implements">extends <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a></span></div>
+<div class="block">Utilidad para manejar operaciones de formato CSV (Comma-Separated Values).
+ <p>
+ Proporciona métodos para escapar valores y construir filas CSV válidas,
+ manejando correctamente caracteres especiales como comas, comillas y saltos de línea.
+ </p></div>
 </section>
 <section class="summary">
 <ul class="summary-list">
@@ -107,10 +113,14 @@ loadScripts(document, 'script');</script>
 <div class="table-header col-last">Description</div>
 <div class="col-first even-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4"><code>static <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></code></div>
 <div class="col-second even-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4"><code><a href="#escape(java.lang.String)" class="member-name-link">escape</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;value)</code></div>
-<div class="col-last even-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4">&nbsp;</div>
+<div class="col-last even-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4">
+<div class="block">Escapa un valor de texto para cumplir con el estándar CSV.</div>
+</div>
 <div class="col-first odd-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4"><code>static <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></code></div>
 <div class="col-second odd-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4"><code><a href="#joinRow(java.util.List)" class="member-name-link">joinRow</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/util/List.html" title="class or interface in java.util" class="external-link">List</a>&lt;<a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&gt;&nbsp;cells)</code></div>
-<div class="col-last odd-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4">&nbsp;</div>
+<div class="col-last odd-row-color method-summary-table method-summary-table-tab1 method-summary-table-tab4">
+<div class="block">Construye una fila CSV a partir de una lista de celdas.</div>
+</div>
 </div>
 </div>
 </div>
@@ -132,12 +142,36 @@ loadScripts(document, 'script');</script>
 <section class="detail" id="escape(java.lang.String)">
 <h3>escape</h3>
 <div class="member-signature"><span class="modifiers">public static</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></span>&nbsp;<span class="element-name">escape</span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;value)</span></div>
+<div class="block">Escapa un valor de texto para cumplir con el estándar CSV.
+ <p>
+ Este método realiza las siguientes operaciones:
+ </p>
+ <ul>
+   <li>Duplica las comillas internas (") para escaparlas</li>
+   <li>Envuelve el valor entre comillas si contiene comas, comillas, saltos de línea o retornos de carro</li>
+ </ul></div>
+<dl class="notes">
+<dt>Parameters:</dt>
+<dd><code>value</code> - el valor a escapar. Puede ser <code>null</code></dd>
+<dt>Returns:</dt>
+<dd>el valor escapado listo para usar en CSV, o una cadena vacía si el valor es <code>null</code></dd>
+</dl>
 </section>
 </li>
 <li>
 <section class="detail" id="joinRow(java.util.List)">
 <h3>joinRow</h3>
 <div class="member-signature"><span class="modifiers">public static</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></span>&nbsp;<span class="element-name">joinRow</span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/util/List.html" title="class or interface in java.util" class="external-link">List</a>&lt;<a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&gt;&nbsp;cells)</span></div>
+<div class="block">Construye una fila CSV a partir de una lista de celdas.
+ <p>
+ Escapa automáticamente cada celda según las reglas CSV y las une con comas.
+ </p></div>
+<dl class="notes">
+<dt>Parameters:</dt>
+<dd><code>cells</code> - lista de valores de las celdas a unir</dd>
+<dt>Returns:</dt>
+<dd>una cadena de texto formada según el formato CSV, con celdas separadas por comas</dd>
+</dl>
 </section>
 </li>
 </ul>

@@ -30,6 +30,7 @@ loadScripts(document, 'script');</script>
 <li><a href="package-summary.html">Package</a></li>
 <li class="nav-bar-cell1-rev">Class</li>
 <li><a href="package-tree.html">Tree</a></li>
+<li><a href="../../../../../deprecated-list.html">Deprecated</a></li>
 <li><a href="../../../../../index-all.html">Index</a></li>
 <li><a href="../../../../../help-doc.html#class">Help</a></li>
 </ul>
@@ -91,6 +92,19 @@ loadScripts(document, 'script');</script>
 <hr>
 <div class="type-signature"><span class="modifiers">public class </span><span class="element-name type-name-label">TrieAutocompletado</span>
 <span class="extends-implements">extends <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a></span></div>
+<div class="block">Estructura de datos Trie optimizada para autocompletado de palabras.
+ <p>
+ Implementa un árbol de prefijos que permite insertar palabras y buscar
+ todas las palabras que comiencen con un prefijo específico de forma eficiente.
+ </p>
+ <p>
+ Características:
+ </p>
+ <ul>
+   <li>Búsqueda por prefijo en tiempo O(m + n), donde m es la longitud del prefijo y n es el número de nodos resultantes</li>
+   <li>Inserción de palabras en tiempo O(k), donde k es la longitud de la palabra</li>
+   <li>Manejo insensible a mayúsculas/minúsculas</li>
+ </ul></div>
 </section>
 <section class="summary">
 <ul class="summary-list">
@@ -120,10 +134,14 @@ loadScripts(document, 'script');</script>
 <div class="table-header col-last">Description</div>
 <div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/util/List.html" title="class or interface in java.util" class="external-link">List</a><wbr>&lt;<a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&gt;</code></div>
 <div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#buscarPorPrefijo(java.lang.String)" class="member-name-link">buscarPorPrefijo</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;prefijo)</code></div>
-<div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">&nbsp;</div>
+<div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
+<div class="block">Busca todas las palabras que comienzan con un prefijo específico.</div>
+</div>
 <div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>void</code></div>
 <div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#insertarPalabra(java.lang.String)" class="member-name-link">insertarPalabra</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;palabra)</code></div>
-<div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">&nbsp;</div>
+<div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
+<div class="block">Inserta una palabra en el Trie.</div>
+</div>
 </div>
 </div>
 </div>
@@ -159,12 +177,32 @@ loadScripts(document, 'script');</script>
 <section class="detail" id="insertarPalabra(java.lang.String)">
 <h3>insertarPalabra</h3>
 <div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">void</span>&nbsp;<span class="element-name">insertarPalabra</span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;palabra)</span></div>
+<div class="block">Inserta una palabra en el Trie.
+ <p>
+ La palabra se convierte a minúsculas antes de insertarse.
+ Si la palabra ya existe, se marca como palabra válida.
+ </p></div>
+<dl class="notes">
+<dt>Parameters:</dt>
+<dd><code>palabra</code> - la palabra a insertar. No debe ser <code>null</code></dd>
+</dl>
 </section>
 </li>
 <li>
 <section class="detail" id="buscarPorPrefijo(java.lang.String)">
 <h3>buscarPorPrefijo</h3>
 <div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/util/List.html" title="class or interface in java.util" class="external-link">List</a>&lt;<a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&gt;</span>&nbsp;<span class="element-name">buscarPorPrefijo</span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;prefijo)</span></div>
+<div class="block">Busca todas las palabras que comienzan con un prefijo específico.
+ <p>
+ La búsqueda es insensible a mayúsculas/minúsculas.
+ </p></div>
+<dl class="notes">
+<dt>Parameters:</dt>
+<dd><code>prefijo</code> - el prefijo a buscar. No debe ser <code>null</code></dd>
+<dt>Returns:</dt>
+<dd>una lista de todas las palabras que comienzan con el prefijo especificado.
+         Retorna una lista vacía si no hay coincidencias</dd>
+</dl>
 </section>
 </li>
 </ul>

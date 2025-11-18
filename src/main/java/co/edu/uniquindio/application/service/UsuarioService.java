@@ -27,12 +27,37 @@ import java.time.format.DateTimeFormatter;
 import java.util.*;
 import java.util.stream.Collectors;
 
+/**
+ * Servicio de gestión de usuarios del sistema.
+ * <p>
+ * Proporciona funcionalidades de autenticación, gestión de sesiones, favoritos,
+ * relaciones sociales (seguir/dejar de seguir) y exportación de datos.
+ * </p>
+ * <p>
+ * Características principales:
+ * </p>
+ * <ul>
+ *   <li>Registro y autenticación de usuarios con contraseñas cifradas</li>
+ *   <li>Generación de tokens JWT para sesiones</li>
+ *   <li>Gestión de canciones favoritas por usuario</li>
+ *   <li>Red social con seguimiento de usuarios (grafo social)</li>
+ *   <li>Sugerencias de usuarios basadas en favoritos comunes</li>
+ *   <li>Exportación de favoritos a CSV con métricas</li>
+ *   <li>Generación de playlists de descubrimiento personalizadas</li>
+ * </ul>
+ *
+ * @author SyncUp
+ * @version 1.0
+ */
 @Service
 public class UsuarioService {
 
     private final UsuarioRepository usuarioRepository;
     private final CancionRepository cancionRepository;
     private final PasswordEncoder passwordEncoder;
+    /**
+     * Grafo social que representa las relaciones de seguimiento entre usuarios.
+     */
     private final GrafoSocial grafoSocial = new GrafoSocial();
     private static final String RUTA_GRAFO = "src/main/resources/data/grafo_social.txt";
 
@@ -41,10 +66,14 @@ public class UsuarioService {
     private static final String RUTA_METRICAS = "src/main/resources/data/metricas";
     private static final String ARCHIVO_METRICAS = "metricas_export_favoritos.csv";
 
-    // ✅ Referencia al servicio de canciones
+    /**
+     * Referencia al servicio de canciones para obtener recomendaciones y similares.
+     */
     private final CancionService cancionService;
 
-    // 🔹 Usuario en sesión (almacenado temporalmente)
+    /**
+     * Usuario actualmente autenticado en sesión.
+     */
     private Usuario usuarioLogueado;
 
     @Autowired
@@ -53,6 +82,14 @@ public class UsuarioService {
     @Autowired
     private MetricasService metricasService;
 
+    /**
+     * Constructor del servicio de usuarios.
+     *
+     * @param usuarioRepository el repositorio de usuarios
+     * @param cancionRepository el repositorio de canciones
+     * @param cancionService el servicio de canciones
+     * @param passwordEncoder el codificador de contraseñas
+     */
     @Autowired
     public UsuarioService(UsuarioRepository usuarioRepository,
                           CancionRepository cancionRepository,
@@ -64,12 +101,24 @@ public class UsuarioService {
         this.passwordEncoder = passwordEncoder;
     }
 
-    // ✅ Cargar el grafo desde archivo al iniciar
+    /**
+     * Inicializa el grafo social cargando las relaciones guardadas desde archivo.
+     * <p>
+     * Se ejecuta al iniciar la aplicación (@PostConstruct).
+     * </p>
+     */
     @PostConstruct
     public void inicializarGrafo() {
         grafoSocial.cargarRelacionesDesdeArchivo(RUTA_GRAFO);
     }
 
+    /**
+     * Inicializa el usuario administrador por defecto si no existe.
+     * <p>
+     * Se ejecuta al iniciar la aplicación (@PostConstruct).
+     * Crea un usuario admin/admin123 con rol ADMIN si aún no existe.
+     * </p>
+     */
     @PostConstruct
     public void inicializarAdmin() {
         if (usuarioRepository.buscarPorUsername("admin") == null) {
@@ -80,7 +129,18 @@ public class UsuarioService {
         }
     }
 
-    // ✅ Registrar nuevo usuario con contraseña cifrada
+    /**
+     * Registra un nuevo usuario en el sistema.
+     * <p>
+     * Encripta la contraseña, crea un nuevo usuario con rol USER,
+     * lo añade al repositorio y también al grafo social.
+     * </p>
+     *
+     * @param username el nombre de usuario único
+     * @param password la contraseña en texto plano
+     * @param nombre el nombre completo del usuario
+     * @return {@code true} si el registro fue exitoso, {@code false} si el usuario ya existe
+     */
     public boolean registrarUsuario(String username, String password, String nombre) {
         if (usuarioRepository.buscarPorUsername(username) != null) {
             return false;
@@ -96,7 +156,16 @@ public class UsuarioService {
         return true;
     }
 
-    // ✅ Login que devuelve un JWT
+    /**
+     * Autentica un usuario y genera un token JWT.
+     * <p>
+     * Valida las credenciales contra la contraseña encriptada del usuario.
+     * </p>
+     *
+     * @param username el nombre de usuario
+     * @param password la contraseña en texto plano
+     * @return token JWT si la autenticación es exitosa, {@code null} en caso contrario
+     */
     public String login(String username, String password) {
         Usuario usuario = usuarioRepository.buscarPorUsername(username);
         if (usuario != null && passwordEncoder.matches(password, usuario.getPassword())) {
@@ -105,7 +174,13 @@ public class UsuarioService {
         return null;
     }
 
-    // ✅ Autenticar usuario
+    /**
+     * Autentica un usuario verificando sus credenciales.
+     *
+     * @param username el nombre de usuario
+     * @param password la contraseña en texto plano
+     * @return el objeto Usuario si la autenticación es exitosa, {@code null} en caso contrario
+     */
     public Usuario autenticarUsuario(String username, String password) {
         Usuario usuario = usuarioRepository.buscarPorUsername(username);
         if (usuario != null && passwordEncoder.matches(password, usuario.getPassword())) {
@@ -114,23 +189,47 @@ public class UsuarioService {
         return null;
     }
 
+    /**
+     * Inicia una sesión de usuario almacenándolo en memoria.
+     *
+     * @param usuario el usuario a establecer como autenticado
+     */
     public void iniciarSesion(Usuario usuario) {
         this.usuarioLogueado = usuario;
     }
 
+    /**
+     * Cierra la sesión actual del usuario.
+     */
     public void logout() {
         usuarioLogueado = null;
     }
 
+    /**
+     * Obtiene el usuario actualmente autenticado en sesión.
+     *
+     * @return el usuario en sesión, o {@code null} si no hay sesión activa
+     */
     public Usuario obtenerUsuarioActual() {
         return usuarioLogueado;
     }
 
+    /**
+     * Lista todos los usuarios registrados en el sistema.
+     *
+     * @return colección de todos los usuarios
+     */
     public Collection<Usuario> listarUsuarios() {
         return usuarioRepository.listarUsuarios().values();
     }
 
-    // 🎵 Favoritos
+    /**
+     * Agrega una canción a los favoritos de un usuario.
+     *
+     * @param username el nombre del usuario
+     * @param idCancion el identificador de la canción
+     * @return mensaje indicando el resultado de la operación
+     */
     public String agregarFavorito(String username, String idCancion) {
         Usuario usuario = usuarioRepository.buscarPorUsername(username);
         Cancion cancion = cancionRepository.buscarPorId(idCancion);
@@ -142,6 +241,13 @@ public class UsuarioService {
         return agregado ? "✅ Canción agregada a favoritos" : "⚠️ Ya estaba en favoritos";
     }
 
+    /**
+     * Elimina una canción de los favoritos de un usuario.
+     *
+     * @param username el nombre del usuario
+     * @param idCancion el identificador de la canción
+     * @return mensaje indicando el resultado de la operación
+     */
     public String eliminarFavorito(String username, String idCancion) {
         Usuario usuario = usuarioRepository.buscarPorUsername(username);
         if (usuario == null) return "❌ Usuario no encontrado";
@@ -150,14 +256,32 @@ public class UsuarioService {
         return eliminado ? "🗑️ Canción eliminada de favoritos" : "⚠️ No estaba en favoritos";
     }
 
+    /**
+     * Obtiene la lista de canciones favoritas de un usuario.
+     *
+     * @param username el nombre del usuario
+     * @return colección de canciones favoritas
+     */
     public Collection<Cancion> listarFavoritos(String username) {
         return usuarioRepository.listarFavoritos(username);
     }
 
+    /**
+     * Verifica si hay una sesión de usuario activa.
+     *
+     * @return {@code true} si hay un usuario autenticado, {@code false} en caso contrario
+     */
     public boolean haySesionActiva() {
         return usuarioLogueado != null;
     }
 
+    /**
+     * Actualiza el nombre completo de un usuario.
+     *
+     * @param username el nombre de usuario
+     * @param nuevoNombre el nuevo nombre completo
+     * @return mensaje indicando el resultado de la operación
+     */
     public String actualizarNombre(String username, String nuevoNombre) {
         Usuario usuario = usuarioRepository.buscarPorUsername(username);
         if (usuario == null) return "❌ Usuario no encontrado";
@@ -167,7 +291,16 @@ public class UsuarioService {
         return "✅ Nombre actualizado correctamente";
     }
 
-    // 👑 Eliminar usuario (acción de administrador)
+    /**
+     * Elimina un usuario del sistema (acción administrativa).
+     * <p>
+     * No permite eliminar el usuario administrador por defecto.
+     * Mantiene la consistencia del grafo social.
+     * </p>
+     *
+     * @param username el nombre del usuario a eliminar
+     * @return {@code true} si la eliminación fue exitosa, {@code false} en caso contrario
+     */
     public boolean eliminarUsuarioAdmin(String username) {
         // opcional: proteger al admin por defecto
         if ("admin".equalsIgnoreCase(username)) {
@@ -200,6 +333,13 @@ public class UsuarioService {
     }
 
 
+    /**
+     * Cambia la contraseña de un usuario.
+     *
+     * @param username el nombre del usuario
+     * @param nuevaPassword la nueva contraseña en texto plano
+     * @return mensaje indicando el resultado de la operación
+     */
     public String cambiarPassword(String username, String nuevaPassword) {
         Usuario usuario = usuarioRepository.buscarPorUsername(username);
         if (usuario == null) return "❌ Usuario no encontrado";
@@ -210,15 +350,36 @@ public class UsuarioService {
         return "🔑 Contraseña actualizada correctamente";
     }
 
+    /**
+     * Busca un usuario por su nombre de usuario.
+     *
+     * @param username el nombre de usuario a buscar
+     * @return el usuario encontrado, o {@code null} si no existe
+     */
     public Usuario buscarPorUsername(String username) {
         return usuarioRepository.buscarPorUsername(username);
     }
 
+    /**
+     * Obtiene el nombre de usuario del usuario actualmente autenticado.
+     *
+     * @return el nombre de usuario del contexto de seguridad actual
+     */
     public String obtenerUsernameActual() {
         return SecurityContextHolder.getContext().getAuthentication().getName();
     }
 
-    // 🎧 Playlist de descubrimiento semanal (RF-005)
+    /**
+     * Genera una playlist de descubrimiento semanal personalizada para un usuario.
+     * <p>
+     * Implementa RF-005. Utiliza canciones similares a los favoritos del usuario
+     * con un sistema de ranking para sugerencias.
+     * </p>
+     *
+     * @param username el nombre del usuario
+     * @param size el tamaño máximo de la playlist
+     * @return lista de canciones recomendadas
+     */
     public List<Cancion> generarPlaylistDescubrimiento(String username, int size) {
         Usuario usuario = usuarioRepository.buscarPorUsername(username);
         if (usuario == null) return Collections.emptyList();
@@ -263,7 +424,17 @@ public class UsuarioService {
                 .collect(Collectors.toList());
     }
 
-    // 👥 Seguir usuario
+    /**
+     * Agrega una relación de seguimiento entre dos usuarios.
+     * <p>
+     * El usuario especificado en {@code username} comenzará a seguir al usuario {@code destino}.
+     * Actualiza el grafo social y lo persiste en archivo.
+     * </p>
+     *
+     * @param username el nombre del usuario que seguirá
+     * @param destino el nombre del usuario a seguir
+     * @return mensaje indicando el resultado de la operación
+     */
     public String seguirUsuario(String username, String destino) {
         Usuario origen = usuarioRepository.buscarPorUsername(username);
         Usuario objetivo = usuarioRepository.buscarPorUsername(destino);
@@ -289,7 +460,17 @@ public class UsuarioService {
     }
 
 
-    // 🚫 Dejar de seguir
+    /**
+     * Elimina una relación de seguimiento entre dos usuarios.
+     * <p>
+     * El usuario especificado en {@code username} dejaráde seguir al usuario {@code destino}.
+     * Actualiza el grafo social y lo persiste en archivo.
+     * </p>
+     *
+     * @param username el nombre del usuario que dejaráde seguir
+     * @param destino el nombre del usuario a dejar de seguir
+     * @return mensaje indicando el resultado de la operación
+     */
     public String dejarDeSeguir(String username, String destino) {
         Usuario origen = usuarioRepository.buscarPorUsername(username);
         Usuario objetivo = usuarioRepository.buscarPorUsername(destino);
@@ -315,22 +496,40 @@ public class UsuarioService {
     }
 
 
-    // 📜 Listar seguidos
+    /**
+     * Lista los usuarios que un usuario específico está siguiendo.
+     *
+     * @param username el nombre del usuario
+     * @return conjunto de nombres de usuarios que está siguiendo
+     */
     public Set<String> listarSeguidos(String username) {
         return grafoSocial.obtenerAmigos(username);
     }
 
-    // 💡 Sugerir usuarios (amigos de amigos)
+    /**
+     * Obtiene sugerencias de usuarios basadas en amigos de amigos.
+     *
+     * @param username el nombre del usuario
+     * @param limite el número máximo de sugerencias
+     * @return lista de nombres de usuarios sugeridos
+     */
     public List<String> sugerirUsuarios(String username, int limite) {
         return grafoSocial.sugerirUsuarios(username, limite);
     }
 
-    // ---------------------------
-    // RF-009: Exportar Favoritos a CSV
-    // ---------------------------
+    /* ---------------------------
+       RF-009: Exportar Favoritos a CSV
+       --------------------------- */
 
     /**
-     * Genera el contenido CSV de los favoritos del usuario (en memoria).
+     * Genera el contenido CSV de los favoritos del usuario en formato bytes.
+     * <p>
+     * Incluye encabezado con columnas estándar (id, titulo, artista, genero, anio, duracion_seg).
+     * </p>
+     *
+     * @param username el nombre del usuario
+     * @return bytes del contenido CSV
+     * @throws IllegalArgumentException si el usuario no existe
      */
     public byte[] exportarFavoritosCsv(String username) {
         Usuario usuario = usuarioRepository.buscarPorUsername(username);
@@ -362,44 +561,88 @@ public class UsuarioService {
     }
 
     /**
-     * Nombre de archivo para DESCARGA (incluye fecha, útil para el front).
-     * Ej: favoritos_deivid_20251108.csv
+     * Construye el nombre de archivo para descarga del CSV de favoritos.
+     * <p>
+     * Incluye fecha en formato YYYYMMDD para diferenciar descargas.
+     * Ejemplo: favoritos_deivid_20251108.csv
+     * </p>
+     *
+     * @param username el nombre del usuario
+     * @return nombre de archivo sugerido para descargar
      */
     public String buildFavoritosFilename(String username) {
         String fecha = LocalDate.now().format(DateTimeFormatter.BASIC_ISO_DATE); // YYYYMMDD
         return "favoritos_" + username + "_" + fecha + ".csv";
     }
 
-    // ========= Helpers de RUTA y guardado en DATA =========
+    /* ========= Helpers de RUTA y guardado en DATA ========= */
 
-    /** Directorio donde se guardan/actualizan los CSV por usuario. */
+    /**
+     * Obtiene la ruta del directorio donde se guardan reportes CSV por usuario.
+     *
+     * @return path del directorio de reportes
+     */
     public Path getReportesDir() {
         // Dentro de la misma carpeta "data" de persistencia
         return Paths.get(RUTA_REPORTES);
     }
 
-    /** Nombre de archivo FIJO en disco (uno por usuario, se sobrescribe). */
+    /**
+     * Construye el nombre de archivo fijo de almacenamiento para un usuario.
+     * <p>
+     * Sin fecha, un solo CSV por usuario, se sobrescribe en cada actualización.
+     * </p>
+     *
+     * @param username el nombre del usuario
+     * @return nombre de archivo (ej: favoritos_deivid.csv)
+     */
     public String buildFavoritosStorageName(String username) {
         // Sin fecha → un solo CSV por usuario, se ACTUALIZA
         return "favoritos_" + username + ".csv";
     }
 
-    /** Ruta completa del CSV de un usuario dentro de /data/reportes. */
+    /**
+     * Obtiene la ruta completa del archivo CSV de favoritos de un usuario.
+     * <p>
+     * Ubicado en /data/reportes/favoritos_username.csv
+     * </p>
+     *
+     * @param username el nombre del usuario
+     * @return path completo del archivo de reportes
+     */
     public Path getReporteFavoritosPath(String username) {
         return getReportesDir().resolve(buildFavoritosStorageName(username));
     }
 
-    /** Directorio de métricas. */
+    /**
+     * Obtiene la ruta del directorio de métricas.
+     *
+     * @return path del directorio de métricas
+     */
     public Path getMetricasDir() {
         return Paths.get(RUTA_METRICAS);
     }
 
-    /** Ruta del archivo de métricas de exportación de favoritos. */
+    /**
+     * Obtiene la ruta del archivo de métricas de exportación de favoritos.
+     *
+     * @return path del archivo de métricas
+     */
     public Path getMetricasFavoritosPath() {
         return getMetricasDir().resolve(ARCHIVO_METRICAS);
     }
 
-    /** Guarda (crea o sobrescribe) el CSV en /data/reportes y devuelve la ruta absoluta. */
+    /**
+     * Guarda el CSV de favoritos en el directorio de datos.
+     * <p>
+     * Crea o sobrescribe el archivo en /data/reportes.
+     * </p>
+     *
+     * @param username el nombre del usuario
+     * @param csvBytes el contenido del CSV en bytes
+     * @return ruta absoluta del archivo guardado
+     * @throws RuntimeException si ocurre un error al guardar
+     */
     public String guardarFavoritosCsvEnData(String username, byte[] csvBytes) {
         try {
             Path dir = getReportesDir();
@@ -415,7 +658,13 @@ public class UsuarioService {
     }
 
     /**
-     * Cuenta favoritos actuales del usuario (útil para métricas).
+     * Cuenta el número de canciones favoritas actuales del usuario.
+     * <p>
+     * Útil para registrar en métricas.
+     * </p>
+     *
+     * @param username el nombre del usuario
+     * @return cantidad de favoritos, o 0 si la colección es nula
      */
     public int contarFavoritosUsuario(String username) {
         Collection<Cancion> favs = listarFavoritos(username);
@@ -423,8 +672,15 @@ public class UsuarioService {
     }
 
     /**
-     * Registra una línea de métrica en CSV:
-     * columnas: fecha_iso,username,total_favoritos,archivo_reporte
+     * Registra una métrica de exportación de favoritos en archivo CSV.
+     * <p>
+     * Columnas: fecha_iso, username, total_favoritos, archivo_reporte
+     * Crea el archivo con encabezado si no existe.
+     * </p>
+     *
+     * @param username el nombre del usuario
+     * @param totalFavoritos la cantidad de favoritos exportados
+     * @param archivoReporte la ruta del archivo de reporte guardado
      */
     public void registrarMetricaExportFavoritos(String username, int totalFavoritos, Path archivoReporte) {
         try {
@@ -459,8 +715,14 @@ public class UsuarioService {
     }
 
     /**
-     * Flujo completo: genera CSV en memoria, lo guarda/actualiza en /data/reportes,
-     * registra la métrica y retorna bytes + nombre sugerido de descarga + ruta guardada.
+     * Flujo completo de exportación y guardado de favoritos a CSV.
+     * <p>
+     * Genera el CSV en memoria, lo guarda/actualiza en /data/reportes,
+     * registra la métrica de exportación y retorna información completa.
+     * </p>
+     *
+     * @param username el nombre del usuario
+     * @return objeto con bytes del CSV, nombre de descarga y ruta guardada
      */
     public ExportResultado exportarYGuardarFavoritosCsv(String username) {
         byte[] csv = exportarFavoritosCsv(username);
@@ -477,12 +739,36 @@ public class UsuarioService {
         return new ExportResultado(csv, downloadName, savedPath);
     }
 
-    /** DTO simple para devolver info del export. */
+    /**
+     * DTO que encapsula la información de un resultado de exportación.
+     * <p>
+     * Contiene los bytes del CSV, el nombre sugerido para descarga
+     * y la ruta absoluta donde fue guardado.
+     * </p>
+     */
     public static class ExportResultado {
+        /**
+         * Contenido del CSV en formato bytes.
+         */
         public final byte[] csv;
+
+        /**
+         * Nombre de archivo sugerido para la descarga.
+         */
         public final String downloadName;
+
+        /**
+         * Ruta absoluta del archivo guardado en el servidor.
+         */
         public final String savedAbsolutePath;
 
+        /**
+         * Constructor del DTO.
+         *
+         * @param csv el contenido en bytes
+         * @param downloadName el nombre para descargar
+         * @param savedAbsolutePath la ruta absoluta guardada
+         */
         public ExportResultado(byte[] csv, String downloadName, String savedAbsolutePath) {
             this.csv = csv;
             this.downloadName = downloadName;
@@ -490,13 +776,27 @@ public class UsuarioService {
         }
     }
 
-    /** Exportar usando el usuario del SecurityContext (si lo necesitas). */
+    /**
+     * Exporta los favoritos del usuario actualmente autenticado en el contexto de seguridad.
+     *
+     * @return bytes del contenido CSV
+     */
     public byte[] exportarFavoritosCsvUsuarioActual() {
         String username = obtenerUsernameActual();
         return exportarFavoritosCsv(username);
     }
 
-    // Método para sugerir usuarios basados en canciones favoritas
+    /**
+     * Obtiene sugerencias de usuarios basadas en canciones favoritas comunes.
+     * <p>
+     * Compara los favoritos del usuario con todos los demás usuarios
+     * y retorna aquellos con más canciones en común.
+     * </p>
+     *
+     * @param username el nombre del usuario
+     * @param limite el número máximo de sugerencias
+     * @return lista de nombres de usuarios sugeridos ordenados por similitud
+     */
     public List<String> sugerirUsuariosPorFavoritos(String username, int limite) {
         // Obtener el usuario autenticado
         Usuario usuario = usuarioRepository.buscarPorUsername(username);

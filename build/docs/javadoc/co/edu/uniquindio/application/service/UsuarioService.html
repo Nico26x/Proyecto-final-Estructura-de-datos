@@ -30,6 +30,7 @@ loadScripts(document, 'script');</script>
 <li><a href="package-summary.html">Package</a></li>
 <li class="nav-bar-cell1-rev">Class</li>
 <li><a href="package-tree.html">Tree</a></li>
+<li><a href="../../../../../deprecated-list.html">Deprecated</a></li>
 <li><a href="../../../../../index-all.html">Index</a></li>
 <li><a href="../../../../../help-doc.html#class">Help</a></li>
 </ul>
@@ -92,6 +93,23 @@ loadScripts(document, 'script');</script>
 <div class="type-signature"><span class="annotations">@Service
 </span><span class="modifiers">public class </span><span class="element-name type-name-label">UsuarioService</span>
 <span class="extends-implements">extends <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a></span></div>
+<div class="block">Servicio de gestión de usuarios del sistema.
+ <p>
+ Proporciona funcionalidades de autenticación, gestión de sesiones, favoritos,
+ relaciones sociales (seguir/dejar de seguir) y exportación de datos.
+ </p>
+ <p>
+ Características principales:
+ </p>
+ <ul>
+   <li>Registro y autenticación de usuarios con contraseñas cifradas</li>
+   <li>Generación de tokens JWT para sesiones</li>
+   <li>Gestión de canciones favoritas por usuario</li>
+   <li>Red social con seguimiento de usuarios (grafo social)</li>
+   <li>Sugerencias de usuarios basadas en favoritos comunes</li>
+   <li>Exportación de favoritos a CSV con métricas</li>
+   <li>Generación de playlists de descubrimiento personalizadas</li>
+ </ul></div>
 </section>
 <section class="summary">
 <ul class="summary-list">
@@ -107,7 +125,7 @@ loadScripts(document, 'script');</script>
 <div class="col-first even-row-color"><code>static class&nbsp;</code></div>
 <div class="col-second even-row-color"><code><a href="UsuarioService.ExportResultado.html" class="type-name-link" title="class in co.edu.uniquindio.application.service">UsuarioService.ExportResultado</a></code></div>
 <div class="col-last even-row-color">
-<div class="block">DTO simple para devolver info del export.</div>
+<div class="block">DTO que encapsula la información de un resultado de exportación.</div>
 </div>
 </div>
 </section>
@@ -124,7 +142,9 @@ loadScripts(document, 'script');</script>
  <a href="../repository/CancionRepository.html" title="class in co.edu.uniquindio.application.repository">CancionRepository</a>&nbsp;cancionRepository,
  <a href="CancionService.html" title="class in co.edu.uniquindio.application.service">CancionService</a>&nbsp;cancionService,
  org.springframework.security.crypto.password.PasswordEncoder&nbsp;passwordEncoder)</code></div>
-<div class="col-last even-row-color">&nbsp;</div>
+<div class="col-last even-row-color">
+<div class="block">Constructor del servicio de usuarios.</div>
+</div>
 </div>
 </section>
 </li>
@@ -142,146 +162,199 @@ loadScripts(document, 'script');</script>
 <div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></code></div>
 <div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#actualizarNombre(java.lang.String,java.lang.String)" class="member-name-link">actualizarNombre</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;username,
  <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;nuevoNombre)</code></div>
-<div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">&nbsp;</div>
+<div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
+<div class="block">Actualiza el nombre completo de un usuario.</div>
+</div>
 <div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></code></div>
 <div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#agregarFavorito(java.lang.String,java.lang.String)" class="member-name-link">agregarFavorito</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;username,
  <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;idCancion)</code></div>
-<div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">&nbsp;</div>
+<div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
+<div class="block">Agrega una canción a los favoritos de un usuario.</div>
+</div>
 <div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="../model/Usuario.html" title="class in co.edu.uniquindio.application.model">Usuario</a></code></div>
 <div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#autenticarUsuario(java.lang.String,java.lang.String)" class="member-name-link">autenticarUsuario</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;username,
  <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;password)</code></div>
-<div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">&nbsp;</div>
+<div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
+<div class="block">Autentica un usuario verificando sus credenciales.</div>
+</div>
 <div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></code></div>
 <div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#buildFavoritosFilename(java.lang.String)" class="member-name-link">buildFavoritosFilename</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;username)</code></div>
 <div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
-<div class="block">Nombre de archivo para DESCARGA (incluye fecha, útil para el front).</div>
+<div class="block">Construye el nombre de archivo para descarga del CSV de favoritos.</div>
 </div>
 <div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></code></div>
 <div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#buildFavoritosStorageName(java.lang.String)" class="member-name-link">buildFavoritosStorageName</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;username)</code></div>
 <div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
-<div class="block">Nombre de archivo FIJO en disco (uno por usuario, se sobrescribe).</div>
+<div class="block">Construye el nombre de archivo fijo de almacenamiento para un usuario.</div>
 </div>
 <div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="../model/Usuario.html" title="class in co.edu.uniquindio.application.model">Usuario</a></code></div>
 <div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#buscarPorUsername(java.lang.String)" class="member-name-link">buscarPorUsername</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;username)</code></div>
-<div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">&nbsp;</div>
+<div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
+<div class="block">Busca un usuario por su nombre de usuario.</div>
+</div>
 <div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></code></div>
 <div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#cambiarPassword(java.lang.String,java.lang.String)" class="member-name-link">cambiarPassword</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;username,
  <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;nuevaPassword)</code></div>
-<div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">&nbsp;</div>
+<div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
+<div class="block">Cambia la contraseña de un usuario.</div>
+</div>
 <div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>int</code></div>
 <div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#contarFavoritosUsuario(java.lang.String)" class="member-name-link">contarFavoritosUsuario</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;username)</code></div>
 <div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
-<div class="block">Cuenta favoritos actuales del usuario (útil para métricas).</div>
+<div class="block">Cuenta el número de canciones favoritas actuales del usuario.</div>
 </div>
 <div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></code></div>
 <div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#dejarDeSeguir(java.lang.String,java.lang.String)" class="member-name-link">dejarDeSeguir</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;username,
  <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;destino)</code></div>
-<div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">&nbsp;</div>
+<div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
+<div class="block">Elimina una relación de seguimiento entre dos usuarios.</div>
+</div>
 <div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></code></div>
 <div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#eliminarFavorito(java.lang.String,java.lang.String)" class="member-name-link">eliminarFavorito</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;username,
  <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;idCancion)</code></div>
-<div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">&nbsp;</div>
-<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>byte[]</code></div>
-<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#exportarFavoritosCsv(java.lang.String)" class="member-name-link">exportarFavoritosCsv</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;username)</code></div>
+<div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
+<div class="block">Elimina una canción de los favoritos de un usuario.</div>
+</div>
+<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>boolean</code></div>
+<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#eliminarUsuarioAdmin(java.lang.String)" class="member-name-link">eliminarUsuarioAdmin</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;username)</code></div>
 <div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
-<div class="block">Genera el contenido CSV de los favoritos del usuario (en memoria).</div>
+<div class="block">Elimina un usuario del sistema (acción administrativa).</div>
 </div>
 <div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>byte[]</code></div>
-<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#exportarFavoritosCsvUsuarioActual()" class="member-name-link">exportarFavoritosCsvUsuarioActual</a>()</code></div>
+<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#exportarFavoritosCsv(java.lang.String)" class="member-name-link">exportarFavoritosCsv</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;username)</code></div>
 <div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
-<div class="block">Exportar usando el usuario del SecurityContext (si lo necesitas).</div>
+<div class="block">Genera el contenido CSV de los favoritos del usuario en formato bytes.</div>
 </div>
-<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="UsuarioService.ExportResultado.html" title="class in co.edu.uniquindio.application.service">UsuarioService.ExportResultado</a></code></div>
-<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#exportarYGuardarFavoritosCsv(java.lang.String)" class="member-name-link">exportarYGuardarFavoritosCsv</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;username)</code></div>
+<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>byte[]</code></div>
+<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#exportarFavoritosCsvUsuarioActual()" class="member-name-link">exportarFavoritosCsvUsuarioActual</a>()</code></div>
 <div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
-<div class="block">Flujo completo: genera CSV en memoria, lo guarda/actualiza en /data/reportes,
- registra la métrica y retorna bytes + nombre sugerido de descarga + ruta guardada.</div>
+<div class="block">Exporta los favoritos del usuario actualmente autenticado en el contexto de seguridad.</div>
 </div>
-<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/util/List.html" title="class or interface in java.util" class="external-link">List</a><wbr>&lt;<a href="../model/Cancion.html" title="class in co.edu.uniquindio.application.model">Cancion</a>&gt;</code></div>
-<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#generarPlaylistDescubrimiento(java.lang.String,int)" class="member-name-link">generarPlaylistDescubrimiento</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;username,
+<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="UsuarioService.ExportResultado.html" title="class in co.edu.uniquindio.application.service">UsuarioService.ExportResultado</a></code></div>
+<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#exportarYGuardarFavoritosCsv(java.lang.String)" class="member-name-link">exportarYGuardarFavoritosCsv</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;username)</code></div>
+<div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
+<div class="block">Flujo completo de exportación y guardado de favoritos a CSV.</div>
+</div>
+<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/util/List.html" title="class or interface in java.util" class="external-link">List</a><wbr>&lt;<a href="../model/Cancion.html" title="class in co.edu.uniquindio.application.model">Cancion</a>&gt;</code></div>
+<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#generarPlaylistDescubrimiento(java.lang.String,int)" class="member-name-link">generarPlaylistDescubrimiento</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;username,
  int&nbsp;size)</code></div>
-<div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">&nbsp;</div>
-<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/nio/file/Path.html" title="class or interface in java.nio.file" class="external-link">Path</a></code></div>
-<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#getMetricasDir()" class="member-name-link">getMetricasDir</a>()</code></div>
 <div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
-<div class="block">Directorio de métricas.</div>
+<div class="block">Genera una playlist de descubrimiento semanal personalizada para un usuario.</div>
 </div>
 <div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/nio/file/Path.html" title="class or interface in java.nio.file" class="external-link">Path</a></code></div>
-<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#getMetricasFavoritosPath()" class="member-name-link">getMetricasFavoritosPath</a>()</code></div>
+<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#getMetricasDir()" class="member-name-link">getMetricasDir</a>()</code></div>
 <div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
-<div class="block">Ruta del archivo de métricas de exportación de favoritos.</div>
+<div class="block">Obtiene la ruta del directorio de métricas.</div>
 </div>
 <div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/nio/file/Path.html" title="class or interface in java.nio.file" class="external-link">Path</a></code></div>
-<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#getReporteFavoritosPath(java.lang.String)" class="member-name-link">getReporteFavoritosPath</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;username)</code></div>
+<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#getMetricasFavoritosPath()" class="member-name-link">getMetricasFavoritosPath</a>()</code></div>
 <div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
-<div class="block">Ruta completa del CSV de un usuario dentro de /data/reportes.</div>
+<div class="block">Obtiene la ruta del archivo de métricas de exportación de favoritos.</div>
 </div>
 <div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/nio/file/Path.html" title="class or interface in java.nio.file" class="external-link">Path</a></code></div>
-<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#getReportesDir()" class="member-name-link">getReportesDir</a>()</code></div>
+<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#getReporteFavoritosPath(java.lang.String)" class="member-name-link">getReporteFavoritosPath</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;username)</code></div>
 <div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
-<div class="block">Directorio donde se guardan/actualizan los CSV por usuario.</div>
+<div class="block">Obtiene la ruta completa del archivo CSV de favoritos de un usuario.</div>
 </div>
-<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></code></div>
-<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#guardarFavoritosCsvEnData(java.lang.String,byte%5B%5D)" class="member-name-link">guardarFavoritosCsvEnData</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;username,
+<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/nio/file/Path.html" title="class or interface in java.nio.file" class="external-link">Path</a></code></div>
+<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#getReportesDir()" class="member-name-link">getReportesDir</a>()</code></div>
+<div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
+<div class="block">Obtiene la ruta del directorio donde se guardan reportes CSV por usuario.</div>
+</div>
+<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></code></div>
+<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#guardarFavoritosCsvEnData(java.lang.String,byte%5B%5D)" class="member-name-link">guardarFavoritosCsvEnData</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;username,
  byte[]&nbsp;csvBytes)</code></div>
-<div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
-<div class="block">Guarda (crea o sobrescribe) el CSV en /data/reportes y devuelve la ruta absoluta.</div>
+<div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
+<div class="block">Guarda el CSV de favoritos en el directorio de datos.</div>
 </div>
-<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>boolean</code></div>
-<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#haySesionActiva()" class="member-name-link">haySesionActiva</a>()</code></div>
-<div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">&nbsp;</div>
-<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>void</code></div>
-<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#inicializarAdmin()" class="member-name-link">inicializarAdmin</a>()</code></div>
-<div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">&nbsp;</div>
+<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>boolean</code></div>
+<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#haySesionActiva()" class="member-name-link">haySesionActiva</a>()</code></div>
+<div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
+<div class="block">Verifica si hay una sesión de usuario activa.</div>
+</div>
 <div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>void</code></div>
-<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#inicializarGrafo()" class="member-name-link">inicializarGrafo</a>()</code></div>
-<div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">&nbsp;</div>
+<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#inicializarAdmin()" class="member-name-link">inicializarAdmin</a>()</code></div>
+<div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
+<div class="block">Inicializa el usuario administrador por defecto si no existe.</div>
+</div>
 <div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>void</code></div>
-<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#iniciarSesion(co.edu.uniquindio.application.model.Usuario)" class="member-name-link">iniciarSesion</a><wbr>(<a href="../model/Usuario.html" title="class in co.edu.uniquindio.application.model">Usuario</a>&nbsp;usuario)</code></div>
-<div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">&nbsp;</div>
-<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/util/Collection.html" title="class or interface in java.util" class="external-link">Collection</a><wbr>&lt;<a href="../model/Cancion.html" title="class in co.edu.uniquindio.application.model">Cancion</a>&gt;</code></div>
-<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#listarFavoritos(java.lang.String)" class="member-name-link">listarFavoritos</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;username)</code></div>
-<div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">&nbsp;</div>
-<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/util/Set.html" title="class or interface in java.util" class="external-link">Set</a><wbr>&lt;<a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&gt;</code></div>
-<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#listarSeguidos(java.lang.String)" class="member-name-link">listarSeguidos</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;username)</code></div>
-<div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">&nbsp;</div>
-<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/util/Collection.html" title="class or interface in java.util" class="external-link">Collection</a><wbr>&lt;<a href="../model/Usuario.html" title="class in co.edu.uniquindio.application.model">Usuario</a>&gt;</code></div>
-<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#listarUsuarios()" class="member-name-link">listarUsuarios</a>()</code></div>
-<div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">&nbsp;</div>
-<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></code></div>
-<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#login(java.lang.String,java.lang.String)" class="member-name-link">login</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;username,
+<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#inicializarGrafo()" class="member-name-link">inicializarGrafo</a>()</code></div>
+<div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
+<div class="block">Inicializa el grafo social cargando las relaciones guardadas desde archivo.</div>
+</div>
+<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>void</code></div>
+<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#iniciarSesion(co.edu.uniquindio.application.model.Usuario)" class="member-name-link">iniciarSesion</a><wbr>(<a href="../model/Usuario.html" title="class in co.edu.uniquindio.application.model">Usuario</a>&nbsp;usuario)</code></div>
+<div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
+<div class="block">Inicia una sesión de usuario almacenándolo en memoria.</div>
+</div>
+<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/util/Collection.html" title="class or interface in java.util" class="external-link">Collection</a><wbr>&lt;<a href="../model/Cancion.html" title="class in co.edu.uniquindio.application.model">Cancion</a>&gt;</code></div>
+<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#listarFavoritos(java.lang.String)" class="member-name-link">listarFavoritos</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;username)</code></div>
+<div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
+<div class="block">Obtiene la lista de canciones favoritas de un usuario.</div>
+</div>
+<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/util/Set.html" title="class or interface in java.util" class="external-link">Set</a><wbr>&lt;<a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&gt;</code></div>
+<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#listarSeguidos(java.lang.String)" class="member-name-link">listarSeguidos</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;username)</code></div>
+<div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
+<div class="block">Lista los usuarios que un usuario específico está siguiendo.</div>
+</div>
+<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/util/Collection.html" title="class or interface in java.util" class="external-link">Collection</a><wbr>&lt;<a href="../model/Usuario.html" title="class in co.edu.uniquindio.application.model">Usuario</a>&gt;</code></div>
+<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#listarUsuarios()" class="member-name-link">listarUsuarios</a>()</code></div>
+<div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
+<div class="block">Lista todos los usuarios registrados en el sistema.</div>
+</div>
+<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></code></div>
+<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#login(java.lang.String,java.lang.String)" class="member-name-link">login</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;username,
  <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;password)</code></div>
-<div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">&nbsp;</div>
-<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>void</code></div>
-<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#logout()" class="member-name-link">logout</a>()</code></div>
-<div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">&nbsp;</div>
-<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></code></div>
-<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#obtenerUsernameActual()" class="member-name-link">obtenerUsernameActual</a>()</code></div>
-<div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">&nbsp;</div>
-<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="../model/Usuario.html" title="class in co.edu.uniquindio.application.model">Usuario</a></code></div>
-<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#obtenerUsuarioActual()" class="member-name-link">obtenerUsuarioActual</a>()</code></div>
-<div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">&nbsp;</div>
+<div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
+<div class="block">Autentica un usuario y genera un token JWT.</div>
+</div>
 <div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>void</code></div>
-<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#registrarMetricaExportFavoritos(java.lang.String,int,java.nio.file.Path)" class="member-name-link">registrarMetricaExportFavoritos</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;username,
+<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#logout()" class="member-name-link">logout</a>()</code></div>
+<div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
+<div class="block">Cierra la sesión actual del usuario.</div>
+</div>
+<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></code></div>
+<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#obtenerUsernameActual()" class="member-name-link">obtenerUsernameActual</a>()</code></div>
+<div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
+<div class="block">Obtiene el nombre de usuario del usuario actualmente autenticado.</div>
+</div>
+<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="../model/Usuario.html" title="class in co.edu.uniquindio.application.model">Usuario</a></code></div>
+<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#obtenerUsuarioActual()" class="member-name-link">obtenerUsuarioActual</a>()</code></div>
+<div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
+<div class="block">Obtiene el usuario actualmente autenticado en sesión.</div>
+</div>
+<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>void</code></div>
+<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#registrarMetricaExportFavoritos(java.lang.String,int,java.nio.file.Path)" class="member-name-link">registrarMetricaExportFavoritos</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;username,
  int&nbsp;totalFavoritos,
  <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/nio/file/Path.html" title="class or interface in java.nio.file" class="external-link">Path</a>&nbsp;archivoReporte)</code></div>
-<div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
-<div class="block">Registra una línea de métrica en CSV:
- columnas: fecha_iso,username,total_favoritos,archivo_reporte</div>
+<div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
+<div class="block">Registra una métrica de exportación de favoritos en archivo CSV.</div>
 </div>
-<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>boolean</code></div>
-<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#registrarUsuario(java.lang.String,java.lang.String,java.lang.String)" class="member-name-link">registrarUsuario</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;username,
+<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>boolean</code></div>
+<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#registrarUsuario(java.lang.String,java.lang.String,java.lang.String)" class="member-name-link">registrarUsuario</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;username,
  <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;password,
  <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;nombre)</code></div>
-<div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">&nbsp;</div>
-<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></code></div>
-<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#seguirUsuario(java.lang.String,java.lang.String)" class="member-name-link">seguirUsuario</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;username,
+<div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
+<div class="block">Registra un nuevo usuario en el sistema.</div>
+</div>
+<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></code></div>
+<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#seguirUsuario(java.lang.String,java.lang.String)" class="member-name-link">seguirUsuario</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;username,
  <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;destino)</code></div>
-<div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">&nbsp;</div>
-<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/util/List.html" title="class or interface in java.util" class="external-link">List</a><wbr>&lt;<a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&gt;</code></div>
-<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#sugerirUsuarios(java.lang.String,int)" class="member-name-link">sugerirUsuarios</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;username,
+<div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
+<div class="block">Agrega una relación de seguimiento entre dos usuarios.</div>
+</div>
+<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/util/List.html" title="class or interface in java.util" class="external-link">List</a><wbr>&lt;<a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&gt;</code></div>
+<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#sugerirUsuarios(java.lang.String,int)" class="member-name-link">sugerirUsuarios</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;username,
  int&nbsp;limite)</code></div>
-<div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">&nbsp;</div>
+<div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
+<div class="block">Obtiene sugerencias de usuarios basadas en amigos de amigos.</div>
+</div>
+<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/util/List.html" title="class or interface in java.util" class="external-link">List</a><wbr>&lt;<a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&gt;</code></div>
+<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#sugerirUsuariosPorFavoritos(java.lang.String,int)" class="member-name-link">sugerirUsuariosPorFavoritos</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;username,
+ int&nbsp;limite)</code></div>
+<div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
+<div class="block">Obtiene sugerencias de usuarios basadas en canciones favoritas comunes.</div>
+</div>
 </div>
 </div>
 </div>
@@ -307,6 +380,14 @@ loadScripts(document, 'script');</script>
  <a href="../repository/CancionRepository.html" title="class in co.edu.uniquindio.application.repository">CancionRepository</a>&nbsp;cancionRepository,
  <a href="CancionService.html" title="class in co.edu.uniquindio.application.service">CancionService</a>&nbsp;cancionService,
  org.springframework.security.crypto.password.PasswordEncoder&nbsp;passwordEncoder)</span></div>
+<div class="block">Constructor del servicio de usuarios.</div>
+<dl class="notes">
+<dt>Parameters:</dt>
+<dd><code>usuarioRepository</code> - el repositorio de usuarios</dd>
+<dd><code>cancionRepository</code> - el repositorio de canciones</dd>
+<dd><code>cancionService</code> - el servicio de canciones</dd>
+<dd><code>passwordEncoder</code> - el codificador de contraseñas</dd>
+</dl>
 </section>
 </li>
 </ul>
@@ -322,6 +403,10 @@ loadScripts(document, 'script');</script>
 <h3>inicializarGrafo</h3>
 <div class="member-signature"><span class="annotations">@PostConstruct
 </span><span class="modifiers">public</span>&nbsp;<span class="return-type">void</span>&nbsp;<span class="element-name">inicializarGrafo</span>()</div>
+<div class="block">Inicializa el grafo social cargando las relaciones guardadas desde archivo.
+ <p>
+ Se ejecuta al iniciar la aplicación (@PostConstruct).
+ </p></div>
 </section>
 </li>
 <li>
@@ -329,6 +414,11 @@ loadScripts(document, 'script');</script>
 <h3>inicializarAdmin</h3>
 <div class="member-signature"><span class="annotations">@PostConstruct
 </span><span class="modifiers">public</span>&nbsp;<span class="return-type">void</span>&nbsp;<span class="element-name">inicializarAdmin</span>()</div>
+<div class="block">Inicializa el usuario administrador por defecto si no existe.
+ <p>
+ Se ejecuta al iniciar la aplicación (@PostConstruct).
+ Crea un usuario admin/admin123 con rol ADMIN si aún no existe.
+ </p></div>
 </section>
 </li>
 <li>
@@ -337,6 +427,19 @@ loadScripts(document, 'script');</script>
 <div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">boolean</span>&nbsp;<span class="element-name">registrarUsuario</span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;username,
  <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;password,
  <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;nombre)</span></div>
+<div class="block">Registra un nuevo usuario en el sistema.
+ <p>
+ Encripta la contraseña, crea un nuevo usuario con rol USER,
+ lo añade al repositorio y también al grafo social.
+ </p></div>
+<dl class="notes">
+<dt>Parameters:</dt>
+<dd><code>username</code> - el nombre de usuario único</dd>
+<dd><code>password</code> - la contraseña en texto plano</dd>
+<dd><code>nombre</code> - el nombre completo del usuario</dd>
+<dt>Returns:</dt>
+<dd><code>true</code> si el registro fue exitoso, <code>false</code> si el usuario ya existe</dd>
+</dl>
 </section>
 </li>
 <li>
@@ -344,6 +447,17 @@ loadScripts(document, 'script');</script>
 <h3>login</h3>
 <div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></span>&nbsp;<span class="element-name">login</span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;username,
  <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;password)</span></div>
+<div class="block">Autentica un usuario y genera un token JWT.
+ <p>
+ Valida las credenciales contra la contraseña encriptada del usuario.
+ </p></div>
+<dl class="notes">
+<dt>Parameters:</dt>
+<dd><code>username</code> - el nombre de usuario</dd>
+<dd><code>password</code> - la contraseña en texto plano</dd>
+<dt>Returns:</dt>
+<dd>token JWT si la autenticación es exitosa, <code>null</code> en caso contrario</dd>
+</dl>
 </section>
 </li>
 <li>
@@ -351,30 +465,54 @@ loadScripts(document, 'script');</script>
 <h3>autenticarUsuario</h3>
 <div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="../model/Usuario.html" title="class in co.edu.uniquindio.application.model">Usuario</a></span>&nbsp;<span class="element-name">autenticarUsuario</span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;username,
  <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;password)</span></div>
+<div class="block">Autentica un usuario verificando sus credenciales.</div>
+<dl class="notes">
+<dt>Parameters:</dt>
+<dd><code>username</code> - el nombre de usuario</dd>
+<dd><code>password</code> - la contraseña en texto plano</dd>
+<dt>Returns:</dt>
+<dd>el objeto Usuario si la autenticación es exitosa, <code>null</code> en caso contrario</dd>
+</dl>
 </section>
 </li>
 <li>
 <section class="detail" id="iniciarSesion(co.edu.uniquindio.application.model.Usuario)">
 <h3>iniciarSesion</h3>
 <div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">void</span>&nbsp;<span class="element-name">iniciarSesion</span><wbr><span class="parameters">(<a href="../model/Usuario.html" title="class in co.edu.uniquindio.application.model">Usuario</a>&nbsp;usuario)</span></div>
+<div class="block">Inicia una sesión de usuario almacenándolo en memoria.</div>
+<dl class="notes">
+<dt>Parameters:</dt>
+<dd><code>usuario</code> - el usuario a establecer como autenticado</dd>
+</dl>
 </section>
 </li>
 <li>
 <section class="detail" id="logout()">
 <h3>logout</h3>
 <div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">void</span>&nbsp;<span class="element-name">logout</span>()</div>
+<div class="block">Cierra la sesión actual del usuario.</div>
 </section>
 </li>
 <li>
 <section class="detail" id="obtenerUsuarioActual()">
 <h3>obtenerUsuarioActual</h3>
 <div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="../model/Usuario.html" title="class in co.edu.uniquindio.application.model">Usuario</a></span>&nbsp;<span class="element-name">obtenerUsuarioActual</span>()</div>
+<div class="block">Obtiene el usuario actualmente autenticado en sesión.</div>
+<dl class="notes">
+<dt>Returns:</dt>
+<dd>el usuario en sesión, o <code>null</code> si no hay sesión activa</dd>
+</dl>
 </section>
 </li>
 <li>
 <section class="detail" id="listarUsuarios()">
 <h3>listarUsuarios</h3>
 <div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/util/Collection.html" title="class or interface in java.util" class="external-link">Collection</a>&lt;<a href="../model/Usuario.html" title="class in co.edu.uniquindio.application.model">Usuario</a>&gt;</span>&nbsp;<span class="element-name">listarUsuarios</span>()</div>
+<div class="block">Lista todos los usuarios registrados en el sistema.</div>
+<dl class="notes">
+<dt>Returns:</dt>
+<dd>colección de todos los usuarios</dd>
+</dl>
 </section>
 </li>
 <li>
@@ -382,6 +520,14 @@ loadScripts(document, 'script');</script>
 <h3>agregarFavorito</h3>
 <div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></span>&nbsp;<span class="element-name">agregarFavorito</span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;username,
  <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;idCancion)</span></div>
+<div class="block">Agrega una canción a los favoritos de un usuario.</div>
+<dl class="notes">
+<dt>Parameters:</dt>
+<dd><code>username</code> - el nombre del usuario</dd>
+<dd><code>idCancion</code> - el identificador de la canción</dd>
+<dt>Returns:</dt>
+<dd>mensaje indicando el resultado de la operación</dd>
+</dl>
 </section>
 </li>
 <li>
@@ -389,18 +535,38 @@ loadScripts(document, 'script');</script>
 <h3>eliminarFavorito</h3>
 <div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></span>&nbsp;<span class="element-name">eliminarFavorito</span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;username,
  <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;idCancion)</span></div>
+<div class="block">Elimina una canción de los favoritos de un usuario.</div>
+<dl class="notes">
+<dt>Parameters:</dt>
+<dd><code>username</code> - el nombre del usuario</dd>
+<dd><code>idCancion</code> - el identificador de la canción</dd>
+<dt>Returns:</dt>
+<dd>mensaje indicando el resultado de la operación</dd>
+</dl>
 </section>
 </li>
 <li>
 <section class="detail" id="listarFavoritos(java.lang.String)">
 <h3>listarFavoritos</h3>
 <div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/util/Collection.html" title="class or interface in java.util" class="external-link">Collection</a>&lt;<a href="../model/Cancion.html" title="class in co.edu.uniquindio.application.model">Cancion</a>&gt;</span>&nbsp;<span class="element-name">listarFavoritos</span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;username)</span></div>
+<div class="block">Obtiene la lista de canciones favoritas de un usuario.</div>
+<dl class="notes">
+<dt>Parameters:</dt>
+<dd><code>username</code> - el nombre del usuario</dd>
+<dt>Returns:</dt>
+<dd>colección de canciones favoritas</dd>
+</dl>
 </section>
 </li>
 <li>
 <section class="detail" id="haySesionActiva()">
 <h3>haySesionActiva</h3>
 <div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">boolean</span>&nbsp;<span class="element-name">haySesionActiva</span>()</div>
+<div class="block">Verifica si hay una sesión de usuario activa.</div>
+<dl class="notes">
+<dt>Returns:</dt>
+<dd><code>true</code> si hay un usuario autenticado, <code>false</code> en caso contrario</dd>
+</dl>
 </section>
 </li>
 <li>
@@ -408,6 +574,31 @@ loadScripts(document, 'script');</script>
 <h3>actualizarNombre</h3>
 <div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></span>&nbsp;<span class="element-name">actualizarNombre</span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;username,
  <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;nuevoNombre)</span></div>
+<div class="block">Actualiza el nombre completo de un usuario.</div>
+<dl class="notes">
+<dt>Parameters:</dt>
+<dd><code>username</code> - el nombre de usuario</dd>
+<dd><code>nuevoNombre</code> - el nuevo nombre completo</dd>
+<dt>Returns:</dt>
+<dd>mensaje indicando el resultado de la operación</dd>
+</dl>
+</section>
+</li>
+<li>
+<section class="detail" id="eliminarUsuarioAdmin(java.lang.String)">
+<h3>eliminarUsuarioAdmin</h3>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">boolean</span>&nbsp;<span class="element-name">eliminarUsuarioAdmin</span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;username)</span></div>
+<div class="block">Elimina un usuario del sistema (acción administrativa).
+ <p>
+ No permite eliminar el usuario administrador por defecto.
+ Mantiene la consistencia del grafo social.
+ </p></div>
+<dl class="notes">
+<dt>Parameters:</dt>
+<dd><code>username</code> - el nombre del usuario a eliminar</dd>
+<dt>Returns:</dt>
+<dd><code>true</code> si la eliminación fue exitosa, <code>false</code> en caso contrario</dd>
+</dl>
 </section>
 </li>
 <li>
@@ -415,18 +606,38 @@ loadScripts(document, 'script');</script>
 <h3>cambiarPassword</h3>
 <div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></span>&nbsp;<span class="element-name">cambiarPassword</span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;username,
  <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;nuevaPassword)</span></div>
+<div class="block">Cambia la contraseña de un usuario.</div>
+<dl class="notes">
+<dt>Parameters:</dt>
+<dd><code>username</code> - el nombre del usuario</dd>
+<dd><code>nuevaPassword</code> - la nueva contraseña en texto plano</dd>
+<dt>Returns:</dt>
+<dd>mensaje indicando el resultado de la operación</dd>
+</dl>
 </section>
 </li>
 <li>
 <section class="detail" id="buscarPorUsername(java.lang.String)">
 <h3>buscarPorUsername</h3>
 <div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="../model/Usuario.html" title="class in co.edu.uniquindio.application.model">Usuario</a></span>&nbsp;<span class="element-name">buscarPorUsername</span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;username)</span></div>
+<div class="block">Busca un usuario por su nombre de usuario.</div>
+<dl class="notes">
+<dt>Parameters:</dt>
+<dd><code>username</code> - el nombre de usuario a buscar</dd>
+<dt>Returns:</dt>
+<dd>el usuario encontrado, o <code>null</code> si no existe</dd>
+</dl>
 </section>
 </li>
 <li>
 <section class="detail" id="obtenerUsernameActual()">
 <h3>obtenerUsernameActual</h3>
 <div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></span>&nbsp;<span class="element-name">obtenerUsernameActual</span>()</div>
+<div class="block">Obtiene el nombre de usuario del usuario actualmente autenticado.</div>
+<dl class="notes">
+<dt>Returns:</dt>
+<dd>el nombre de usuario del contexto de seguridad actual</dd>
+</dl>
 </section>
 </li>
 <li>
@@ -434,6 +645,18 @@ loadScripts(document, 'script');</script>
 <h3>generarPlaylistDescubrimiento</h3>
 <div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/util/List.html" title="class or interface in java.util" class="external-link">List</a>&lt;<a href="../model/Cancion.html" title="class in co.edu.uniquindio.application.model">Cancion</a>&gt;</span>&nbsp;<span class="element-name">generarPlaylistDescubrimiento</span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;username,
  int&nbsp;size)</span></div>
+<div class="block">Genera una playlist de descubrimiento semanal personalizada para un usuario.
+ <p>
+ Implementa RF-005. Utiliza canciones similares a los favoritos del usuario
+ con un sistema de ranking para sugerencias.
+ </p></div>
+<dl class="notes">
+<dt>Parameters:</dt>
+<dd><code>username</code> - el nombre del usuario</dd>
+<dd><code>size</code> - el tamaño máximo de la playlist</dd>
+<dt>Returns:</dt>
+<dd>lista de canciones recomendadas</dd>
+</dl>
 </section>
 </li>
 <li>
@@ -441,6 +664,18 @@ loadScripts(document, 'script');</script>
 <h3>seguirUsuario</h3>
 <div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></span>&nbsp;<span class="element-name">seguirUsuario</span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;username,
  <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;destino)</span></div>
+<div class="block">Agrega una relación de seguimiento entre dos usuarios.
+ <p>
+ El usuario especificado en <code>username</code> comenzará a seguir al usuario <code>destino</code>.
+ Actualiza el grafo social y lo persiste en archivo.
+ </p></div>
+<dl class="notes">
+<dt>Parameters:</dt>
+<dd><code>username</code> - el nombre del usuario que seguirá</dd>
+<dd><code>destino</code> - el nombre del usuario a seguir</dd>
+<dt>Returns:</dt>
+<dd>mensaje indicando el resultado de la operación</dd>
+</dl>
 </section>
 </li>
 <li>
@@ -448,12 +683,31 @@ loadScripts(document, 'script');</script>
 <h3>dejarDeSeguir</h3>
 <div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></span>&nbsp;<span class="element-name">dejarDeSeguir</span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;username,
  <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;destino)</span></div>
+<div class="block">Elimina una relación de seguimiento entre dos usuarios.
+ <p>
+ El usuario especificado en <code>username</code> dejaráde seguir al usuario <code>destino</code>.
+ Actualiza el grafo social y lo persiste en archivo.
+ </p></div>
+<dl class="notes">
+<dt>Parameters:</dt>
+<dd><code>username</code> - el nombre del usuario que dejaráde seguir</dd>
+<dd><code>destino</code> - el nombre del usuario a dejar de seguir</dd>
+<dt>Returns:</dt>
+<dd>mensaje indicando el resultado de la operación</dd>
+</dl>
 </section>
 </li>
 <li>
 <section class="detail" id="listarSeguidos(java.lang.String)">
 <h3>listarSeguidos</h3>
 <div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/util/Set.html" title="class or interface in java.util" class="external-link">Set</a>&lt;<a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&gt;</span>&nbsp;<span class="element-name">listarSeguidos</span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;username)</span></div>
+<div class="block">Lista los usuarios que un usuario específico está siguiendo.</div>
+<dl class="notes">
+<dt>Parameters:</dt>
+<dd><code>username</code> - el nombre del usuario</dd>
+<dt>Returns:</dt>
+<dd>conjunto de nombres de usuarios que está siguiendo</dd>
+</dl>
 </section>
 </li>
 <li>
@@ -461,56 +715,114 @@ loadScripts(document, 'script');</script>
 <h3>sugerirUsuarios</h3>
 <div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/util/List.html" title="class or interface in java.util" class="external-link">List</a>&lt;<a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&gt;</span>&nbsp;<span class="element-name">sugerirUsuarios</span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;username,
  int&nbsp;limite)</span></div>
+<div class="block">Obtiene sugerencias de usuarios basadas en amigos de amigos.</div>
+<dl class="notes">
+<dt>Parameters:</dt>
+<dd><code>username</code> - el nombre del usuario</dd>
+<dd><code>limite</code> - el número máximo de sugerencias</dd>
+<dt>Returns:</dt>
+<dd>lista de nombres de usuarios sugeridos</dd>
+</dl>
 </section>
 </li>
 <li>
 <section class="detail" id="exportarFavoritosCsv(java.lang.String)">
 <h3>exportarFavoritosCsv</h3>
 <div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">byte[]</span>&nbsp;<span class="element-name">exportarFavoritosCsv</span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;username)</span></div>
-<div class="block">Genera el contenido CSV de los favoritos del usuario (en memoria).</div>
+<div class="block">Genera el contenido CSV de los favoritos del usuario en formato bytes.
+ <p>
+ Incluye encabezado con columnas estándar (id, titulo, artista, genero, anio, duracion_seg).
+ </p></div>
+<dl class="notes">
+<dt>Parameters:</dt>
+<dd><code>username</code> - el nombre del usuario</dd>
+<dt>Returns:</dt>
+<dd>bytes del contenido CSV</dd>
+<dt>Throws:</dt>
+<dd><code><a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/IllegalArgumentException.html" title="class or interface in java.lang" class="external-link">IllegalArgumentException</a></code> - si el usuario no existe</dd>
+</dl>
 </section>
 </li>
 <li>
 <section class="detail" id="buildFavoritosFilename(java.lang.String)">
 <h3>buildFavoritosFilename</h3>
 <div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></span>&nbsp;<span class="element-name">buildFavoritosFilename</span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;username)</span></div>
-<div class="block">Nombre de archivo para DESCARGA (incluye fecha, útil para el front).
- Ej: favoritos_deivid_20251108.csv</div>
+<div class="block">Construye el nombre de archivo para descarga del CSV de favoritos.
+ <p>
+ Incluye fecha en formato YYYYMMDD para diferenciar descargas.
+ Ejemplo: favoritos_deivid_20251108.csv
+ </p></div>
+<dl class="notes">
+<dt>Parameters:</dt>
+<dd><code>username</code> - el nombre del usuario</dd>
+<dt>Returns:</dt>
+<dd>nombre de archivo sugerido para descargar</dd>
+</dl>
 </section>
 </li>
 <li>
 <section class="detail" id="getReportesDir()">
 <h3>getReportesDir</h3>
 <div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/nio/file/Path.html" title="class or interface in java.nio.file" class="external-link">Path</a></span>&nbsp;<span class="element-name">getReportesDir</span>()</div>
-<div class="block">Directorio donde se guardan/actualizan los CSV por usuario.</div>
+<div class="block">Obtiene la ruta del directorio donde se guardan reportes CSV por usuario.</div>
+<dl class="notes">
+<dt>Returns:</dt>
+<dd>path del directorio de reportes</dd>
+</dl>
 </section>
 </li>
 <li>
 <section class="detail" id="buildFavoritosStorageName(java.lang.String)">
 <h3>buildFavoritosStorageName</h3>
 <div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></span>&nbsp;<span class="element-name">buildFavoritosStorageName</span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;username)</span></div>
-<div class="block">Nombre de archivo FIJO en disco (uno por usuario, se sobrescribe).</div>
+<div class="block">Construye el nombre de archivo fijo de almacenamiento para un usuario.
+ <p>
+ Sin fecha, un solo CSV por usuario, se sobrescribe en cada actualización.
+ </p></div>
+<dl class="notes">
+<dt>Parameters:</dt>
+<dd><code>username</code> - el nombre del usuario</dd>
+<dt>Returns:</dt>
+<dd>nombre de archivo (ej: favoritos_deivid.csv)</dd>
+</dl>
 </section>
 </li>
 <li>
 <section class="detail" id="getReporteFavoritosPath(java.lang.String)">
 <h3>getReporteFavoritosPath</h3>
 <div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/nio/file/Path.html" title="class or interface in java.nio.file" class="external-link">Path</a></span>&nbsp;<span class="element-name">getReporteFavoritosPath</span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;username)</span></div>
-<div class="block">Ruta completa del CSV de un usuario dentro de /data/reportes.</div>
+<div class="block">Obtiene la ruta completa del archivo CSV de favoritos de un usuario.
+ <p>
+ Ubicado en /data/reportes/favoritos_username.csv
+ </p></div>
+<dl class="notes">
+<dt>Parameters:</dt>
+<dd><code>username</code> - el nombre del usuario</dd>
+<dt>Returns:</dt>
+<dd>path completo del archivo de reportes</dd>
+</dl>
 </section>
 </li>
 <li>
 <section class="detail" id="getMetricasDir()">
 <h3>getMetricasDir</h3>
 <div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/nio/file/Path.html" title="class or interface in java.nio.file" class="external-link">Path</a></span>&nbsp;<span class="element-name">getMetricasDir</span>()</div>
-<div class="block">Directorio de métricas.</div>
+<div class="block">Obtiene la ruta del directorio de métricas.</div>
+<dl class="notes">
+<dt>Returns:</dt>
+<dd>path del directorio de métricas</dd>
+</dl>
 </section>
 </li>
 <li>
 <section class="detail" id="getMetricasFavoritosPath()">
 <h3>getMetricasFavoritosPath</h3>
 <div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/nio/file/Path.html" title="class or interface in java.nio.file" class="external-link">Path</a></span>&nbsp;<span class="element-name">getMetricasFavoritosPath</span>()</div>
-<div class="block">Ruta del archivo de métricas de exportación de favoritos.</div>
+<div class="block">Obtiene la ruta del archivo de métricas de exportación de favoritos.</div>
+<dl class="notes">
+<dt>Returns:</dt>
+<dd>path del archivo de métricas</dd>
+</dl>
 </section>
 </li>
 <li>
@@ -518,14 +830,35 @@ loadScripts(document, 'script');</script>
 <h3>guardarFavoritosCsvEnData</h3>
 <div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></span>&nbsp;<span class="element-name">guardarFavoritosCsvEnData</span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;username,
  byte[]&nbsp;csvBytes)</span></div>
-<div class="block">Guarda (crea o sobrescribe) el CSV en /data/reportes y devuelve la ruta absoluta.</div>
+<div class="block">Guarda el CSV de favoritos en el directorio de datos.
+ <p>
+ Crea o sobrescribe el archivo en /data/reportes.
+ </p></div>
+<dl class="notes">
+<dt>Parameters:</dt>
+<dd><code>username</code> - el nombre del usuario</dd>
+<dd><code>csvBytes</code> - el contenido del CSV en bytes</dd>
+<dt>Returns:</dt>
+<dd>ruta absoluta del archivo guardado</dd>
+<dt>Throws:</dt>
+<dd><code><a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/RuntimeException.html" title="class or interface in java.lang" class="external-link">RuntimeException</a></code> - si ocurre un error al guardar</dd>
+</dl>
 </section>
 </li>
 <li>
 <section class="detail" id="contarFavoritosUsuario(java.lang.String)">
 <h3>contarFavoritosUsuario</h3>
 <div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">int</span>&nbsp;<span class="element-name">contarFavoritosUsuario</span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;username)</span></div>
-<div class="block">Cuenta favoritos actuales del usuario (útil para métricas).</div>
+<div class="block">Cuenta el número de canciones favoritas actuales del usuario.
+ <p>
+ Útil para registrar en métricas.
+ </p></div>
+<dl class="notes">
+<dt>Parameters:</dt>
+<dd><code>username</code> - el nombre del usuario</dd>
+<dt>Returns:</dt>
+<dd>cantidad de favoritos, o 0 si la colección es nula</dd>
+</dl>
 </section>
 </li>
 <li>
@@ -534,23 +867,64 @@ loadScripts(document, 'script');</script>
 <div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">void</span>&nbsp;<span class="element-name">registrarMetricaExportFavoritos</span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;username,
  int&nbsp;totalFavoritos,
  <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/nio/file/Path.html" title="class or interface in java.nio.file" class="external-link">Path</a>&nbsp;archivoReporte)</span></div>
-<div class="block">Registra una línea de métrica en CSV:
- columnas: fecha_iso,username,total_favoritos,archivo_reporte</div>
+<div class="block">Registra una métrica de exportación de favoritos en archivo CSV.
+ <p>
+ Columnas: fecha_iso, username, total_favoritos, archivo_reporte
+ Crea el archivo con encabezado si no existe.
+ </p></div>
+<dl class="notes">
+<dt>Parameters:</dt>
+<dd><code>username</code> - el nombre del usuario</dd>
+<dd><code>totalFavoritos</code> - la cantidad de favoritos exportados</dd>
+<dd><code>archivoReporte</code> - la ruta del archivo de reporte guardado</dd>
+</dl>
 </section>
 </li>
 <li>
 <section class="detail" id="exportarYGuardarFavoritosCsv(java.lang.String)">
 <h3>exportarYGuardarFavoritosCsv</h3>
 <div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="UsuarioService.ExportResultado.html" title="class in co.edu.uniquindio.application.service">UsuarioService.ExportResultado</a></span>&nbsp;<span class="element-name">exportarYGuardarFavoritosCsv</span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;username)</span></div>
-<div class="block">Flujo completo: genera CSV en memoria, lo guarda/actualiza en /data/reportes,
- registra la métrica y retorna bytes + nombre sugerido de descarga + ruta guardada.</div>
+<div class="block">Flujo completo de exportación y guardado de favoritos a CSV.
+ <p>
+ Genera el CSV en memoria, lo guarda/actualiza en /data/reportes,
+ registra la métrica de exportación y retorna información completa.
+ </p></div>
+<dl class="notes">
+<dt>Parameters:</dt>
+<dd><code>username</code> - el nombre del usuario</dd>
+<dt>Returns:</dt>
+<dd>objeto con bytes del CSV, nombre de descarga y ruta guardada</dd>
+</dl>
 </section>
 </li>
 <li>
 <section class="detail" id="exportarFavoritosCsvUsuarioActual()">
 <h3>exportarFavoritosCsvUsuarioActual</h3>
 <div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">byte[]</span>&nbsp;<span class="element-name">exportarFavoritosCsvUsuarioActual</span>()</div>
-<div class="block">Exportar usando el usuario del SecurityContext (si lo necesitas).</div>
+<div class="block">Exporta los favoritos del usuario actualmente autenticado en el contexto de seguridad.</div>
+<dl class="notes">
+<dt>Returns:</dt>
+<dd>bytes del contenido CSV</dd>
+</dl>
+</section>
+</li>
+<li>
+<section class="detail" id="sugerirUsuariosPorFavoritos(java.lang.String,int)">
+<h3>sugerirUsuariosPorFavoritos</h3>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/util/List.html" title="class or interface in java.util" class="external-link">List</a>&lt;<a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&gt;</span>&nbsp;<span class="element-name">sugerirUsuariosPorFavoritos</span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;username,
+ int&nbsp;limite)</span></div>
+<div class="block">Obtiene sugerencias de usuarios basadas en canciones favoritas comunes.
+ <p>
+ Compara los favoritos del usuario con todos los demás usuarios
+ y retorna aquellos con más canciones en común.
+ </p></div>
+<dl class="notes">
+<dt>Parameters:</dt>
+<dd><code>username</code> - el nombre del usuario</dd>
+<dd><code>limite</code> - el número máximo de sugerencias</dd>
+<dt>Returns:</dt>
+<dd>lista de nombres de usuarios sugeridos ordenados por similitud</dd>
+</dl>
 </section>
 </li>
 </ul>

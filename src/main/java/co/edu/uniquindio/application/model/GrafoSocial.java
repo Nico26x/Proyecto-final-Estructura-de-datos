@@ -4,22 +4,57 @@ import java.io.*;
 import java.util.*;
 
 /**
- * Grafo no dirigido que modela las relaciones entre usuarios.
- * Permite seguir/dejar de seguir y obtener sugerencias mediante BFS.
+ * Grafo no dirigido que modela las relaciones sociales entre usuarios.
+ * <p>
+ * Permite gestionar conexiones bidireccionales entre usuarios (seguir/dejar de seguir),
+ * obtener amigos de un usuario y generar sugerencias de amistad mediante búsqueda en anchura (BFS).
+ * </p>
+ * <p>
+ * Características:
+ * </p>
+ * <ul>
+ *   <li>Operaciones de seguir/dejar de seguir con validación</li>
+ *   <li>Sugerencias de amigos mediante BFS (amigos de amigos no seguidos)</li>
+ *   <li>Persistencia en archivo de texto</li>
+ *   <li>Eliminación completa de usuarios y sus relaciones</li>
+ * </ul>
+ *
+ * @author SyncUp
+ * @version 1.0
  */
 public class GrafoSocial {
 
+    /**
+     * Almacenamiento del grafo no dirigido: mapa de usuarios a sus conjuntos de amigos.
+     */
     private final Map<String, Set<String>> relaciones = new HashMap<>();
 
     /**
-     * Agrega un nuevo usuario al grafo (sin conexiones iniciales).
+     * Agrega un nuevo usuario al grafo sin conexiones iniciales.
+     * <p>
+     * Si el usuario ya existe, no realiza cambios.
+     * </p>
+     *
+     * @param username el nombre del usuario a agregar
      */
     public void agregarUsuario(String username) {
         relaciones.putIfAbsent(username, new HashSet<>());
     }
 
     /**
-     * Crea una conexión bidireccional entre dos usuarios.
+     * Crea una conexión bidireccional entre dos usuarios (seguir).
+     * <p>
+     * Validaciones:
+     * <ul>
+     *   <li>Un usuario no puede seguirse a sí mismo</li>
+     *   <li>Ambos usuarios deben existir en el grafo</li>
+     *   <li>Si ya existe la relación, devuelve {@code true} sin cambios</li>
+     * </ul>
+     * </p>
+     *
+     * @param origen el usuario que sigue
+     * @param destino el usuario a seguir
+     * @return {@code true} si la relación se creó o ya existía, {@code false} si falló la validación
      */
     public boolean seguirUsuario(String origen, String destino) {
         // Evitar que un usuario se siga a sí mismo
@@ -42,7 +77,19 @@ public class GrafoSocial {
 
 
     /**
-     * Elimina la conexión entre dos usuarios (dejar de seguir).
+     * Elimina la conexión bidireccional entre dos usuarios (dejar de seguir).
+     * <p>
+     * Validaciones:
+     * <ul>
+     *   <li>Un usuario no puede dejar de seguirse a sí mismo</li>
+     *   <li>Ambos usuarios deben existir en el grafo</li>
+     *   <li>Debe existir una relación previa para poder eliminarla</li>
+     * </ul>
+     * </p>
+     *
+     * @param origen el usuario que deja de seguir
+     * @param destino el usuario al que se deja de seguir
+     * @return {@code true} si la relación fue eliminada exitosamente, {@code false} si falló la validación
      */
     public boolean dejarDeSeguir(String origen, String destino) {
         // Evitar que un usuario se deje de seguir a sí mismo
@@ -65,14 +112,28 @@ public class GrafoSocial {
 
 
     /**
-     * Obtiene los usuarios seguidos por un usuario.
+     * Obtiene el conjunto de usuarios seguidos por un usuario.
+     *
+     * @param username el nombre del usuario
+     * @return conjunto no modificable de amigos, o conjunto vacío si el usuario no existe
      */
     public Set<String> obtenerAmigos(String username) {
         return relaciones.getOrDefault(username, Collections.emptySet());
     }
 
     /**
-     * Sugerencias de amistad usando BFS (amigos de amigos no seguidos aún).
+     * Genera sugerencias de amistad para un usuario mediante búsqueda en anchura (BFS).
+     * <p>
+     * Busca usuarios que estén a dos niveles de distancia (amigos de amigos) y que
+     * el usuario no sigue actualmente. El resultado se limita a una cantidad especificada.
+     * </p>
+     * <p>
+     * Complejidad: O(V + E) donde V es la cantidad de usuarios y E es la cantidad de relaciones.
+     * </p>
+     *
+     * @param username el usuario para el cual generar sugerencias
+     * @param limite la cantidad máxima de sugerencias a retornar
+     * @return lista de usuarios sugeridos, o lista vacía si el usuario no existe
      */
     public List<String> sugerirUsuarios(String username, int limite) {
         if (!relaciones.containsKey(username)) return Collections.emptyList();
@@ -102,12 +163,15 @@ public class GrafoSocial {
         return sugerencias;
     }
 
-    // 🔽🔽🔽 NUEVO: Eliminar usuario del grafo 🔽🔽🔽
-
     /**
-     * Elimina por completo un usuario del grafo y todas sus conexiones.
-     * @param username usuario a eliminar
-     * @return true si existía y fue eliminado; false si no estaba presente
+     * Elimina un usuario completamente del grafo y todas sus conexiones.
+     * <p>
+     * Busca el usuario en el mapa de relaciones y lo elimina junto con todas
+     * las referencias que otros usuarios tienen hacia él.
+     * </p>
+     *
+     * @param username el nombre del usuario a eliminar
+     * @return {@code true} si el usuario existía y fue eliminado, {@code false} si no estaba presente
      */
     public boolean eliminarUsuario(String username) {
         if (!relaciones.containsKey(username)) {
@@ -122,11 +186,17 @@ public class GrafoSocial {
         return true;
     }
 
-    // 🔽🔽🔽 Métodos de persistencia 🔽🔽🔽
-
     /**
-     * Guarda todas las relaciones en un archivo de texto.
-     * Cada línea representa una relación bidireccional: usuario1;usuario2
+     * Guarda todas las relaciones del grafo en un archivo de texto.
+     * <p>
+     * Cada línea representa una relación unidireccional en formato:
+     * <code>usuario1;usuario2</code>
+     * </p>
+     * <p>
+     * Si ocurre un error de I/O, registra un mensaje de error pero no lanza excepción.
+     * </p>
+     *
+     * @param rutaArchivo la ruta del archivo donde guardar las relaciones
      */
     public void guardarRelacionesEnArchivo(String rutaArchivo) {
         try (BufferedWriter bw = new BufferedWriter(new FileWriter(rutaArchivo))) {
@@ -144,8 +214,17 @@ public class GrafoSocial {
 
 
     /**
-     * Carga las relaciones desde un archivo existente.
-     * Si el archivo no existe, no hace nada.
+     * Carga las relaciones del grafo desde un archivo de persistencia.
+     * <p>
+     * Lee líneas del archivo en formato {@code usuario1;usuario2} y reconstruye
+     * el grafo. Crea automáticamente los usuarios si no existen.
+     * Si el archivo no existe, no realiza cambios.
+     * </p>
+     * <p>
+     * Si ocurre un error de I/O, registra un mensaje de error pero no lanza excepción.
+     * </p>
+     *
+     * @param rutaArchivo la ruta del archivo a cargar
      */
     public void cargarRelacionesDesdeArchivo(String rutaArchivo) {
         File archivo = new File(rutaArchivo);
@@ -172,7 +251,13 @@ public class GrafoSocial {
         }
     }
 
-    // ✅ (Opcional) Método auxiliar para inspeccionar el grafo
+    /**
+     * Método auxiliar para imprimir el estado actual del grafo en consola.
+     * <p>
+     * Útil para depuración. Imprime cada usuario y sus amigos en el formato:
+     * <code>usuario -&gt; [amigo1, amigo2, ...]</code>
+     * </p>
+     */
     public void imprimirRelaciones() {
         relaciones.forEach((usuario, amigos) -> {
             System.out.println(usuario + " -> " + amigos);

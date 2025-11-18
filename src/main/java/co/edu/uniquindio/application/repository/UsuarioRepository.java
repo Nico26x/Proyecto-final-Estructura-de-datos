@@ -13,46 +13,97 @@ import java.util.concurrent.ConcurrentHashMap;
 import java.util.stream.Collectors;
 
 /**
- * Repositorio con persistencia en archivo usuarios.txt y manejo de favoritos.
- * Formato de línea:
- * username;password;nombre;id1,id2,id3
+ * Repositorio de usuarios con persistencia en archivo.
+ * <p>
+ * Gestiona la lectura, escritura y búsqueda de usuarios utilizando un archivo
+ * de texto (usuarios.txt) como almacenamiento. Proporciona operaciones CRUD,
+ * gestión de favoritos y carga de dependencias con CancionRepository.
+ * </p>
+ * <p>
+ * Formato de línea en archivo:
+ * <code>username;password;nombre;ROL;id1,id2,id3</code>
+ * </p>
+ * <p>
+ * Soporta retrocompatibilidad con formatos legacy sin rol o sin favoritos.
+ * </p>
+ *
+ * @author SyncUp
+ * @version 1.0
  */
 @Repository
 public class UsuarioRepository {
 
+    /**
+     * Almacenamiento en memoria de usuarios (thread-safe).
+     */
     private final Map<String, Usuario> usuarios = new ConcurrentHashMap<>();
+
+    /**
+     * Ruta del archivo de persistencia de usuarios.
+     */
     private static final String FILE_PATH = "src/main/resources/data/usuarios.txt";
 
+    /**
+     * Referencia al repositorio de canciones para resolver IDs de favoritos.
+     */
     private final CancionRepository cancionRepository;
 
+    /**
+     * Constructor que inyecta el repositorio de canciones y carga los usuarios desde archivo.
+     *
+     * @param cancionRepository el repositorio de canciones inyectado
+     */
     @Autowired
     public UsuarioRepository(CancionRepository cancionRepository) {
         this.cancionRepository = cancionRepository;
         cargarUsuariosDesdeArchivo();
     }
 
-    // 📌 Buscar usuario por username
+    /**
+     * Busca un usuario por su nombre de usuario.
+     *
+     * @param username el nombre de usuario a buscar
+     * @return el usuario si existe, {@code null} en caso contrario
+     */
     public Usuario buscarPorUsername(String username) {
         return usuarios.get(username);
     }
 
-    // 📌 Registrar o actualizar usuario
+    /**
+     * Guarda un nuevo usuario o actualiza uno existente.
+     *
+     * @param usuario el usuario a guardar o actualizar
+     */
     public void guardarUsuario(Usuario usuario) {
         usuarios.put(usuario.getUsername(), usuario);
         guardarUsuariosEnArchivo();
     }
 
-    // 📋 Listar todos los usuarios
+    /**
+     * Lista todos los usuarios registrados en el repositorio.
+     *
+     * @return mapa no modificable con todos los usuarios
+     */
     public Map<String, Usuario> listarUsuarios() {
         return Collections.unmodifiableMap(usuarios);
     }
 
-    // 📌 Verificar si existe
+    /**
+     * Verifica si un usuario existe en el repositorio.
+     *
+     * @param username el nombre de usuario a verificar
+     * @return {@code true} si el usuario existe, {@code false} en caso contrario
+     */
     public boolean existe(String username) {
         return usuarios.containsKey(username);
     }
 
-    // 🗑️ Eliminar usuario (ya existente)
+    /**
+     * Elimina un usuario del repositorio.
+     *
+     * @param username el nombre del usuario a eliminar
+     * @return el usuario eliminado, o {@code null} si no existía
+     */
     public Usuario eliminarUsuario(String username) {
         Usuario eliminado = usuarios.remove(username);
         if (eliminado != null) {
@@ -61,12 +112,22 @@ public class UsuarioRepository {
         return eliminado;
     }
 
-    // 🆕 🗑️ Helper: eliminar si existe (boolean)
+    /**
+     * Auxiliar para eliminar un usuario si existe, devolviendo un booleano.
+     *
+     * @param username el nombre del usuario a eliminar
+     * @return {@code true} si el usuario fue eliminado, {@code false} si no existía
+     */
     public boolean eliminarUsuarioSiExiste(String username) {
         return eliminarUsuario(username) != null;
     }
 
-    // 🆕 🗑️ Helper: eliminar en lote. Retorna cuántos eliminó realmente.
+    /**
+     * Auxiliar para eliminar múltiples usuarios en una sola operación.
+     *
+     * @param usernames colección con los nombres de usuarios a eliminar
+     * @return la cantidad de usuarios que fueron efectivamente eliminados
+     */
     public int eliminarUsuarios(Collection<String> usernames) {
         if (usernames == null || usernames.isEmpty()) return 0;
         int count = 0;
@@ -81,7 +142,13 @@ public class UsuarioRepository {
         return count;
     }
 
-    // 🎵 FAVORITOS
+    /**
+     * Agrega una canción a la lista de favoritos de un usuario.
+     *
+     * @param username el nombre del usuario
+     * @param cancion la canción a agregar a favoritos
+     * @return {@code true} si la canción fue agregada, {@code false} si ya estaba o usuario no existe
+     */
     public boolean agregarFavorito(String username, Cancion cancion) {
         Usuario usuario = usuarios.get(username);
         if (usuario != null && cancion != null) {
@@ -92,6 +159,13 @@ public class UsuarioRepository {
         return false;
     }
 
+    /**
+     * Elimina una canción de la lista de favoritos de un usuario.
+     *
+     * @param username el nombre del usuario
+     * @param idCancion el identificador de la canción a eliminar
+     * @return {@code true} si la canción fue eliminada, {@code false} si no existía o usuario no existe
+     */
     public boolean eliminarFavorito(String username, String idCancion) {
         Usuario usuario = usuarios.get(username);
         if (usuario != null) {
@@ -102,17 +176,33 @@ public class UsuarioRepository {
         return false;
     }
 
+    /**
+     * Lista todas las canciones favoritas de un usuario.
+     *
+     * @param username el nombre del usuario
+     * @return colección de canciones favoritas, o lista vacía si el usuario no existe
+     */
     public Collection<Cancion> listarFavoritos(String username) {
         Usuario usuario = usuarios.get(username);
         return usuario != null ? usuario.getListaFavoritos() : List.of();
     }
 
     /**
-     * 🔹 Cargar usuarios desde usuarios.txt
+     * Carga todos los usuarios desde el archivo de persistencia.
+     * <p>
+     * Soporta múltiples formatos para retrocompatibilidad:
+     * <ul>
+     *   <li>username;password;nombre</li>
+     *   <li>username;password;nombre;ROL</li>
+     *   <li>username;password;nombre;ROL;id1,id2,...</li>
+     *   <li>username;password;nombre;id1,id2,... (legacy sin rol)</li>
+     * </ul>
+     * </p>
+     * <p>
+     * Resuelve los IDs de canciones en favoritos a través del CancionRepository inyectado.
+     * Si una canción no existe, se registra una advertencia pero no detiene la carga.
+     * </p>
      */
-    // dentro de UsuarioRepository (asegúrate de tener un campo:
-    // private final CancionRepository cancionRepository; y que esté inyectado)
-
     private void cargarUsuariosDesdeArchivo() {
         File archivo = new File(FILE_PATH);
         if (!archivo.exists()) return;
@@ -182,6 +272,17 @@ public class UsuarioRepository {
         }
     }
 
+    /**
+     * Guarda todos los usuarios en el archivo de persistencia.
+     * <p>
+     * Escribe cada usuario con el formato:
+     * <code>username;password;nombre;ROL;id1,id2,...</code>
+     * </p>
+     * <p>
+     * Si un usuario no tiene favoritos, se escribe un campo vacío al final.
+     * La codificación utilizada es UTF-8.
+     * </p>
+     */
     private void guardarUsuariosEnArchivo() {
         try (BufferedWriter bw = new BufferedWriter(
                 new OutputStreamWriter(new FileOutputStream(FILE_PATH), StandardCharsets.UTF_8))) {

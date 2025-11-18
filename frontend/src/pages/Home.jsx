@@ -869,12 +869,6 @@ export default function Home() {
                             <h2>¡Bienvenido{username ? `, ${username}` : ""}!</h2>
                         </section>
                         <SectionRow
-                            title="Reproducido recientemente"
-                            items={songs.slice(0, 8)}
-                            onPick={setCurrent}
-                            onSimilar={fetchSimilares}
-                        />
-                        <SectionRow
                             title="Catálogo"
                             items={songs}
                             onPick={setCurrent}

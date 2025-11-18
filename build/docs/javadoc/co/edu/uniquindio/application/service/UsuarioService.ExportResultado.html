@@ -30,6 +30,7 @@ loadScripts(document, 'script');</script>
 <li><a href="package-summary.html">Package</a></li>
 <li class="nav-bar-cell1-rev">Class</li>
 <li><a href="package-tree.html">Tree</a></li>
+<li><a href="../../../../../deprecated-list.html">Deprecated</a></li>
 <li><a href="../../../../../index-all.html">Index</a></li>
 <li><a href="../../../../../help-doc.html#class">Help</a></li>
 </ul>
@@ -95,7 +96,11 @@ loadScripts(document, 'script');</script>
 <hr>
 <div class="type-signature"><span class="modifiers">public static class </span><span class="element-name type-name-label">UsuarioService.ExportResultado</span>
 <span class="extends-implements">extends <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a></span></div>
-<div class="block">DTO simple para devolver info del export.</div>
+<div class="block">DTO que encapsula la información de un resultado de exportación.
+ <p>
+ Contiene los bytes del CSV, el nombre sugerido para descarga
+ y la ruta absoluta donde fue guardado.
+ </p></div>
 </section>
 <section class="summary">
 <ul class="summary-list">
@@ -110,13 +115,19 @@ loadScripts(document, 'script');</script>
 <div class="table-header col-last">Description</div>
 <div class="col-first even-row-color"><code>final byte[]</code></div>
 <div class="col-second even-row-color"><code><a href="#csv" class="member-name-link">csv</a></code></div>
-<div class="col-last even-row-color">&nbsp;</div>
+<div class="col-last even-row-color">
+<div class="block">Contenido del CSV en formato bytes.</div>
+</div>
 <div class="col-first odd-row-color"><code>final <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></code></div>
 <div class="col-second odd-row-color"><code><a href="#downloadName" class="member-name-link">downloadName</a></code></div>
-<div class="col-last odd-row-color">&nbsp;</div>
+<div class="col-last odd-row-color">
+<div class="block">Nombre de archivo sugerido para la descarga.</div>
+</div>
 <div class="col-first even-row-color"><code>final <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></code></div>
 <div class="col-second even-row-color"><code><a href="#savedAbsolutePath" class="member-name-link">savedAbsolutePath</a></code></div>
-<div class="col-last even-row-color">&nbsp;</div>
+<div class="col-last even-row-color">
+<div class="block">Ruta absoluta del archivo guardado en el servidor.</div>
+</div>
 </div>
 </section>
 </li>
@@ -131,7 +142,9 @@ loadScripts(document, 'script');</script>
 <div class="col-constructor-name even-row-color"><code><a href="#%3Cinit%3E(byte%5B%5D,java.lang.String,java.lang.String)" class="member-name-link">ExportResultado</a><wbr>(byte[]&nbsp;csv,
  <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;downloadName,
  <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;savedAbsolutePath)</code></div>
-<div class="col-last even-row-color">&nbsp;</div>
+<div class="col-last even-row-color">
+<div class="block">Constructor del DTO.</div>
+</div>
 </div>
 </section>
 </li>
@@ -157,18 +170,21 @@ loadScripts(document, 'script');</script>
 <section class="detail" id="csv">
 <h3>csv</h3>
 <div class="member-signature"><span class="modifiers">public final</span>&nbsp;<span class="return-type">byte[]</span>&nbsp;<span class="element-name">csv</span></div>
+<div class="block">Contenido del CSV en formato bytes.</div>
 </section>
 </li>
 <li>
 <section class="detail" id="downloadName">
 <h3>downloadName</h3>
 <div class="member-signature"><span class="modifiers">public final</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></span>&nbsp;<span class="element-name">downloadName</span></div>
+<div class="block">Nombre de archivo sugerido para la descarga.</div>
 </section>
 </li>
 <li>
 <section class="detail" id="savedAbsolutePath">
 <h3>savedAbsolutePath</h3>
 <div class="member-signature"><span class="modifiers">public final</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></span>&nbsp;<span class="element-name">savedAbsolutePath</span></div>
+<div class="block">Ruta absoluta del archivo guardado en el servidor.</div>
 </section>
 </li>
 </ul>
@@ -185,6 +201,13 @@ loadScripts(document, 'script');</script>
 <div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="element-name">ExportResultado</span><wbr><span class="parameters">(byte[]&nbsp;csv,
  <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;downloadName,
  <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;savedAbsolutePath)</span></div>
+<div class="block">Constructor del DTO.</div>
+<dl class="notes">
+<dt>Parameters:</dt>
+<dd><code>csv</code> - el contenido en bytes</dd>
+<dd><code>downloadName</code> - el nombre para descargar</dd>
+<dd><code>savedAbsolutePath</code> - la ruta absoluta guardada</dd>
+</dl>
 </section>
 </li>
 </ul>

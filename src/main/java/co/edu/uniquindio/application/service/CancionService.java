@@ -15,17 +15,51 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
+/**
+ * Servicio de negocio para la gestión de canciones.
+ * <p>
+ * Proporciona funcionalidades de CRUD, búsqueda avanzada, autocompletado de títulos
+ * y recomendación de canciones similares mediante un grafo de similitud.
+ * </p>
+ * <p>
+ * Características principales:
+ * </p>
+ * <ul>
+ *   <li>Gestión de canciones (agregar, actualizar, eliminar, listar)</li>
+ *   <li>Autocompletado de títulos usando estructura Trie</li>
+ *   <li>Búsqueda avanzada concurrente por múltiples criterios</li>
+ *   <li>Construcción de grafo de similitud entre canciones</li>
+ *   <li>Recomendación de canciones similares y radio personalizada</li>
+ *   <li>Carga masiva de canciones desde archivo CSV</li>
+ * </ul>
+ *
+ * @author SyncUp
+ * @version 1.0
+ */
 @Service
 public class CancionService {
 
     private final CancionRepository cancionRepository;
 
-    // ✅ Soporte para autocompletado con Trie
+    /**
+     * Estructura Trie para autocompletado eficiente de títulos de canciones.
+     */
     private final TrieAutocompletado trieAutocompletado;
 
-    // ✅ Grafo de similitud entre canciones
+    /**
+     * Grafo de similitud que almacena las relaciones de parecido entre canciones
+     * basado en géneros, artistas y otras características.
+     */
     private final GrafoDeSimilitud grafoDeSimilitud;
 
+    /**
+     * Constructor que inicializa el servicio de canciones.
+     * <p>
+     * Carga inicial de títulos en el Trie y construcción del grafo de similitud.
+     * </p>
+     *
+     * @param cancionRepository el repositorio de canciones
+     */
     @Autowired
     public CancionService(CancionRepository cancionRepository) {
         this.cancionRepository = cancionRepository;
@@ -35,9 +69,15 @@ public class CancionService {
         construirGrafoDeSimilitud();   // construye el grafo desde las canciones actuales
     }
 
-    // ✅ Carga inicial de títulos en el Trie
+    /**
+     * Carga inicial de todos los títulos de canciones en la estructura Trie.
+     * <p>
+     * Se ejecuta en la inicialización del servicio para habilitar el autocompletado
+     * desde el primer momento.
+     * </p>
+     */
     private void inicializarTrie() {
-        // Nota: TrieAutocompletado no implementa 'limpiar()' en tu versión actual,
+    // Nota: TrieAutocompletado no implementa 'limpiar()' en tu versión actual,
         // por eso no intentamos llamar a un método inexistente. Insertar duplicados
         // generalmente no rompe la búsqueda por prefijos; si quieres evitar duplicados
         // preferimos hacerlo dentro del propio Trie (recomendado).
@@ -46,25 +86,59 @@ public class CancionService {
         }
     }
 
-    // ✅ Método de autocompletado
+    /**
+     * Obtiene sugerencias de títulos de canciones que coinciden con un prefijo.
+     *
+     * @param prefijo el prefijo a buscar. No debe ser {@code null}
+     * @return lista de títulos de canciones que comienzan con el prefijo especificado
+     */
     public List<String> autocompletarTitulo(String prefijo) {
         return trieAutocompletado.buscarPorPrefijo(prefijo);
     }
 
+    /**
+     * Obtiene todas las canciones del repositorio.
+     *
+     * @return colección de todas las canciones disponibles
+     */
     public Collection<Cancion> listarCanciones() {
         return cancionRepository.listarCanciones();
     }
 
+    /**
+     * Busca una canción por su identificador único.
+     *
+     * @param id el identificador de la canción
+     * @return la canción si existe, {@code null} en caso contrario
+     */
     public Cancion buscarPorId(String id) {
         return cancionRepository.buscarPorId(id);
     }
 
+    /**
+     * Agrega una nueva canción al repositorio.
+     * <p>
+     * También inserta el título en el Trie para autocompletado
+     * y reconstruye el grafo de similitud.
+     * </p>
+     *
+     * @param cancion la canción a agregar. No debe ser {@code null}
+     */
     public void agregarCancion(Cancion cancion) {
         cancionRepository.agregarCancion(cancion);
         trieAutocompletado.insertarPalabra(cancion.getTitulo());
         construirGrafoDeSimilitud(); // reconstruye el grafo al agregar
     }
 
+    /**
+     * Actualiza los datos de una canción existente.
+     * <p>
+     * Si la actualización es exitosa, refresca el Trie y el grafo de similitud.
+     * </p>
+     *
+     * @param cancion la canción con los datos actualizados. No debe ser {@code null}
+     * @return {@code true} si la canción fue actualizada, {@code false} en caso contrario
+     */
     public boolean actualizarCancion(Cancion cancion) {
         boolean actualizado = cancionRepository.actualizarCancion(cancion);
 
@@ -76,6 +150,15 @@ public class CancionService {
         return actualizado;
     }
 
+    /**
+     * Elimina una canción del repositorio por su identificador.
+     * <p>
+     * Si la eliminación es exitosa, refresca el Trie y el grafo de similitud.
+     * </p>
+     *
+     * @param id el identificador de la canción a eliminar
+     * @return {@code true} si la canción fue eliminada, {@code false} en caso contrario
+     */
     public boolean eliminarCancion(String id) {
         boolean eliminado = cancionRepository.eliminarCancion(id);
 
@@ -87,12 +170,31 @@ public class CancionService {
         return eliminado;
     }
 
-    // Búsqueda básica por título o género
+    /**
+     * Busca canciones por filtros básicos (título y género).
+     *
+     * @param titulo el título de la canción a buscar (puede ser parcial)
+     * @param genero el género de la canción
+     * @return lista de canciones que coinciden con los filtros especificados
+     */
     public List<Cancion> buscarPorFiltro(String titulo, String genero) {
         return cancionRepository.buscarPorFiltro(titulo, genero);
     }
 
-    // Búsqueda avanzada concurrente (RF-004 + RF-030)
+    /**
+     * Realiza una búsqueda avanzada y concurrente de canciones por múltiples criterios.
+     * <p>
+     * Implementa los requisitos funcionales RF-004 y RF-030.
+     * </p>
+     *
+     * @param titulo el título de la canción (opcional)
+     * @param artista el artista de la canción (opcional)
+     * @param genero el género de la canción (opcional)
+     * @param anioFrom el año mínimo (opcional)
+     * @param anioTo el año máximo (opcional)
+     * @param op el operador lógico para combinar criterios (AND/OR)
+     * @return lista de canciones que coinciden con los criterios especificados
+     */
     public List<Cancion> buscarAvanzada(String titulo,
                                         String artista,
                                         String genero,
@@ -102,6 +204,23 @@ public class CancionService {
         return cancionRepository.buscarAvanzadaConcurrente(titulo, artista, genero, anioFrom, anioTo, op);
     }
 
+    /**
+     * Carga un lote masivo de canciones desde un archivo CSV.
+     * <p>
+     * El archivo debe tener el siguiente formato (con separador semicolon):
+     * </p>
+     * <ul>
+     *   <li>6 columnas: id;titulo;artista;genero;anio;fileName</li>
+     *   <li>7 columnas: id;titulo;artista;genero;anio;duracion;fileName</li>
+     * </ul>
+     * <p>
+     * Líneas en blanco o que comienzan con '#' son ignoradas.
+     * </p>
+     *
+     * @param archivo el archivo MultipartFile con las canciones a cargar
+     * @return el número de canciones cargadas exitosamente
+     * @throws Exception si ocurre un error al procesar el archivo
+     */
     public int cargarCancionesMasivamente(MultipartFile archivo) throws Exception {
         int contador = 0;
 
@@ -169,17 +288,41 @@ public class CancionService {
     }
 
 
-    // Construcción y consulta del grafo de similitud
+    /**
+     * Construye o reconstruye el grafo de similitud entre canciones.
+     * <p>
+     * Utiliza todas las canciones del repositorio para establecer relaciones
+     * de similitud basadas en criterios como género, artista, etc.
+     * </p>
+     */
     public void construirGrafoDeSimilitud() {
         grafoDeSimilitud.construirGrafo(cancionRepository.listarCanciones());
     }
 
+    /**
+     * Obtiene un conjunto de canciones similares a una canción especificada.
+     *
+     * @param idCancion el identificador de la canción de origen
+     * @param limite el número máximo de canciones similares a retornar
+     * @return lista de canciones similares, o lista vacía si la canción no existe
+     */
     public List<Cancion> obtenerCancionesSimilares(String idCancion, int limite) {
         Cancion origen = cancionRepository.buscarPorId(idCancion);
         if (origen == null) return List.of();
         return grafoDeSimilitud.obtenerSimilares(origen, limite);
     }
 
+    /**
+     * Inicia una estación de radio personalizada basada en una canción.
+     * <p>
+     * Retorna la canción original seguida de una lista de canciones similares
+     * para crear una cola de reproducción personalizada.
+     * </p>
+     *
+     * @param idCancion el identificador de la canción a partir de la cual iniciar la radio
+     * @param limite el número máximo de canciones similares a incluir
+     * @return lista de canciones con la canción original al inicio, o lista vacía si la canción no existe
+     */
     public List<Cancion> iniciarRadio(String idCancion, int limite) {
         Cancion origen = cancionRepository.buscarPorId(idCancion);
         if (origen == null) return List.of();

@@ -30,6 +30,7 @@ loadScripts(document, 'script');</script>
 <li><a href="package-summary.html">Package</a></li>
 <li class="nav-bar-cell1-rev">Class</li>
 <li><a href="package-tree.html">Tree</a></li>
+<li><a href="../../../../../deprecated-list.html">Deprecated</a></li>
 <li><a href="../../../../../index-all.html">Index</a></li>
 <li><a href="../../../../../help-doc.html#class">Help</a></li>
 </ul>
@@ -94,6 +95,20 @@ loadScripts(document, 'script');</script>
 @CrossOrigin(origins="*")
 </span><span class="modifiers">public class </span><span class="element-name type-name-label">MetricasController</span>
 <span class="extends-implements">extends <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a></span></div>
+<div class="block">Controlador REST para la gestión y consulta de métricas del sistema.
+ <p>
+ Proporciona endpoints para analizar datos de exportación, favoritos y actividad de usuarios.
+ Todos los endpoints requieren autenticación mediante JWT token.
+ </p>
+ <p>
+ Métricas disponibles:
+ </p>
+ <ul>
+   <li>Descargas de favoritos por día</li>
+   <li>Top usuarios exportadores</li>
+   <li>Top artistas por favoritos</li>
+   <li>Top géneros por favoritos</li>
+ </ul></div>
 </section>
 <section class="summary">
 <ul class="summary-list">
@@ -107,7 +122,9 @@ loadScripts(document, 'script');</script>
 <div class="table-header col-last">Description</div>
 <div class="col-constructor-name even-row-color"><code><a href="#%3Cinit%3E(co.edu.uniquindio.application.service.MetricasService,co.edu.uniquindio.application.security.JwtUtil)" class="member-name-link">MetricasController</a><wbr>(<a href="../service/MetricasService.html" title="class in co.edu.uniquindio.application.service">MetricasService</a>&nbsp;metricasService,
  <a href="../security/JwtUtil.html" title="class in co.edu.uniquindio.application.security">JwtUtil</a>&nbsp;jwtUtil)</code></div>
-<div class="col-last even-row-color">&nbsp;</div>
+<div class="col-last even-row-color">
+<div class="block">Constructor que inyecta las dependencias de servicio y seguridad.</div>
+</div>
 </div>
 </section>
 </li>
@@ -124,19 +141,27 @@ loadScripts(document, 'script');</script>
 <div class="table-header col-last">Description</div>
 <div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>org.springframework.http.ResponseEntity<wbr>&lt;?&gt;</code></div>
 <div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#descargasFavoritosPorDia(java.lang.String)" class="member-name-link">descargasFavoritosPorDia</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;authHeader)</code></div>
-<div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">&nbsp;</div>
+<div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
+<div class="block">Obtiene el conteo de descargas de favoritos agrupadas por día.</div>
+</div>
 <div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>org.springframework.http.ResponseEntity<wbr>&lt;?&gt;</code></div>
 <div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#topArtistas(int,java.lang.String)" class="member-name-link">topArtistas</a><wbr>(int&nbsp;limit,
  <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;authHeader)</code></div>
-<div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">&nbsp;</div>
+<div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
+<div class="block">Obtiene el ranking de los artistas más favoritos de todos los usuarios.</div>
+</div>
 <div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>org.springframework.http.ResponseEntity<wbr>&lt;?&gt;</code></div>
 <div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#topGeneros(int,java.lang.String)" class="member-name-link">topGeneros</a><wbr>(int&nbsp;limit,
  <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;authHeader)</code></div>
-<div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">&nbsp;</div>
+<div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
+<div class="block">Obtiene el ranking de los géneros musicales más favoritos de todos los usuarios.</div>
+</div>
 <div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>org.springframework.http.ResponseEntity<wbr>&lt;?&gt;</code></div>
 <div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#topUsuariosExportadores(int,java.lang.String)" class="member-name-link">topUsuariosExportadores</a><wbr>(int&nbsp;limit,
  <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;authHeader)</code></div>
-<div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">&nbsp;</div>
+<div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
+<div class="block">Obtiene el ranking de los usuarios que más han exportado favoritos.</div>
+</div>
 </div>
 </div>
 </div>
@@ -160,6 +185,12 @@ loadScripts(document, 'script');</script>
 <div class="member-signature"><span class="annotations">@Autowired
 </span><span class="modifiers">public</span>&nbsp;<span class="element-name">MetricasController</span><wbr><span class="parameters">(<a href="../service/MetricasService.html" title="class in co.edu.uniquindio.application.service">MetricasService</a>&nbsp;metricasService,
  <a href="../security/JwtUtil.html" title="class in co.edu.uniquindio.application.security">JwtUtil</a>&nbsp;jwtUtil)</span></div>
+<div class="block">Constructor que inyecta las dependencias de servicio y seguridad.</div>
+<dl class="notes">
+<dt>Parameters:</dt>
+<dd><code>metricasService</code> - el servicio de métricas</dd>
+<dd><code>jwtUtil</code> - la utilidad JWT para validación de tokens</dd>
+</dl>
 </section>
 </li>
 </ul>
@@ -176,6 +207,17 @@ loadScripts(document, 'script');</script>
 <div class="member-signature"><span class="annotations">@GetMapping("/descargas-favoritos/dia")
 </span><span class="modifiers">public</span>&nbsp;<span class="return-type">org.springframework.http.ResponseEntity&lt;?&gt;</span>&nbsp;<span class="element-name">descargasFavoritosPorDia</span><wbr><span class="parameters">(@RequestHeader(value="Authorization",required=false)
  <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;authHeader)</span></div>
+<div class="block">Obtiene el conteo de descargas de favoritos agrupadas por día.
+ <p>
+ Requiere autenticación mediante JWT token en el header Authorization.
+ Retorna un mapa con fechas como clave y cantidad de descargas como valor.
+ </p></div>
+<dl class="notes">
+<dt>Parameters:</dt>
+<dd><code>authHeader</code> - el header de autorización con el JWT token</dd>
+<dt>Returns:</dt>
+<dd>respuesta con el mapa de descargas por día, o error 401/403 si falta o es inválido el token</dd>
+</dl>
 </section>
 </li>
 <li>
@@ -186,6 +228,18 @@ loadScripts(document, 'script');</script>
  int&nbsp;limit,
  @RequestHeader(value="Authorization",required=false)
  <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;authHeader)</span></div>
+<div class="block">Obtiene el ranking de los usuarios que más han exportado favoritos.
+ <p>
+ Requiere autenticación mediante JWT token. Retorna una lista de objetos con
+ username y cantidad total de exportaciones.
+ </p></div>
+<dl class="notes">
+<dt>Parameters:</dt>
+<dd><code>limit</code> - la cantidad máxima de usuarios a retornar (por defecto 5)</dd>
+<dd><code>authHeader</code> - el header de autorización con el JWT token</dd>
+<dt>Returns:</dt>
+<dd>respuesta con la lista de top usuarios exportadores, o error 401/403 si falta o es inválido el token</dd>
+</dl>
 </section>
 </li>
 <li>
@@ -196,6 +250,18 @@ loadScripts(document, 'script');</script>
  int&nbsp;limit,
  @RequestHeader(value="Authorization",required=false)
  <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;authHeader)</span></div>
+<div class="block">Obtiene el ranking de los artistas más favoritos de todos los usuarios.
+ <p>
+ Requiere autenticación mediante JWT token. Analiza los archivos CSV de favoritos
+ para contar apariciones de artistas.
+ </p></div>
+<dl class="notes">
+<dt>Parameters:</dt>
+<dd><code>limit</code> - la cantidad máxima de artistas a retornar (por defecto 10)</dd>
+<dd><code>authHeader</code> - el header de autorización con el JWT token</dd>
+<dt>Returns:</dt>
+<dd>respuesta con el ranking de artistas, o error 401/403 si falta o es inválido el token</dd>
+</dl>
 </section>
 </li>
 <li>
@@ -206,6 +272,18 @@ loadScripts(document, 'script');</script>
  int&nbsp;limit,
  @RequestHeader(value="Authorization",required=false)
  <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;authHeader)</span></div>
+<div class="block">Obtiene el ranking de los géneros musicales más favoritos de todos los usuarios.
+ <p>
+ Requiere autenticación mediante JWT token. Analiza los archivos CSV de favoritos
+ para contar apariciones de géneros.
+ </p></div>
+<dl class="notes">
+<dt>Parameters:</dt>
+<dd><code>limit</code> - la cantidad máxima de géneros a retornar (por defecto 10)</dd>
+<dd><code>authHeader</code> - el header de autorización con el JWT token</dd>
+<dt>Returns:</dt>
+<dd>respuesta con el ranking de géneros, o error 401/403 si falta o es inválido el token</dd>
+</dl>
 </section>
 </li>
 </ul>

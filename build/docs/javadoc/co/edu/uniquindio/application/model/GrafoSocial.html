@@ -30,6 +30,7 @@ loadScripts(document, 'script');</script>
 <li><a href="package-summary.html">Package</a></li>
 <li class="nav-bar-cell1-rev">Class</li>
 <li><a href="package-tree.html">Tree</a></li>
+<li><a href="../../../../../deprecated-list.html">Deprecated</a></li>
 <li><a href="../../../../../index-all.html">Index</a></li>
 <li><a href="../../../../../help-doc.html#class">Help</a></li>
 </ul>
@@ -91,8 +92,20 @@ loadScripts(document, 'script');</script>
 <hr>
 <div class="type-signature"><span class="modifiers">public class </span><span class="element-name type-name-label">GrafoSocial</span>
 <span class="extends-implements">extends <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a></span></div>
-<div class="block">Grafo no dirigido que modela las relaciones entre usuarios.
- Permite seguir/dejar de seguir y obtener sugerencias mediante BFS.</div>
+<div class="block">Grafo no dirigido que modela las relaciones sociales entre usuarios.
+ <p>
+ Permite gestionar conexiones bidireccionales entre usuarios (seguir/dejar de seguir),
+ obtener amigos de un usuario y generar sugerencias de amistad mediante búsqueda en anchura (BFS).
+ </p>
+ <p>
+ Características:
+ </p>
+ <ul>
+   <li>Operaciones de seguir/dejar de seguir con validación</li>
+   <li>Sugerencias de amigos mediante BFS (amigos de amigos no seguidos)</li>
+   <li>Persistencia en archivo de texto</li>
+   <li>Eliminación completa de usuarios y sus relaciones</li>
+ </ul></div>
 </section>
 <section class="summary">
 <ul class="summary-list">
@@ -123,43 +136,50 @@ loadScripts(document, 'script');</script>
 <div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>void</code></div>
 <div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#agregarUsuario(java.lang.String)" class="member-name-link">agregarUsuario</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;username)</code></div>
 <div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
-<div class="block">Agrega un nuevo usuario al grafo (sin conexiones iniciales).</div>
+<div class="block">Agrega un nuevo usuario al grafo sin conexiones iniciales.</div>
 </div>
 <div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>void</code></div>
 <div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#cargarRelacionesDesdeArchivo(java.lang.String)" class="member-name-link">cargarRelacionesDesdeArchivo</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;rutaArchivo)</code></div>
 <div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
-<div class="block">Carga las relaciones desde un archivo existente.</div>
+<div class="block">Carga las relaciones del grafo desde un archivo de persistencia.</div>
 </div>
 <div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>boolean</code></div>
 <div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#dejarDeSeguir(java.lang.String,java.lang.String)" class="member-name-link">dejarDeSeguir</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;origen,
  <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;destino)</code></div>
 <div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
-<div class="block">Elimina la conexión entre dos usuarios (dejar de seguir).</div>
+<div class="block">Elimina la conexión bidireccional entre dos usuarios (dejar de seguir).</div>
 </div>
-<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>void</code></div>
-<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#guardarRelacionesEnArchivo(java.lang.String)" class="member-name-link">guardarRelacionesEnArchivo</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;rutaArchivo)</code></div>
+<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>boolean</code></div>
+<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#eliminarUsuario(java.lang.String)" class="member-name-link">eliminarUsuario</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;username)</code></div>
 <div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
-<div class="block">Guarda todas las relaciones en un archivo de texto.</div>
+<div class="block">Elimina un usuario completamente del grafo y todas sus conexiones.</div>
 </div>
 <div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>void</code></div>
-<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#imprimirRelaciones()" class="member-name-link">imprimirRelaciones</a>()</code></div>
-<div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">&nbsp;</div>
-<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/util/Set.html" title="class or interface in java.util" class="external-link">Set</a><wbr>&lt;<a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&gt;</code></div>
-<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#obtenerAmigos(java.lang.String)" class="member-name-link">obtenerAmigos</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;username)</code></div>
-<div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
-<div class="block">Obtiene los usuarios seguidos por un usuario.</div>
-</div>
-<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>boolean</code></div>
-<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#seguirUsuario(java.lang.String,java.lang.String)" class="member-name-link">seguirUsuario</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;origen,
- <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;destino)</code></div>
+<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#guardarRelacionesEnArchivo(java.lang.String)" class="member-name-link">guardarRelacionesEnArchivo</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;rutaArchivo)</code></div>
 <div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
-<div class="block">Crea una conexión bidireccional entre dos usuarios.</div>
+<div class="block">Guarda todas las relaciones del grafo en un archivo de texto.</div>
 </div>
-<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/util/List.html" title="class or interface in java.util" class="external-link">List</a><wbr>&lt;<a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&gt;</code></div>
-<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#sugerirUsuarios(java.lang.String,int)" class="member-name-link">sugerirUsuarios</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;username,
- int&nbsp;limite)</code></div>
+<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>void</code></div>
+<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#imprimirRelaciones()" class="member-name-link">imprimirRelaciones</a>()</code></div>
 <div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
-<div class="block">Sugerencias de amistad usando BFS (amigos de amigos no seguidos aún).</div>
+<div class="block">Método auxiliar para imprimir el estado actual del grafo en consola.</div>
+</div>
+<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/util/Set.html" title="class or interface in java.util" class="external-link">Set</a><wbr>&lt;<a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&gt;</code></div>
+<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#obtenerAmigos(java.lang.String)" class="member-name-link">obtenerAmigos</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;username)</code></div>
+<div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
+<div class="block">Obtiene el conjunto de usuarios seguidos por un usuario.</div>
+</div>
+<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>boolean</code></div>
+<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#seguirUsuario(java.lang.String,java.lang.String)" class="member-name-link">seguirUsuario</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;origen,
+ <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;destino)</code></div>
+<div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
+<div class="block">Crea una conexión bidireccional entre dos usuarios (seguir).</div>
+</div>
+<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/util/List.html" title="class or interface in java.util" class="external-link">List</a><wbr>&lt;<a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&gt;</code></div>
+<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#sugerirUsuarios(java.lang.String,int)" class="member-name-link">sugerirUsuarios</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;username,
+ int&nbsp;limite)</code></div>
+<div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
+<div class="block">Genera sugerencias de amistad para un usuario mediante búsqueda en anchura (BFS).</div>
 </div>
 </div>
 </div>
@@ -196,7 +216,14 @@ loadScripts(document, 'script');</script>
 <section class="detail" id="agregarUsuario(java.lang.String)">
 <h3>agregarUsuario</h3>
 <div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">void</span>&nbsp;<span class="element-name">agregarUsuario</span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;username)</span></div>
-<div class="block">Agrega un nuevo usuario al grafo (sin conexiones iniciales).</div>
+<div class="block">Agrega un nuevo usuario al grafo sin conexiones iniciales.
+ <p>
+ Si el usuario ya existe, no realiza cambios.
+ </p></div>
+<dl class="notes">
+<dt>Parameters:</dt>
+<dd><code>username</code> - el nombre del usuario a agregar</dd>
+</dl>
 </section>
 </li>
 <li>
@@ -204,7 +231,22 @@ loadScripts(document, 'script');</script>
 <h3>seguirUsuario</h3>
 <div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">boolean</span>&nbsp;<span class="element-name">seguirUsuario</span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;origen,
  <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;destino)</span></div>
-<div class="block">Crea una conexión bidireccional entre dos usuarios.</div>
+<div class="block">Crea una conexión bidireccional entre dos usuarios (seguir).
+ <p>
+ Validaciones:
+ <ul>
+   <li>Un usuario no puede seguirse a sí mismo</li>
+   <li>Ambos usuarios deben existir en el grafo</li>
+   <li>Si ya existe la relación, devuelve <code>true</code> sin cambios</li>
+ </ul>
+ </p></div>
+<dl class="notes">
+<dt>Parameters:</dt>
+<dd><code>origen</code> - el usuario que sigue</dd>
+<dd><code>destino</code> - el usuario a seguir</dd>
+<dt>Returns:</dt>
+<dd><code>true</code> si la relación se creó o ya existía, <code>false</code> si falló la validación</dd>
+</dl>
 </section>
 </li>
 <li>
@@ -212,14 +254,35 @@ loadScripts(document, 'script');</script>
 <h3>dejarDeSeguir</h3>
 <div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">boolean</span>&nbsp;<span class="element-name">dejarDeSeguir</span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;origen,
  <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;destino)</span></div>
-<div class="block">Elimina la conexión entre dos usuarios (dejar de seguir).</div>
+<div class="block">Elimina la conexión bidireccional entre dos usuarios (dejar de seguir).
+ <p>
+ Validaciones:
+ <ul>
+   <li>Un usuario no puede dejar de seguirse a sí mismo</li>
+   <li>Ambos usuarios deben existir en el grafo</li>
+   <li>Debe existir una relación previa para poder eliminarla</li>
+ </ul>
+ </p></div>
+<dl class="notes">
+<dt>Parameters:</dt>
+<dd><code>origen</code> - el usuario que deja de seguir</dd>
+<dd><code>destino</code> - el usuario al que se deja de seguir</dd>
+<dt>Returns:</dt>
+<dd><code>true</code> si la relación fue eliminada exitosamente, <code>false</code> si falló la validación</dd>
+</dl>
 </section>
 </li>
 <li>
 <section class="detail" id="obtenerAmigos(java.lang.String)">
 <h3>obtenerAmigos</h3>
 <div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/util/Set.html" title="class or interface in java.util" class="external-link">Set</a>&lt;<a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&gt;</span>&nbsp;<span class="element-name">obtenerAmigos</span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;username)</span></div>
-<div class="block">Obtiene los usuarios seguidos por un usuario.</div>
+<div class="block">Obtiene el conjunto de usuarios seguidos por un usuario.</div>
+<dl class="notes">
+<dt>Parameters:</dt>
+<dd><code>username</code> - el nombre del usuario</dd>
+<dt>Returns:</dt>
+<dd>conjunto no modificable de amigos, o conjunto vacío si el usuario no existe</dd>
+</dl>
 </section>
 </li>
 <li>
@@ -227,29 +290,86 @@ loadScripts(document, 'script');</script>
 <h3>sugerirUsuarios</h3>
 <div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/util/List.html" title="class or interface in java.util" class="external-link">List</a>&lt;<a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&gt;</span>&nbsp;<span class="element-name">sugerirUsuarios</span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;username,
  int&nbsp;limite)</span></div>
-<div class="block">Sugerencias de amistad usando BFS (amigos de amigos no seguidos aún).</div>
+<div class="block">Genera sugerencias de amistad para un usuario mediante búsqueda en anchura (BFS).
+ <p>
+ Busca usuarios que estén a dos niveles de distancia (amigos de amigos) y que
+ el usuario no sigue actualmente. El resultado se limita a una cantidad especificada.
+ </p>
+ <p>
+ Complejidad: O(V + E) donde V es la cantidad de usuarios y E es la cantidad de relaciones.
+ </p></div>
+<dl class="notes">
+<dt>Parameters:</dt>
+<dd><code>username</code> - el usuario para el cual generar sugerencias</dd>
+<dd><code>limite</code> - la cantidad máxima de sugerencias a retornar</dd>
+<dt>Returns:</dt>
+<dd>lista de usuarios sugeridos, o lista vacía si el usuario no existe</dd>
+</dl>
+</section>
+</li>
+<li>
+<section class="detail" id="eliminarUsuario(java.lang.String)">
+<h3>eliminarUsuario</h3>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">boolean</span>&nbsp;<span class="element-name">eliminarUsuario</span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;username)</span></div>
+<div class="block">Elimina un usuario completamente del grafo y todas sus conexiones.
+ <p>
+ Busca el usuario en el mapa de relaciones y lo elimina junto con todas
+ las referencias que otros usuarios tienen hacia él.
+ </p></div>
+<dl class="notes">
+<dt>Parameters:</dt>
+<dd><code>username</code> - el nombre del usuario a eliminar</dd>
+<dt>Returns:</dt>
+<dd><code>true</code> si el usuario existía y fue eliminado, <code>false</code> si no estaba presente</dd>
+</dl>
 </section>
 </li>
 <li>
 <section class="detail" id="guardarRelacionesEnArchivo(java.lang.String)">
 <h3>guardarRelacionesEnArchivo</h3>
 <div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">void</span>&nbsp;<span class="element-name">guardarRelacionesEnArchivo</span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;rutaArchivo)</span></div>
-<div class="block">Guarda todas las relaciones en un archivo de texto.
- Cada línea representa una relación bidireccional: usuario1;usuario2</div>
+<div class="block">Guarda todas las relaciones del grafo en un archivo de texto.
+ <p>
+ Cada línea representa una relación unidireccional en formato:
+ <code>usuario1;usuario2</code>
+ </p>
+ <p>
+ Si ocurre un error de I/O, registra un mensaje de error pero no lanza excepción.
+ </p></div>
+<dl class="notes">
+<dt>Parameters:</dt>
+<dd><code>rutaArchivo</code> - la ruta del archivo donde guardar las relaciones</dd>
+</dl>
 </section>
 </li>
 <li>
 <section class="detail" id="cargarRelacionesDesdeArchivo(java.lang.String)">
 <h3>cargarRelacionesDesdeArchivo</h3>
 <div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">void</span>&nbsp;<span class="element-name">cargarRelacionesDesdeArchivo</span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;rutaArchivo)</span></div>
-<div class="block">Carga las relaciones desde un archivo existente.
- Si el archivo no existe, no hace nada.</div>
+<div class="block">Carga las relaciones del grafo desde un archivo de persistencia.
+ <p>
+ Lee líneas del archivo en formato <code>usuario1;usuario2</code> y reconstruye
+ el grafo. Crea automáticamente los usuarios si no existen.
+ Si el archivo no existe, no realiza cambios.
+ </p>
+ <p>
+ Si ocurre un error de I/O, registra un mensaje de error pero no lanza excepción.
+ </p></div>
+<dl class="notes">
+<dt>Parameters:</dt>
+<dd><code>rutaArchivo</code> - la ruta del archivo a cargar</dd>
+</dl>
 </section>
 </li>
 <li>
 <section class="detail" id="imprimirRelaciones()">
 <h3>imprimirRelaciones</h3>
 <div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">void</span>&nbsp;<span class="element-name">imprimirRelaciones</span>()</div>
+<div class="block">Método auxiliar para imprimir el estado actual del grafo en consola.
+ <p>
+ Útil para depuración. Imprime cada usuario y sus amigos en el formato:
+ <code>usuario -&gt; [amigo1, amigo2, ...]</code>
+ </p></div>
 </section>
 </li>
 </ul>

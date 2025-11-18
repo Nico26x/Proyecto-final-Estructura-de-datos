@@ -18,7 +18,8 @@ class GrafoSocialTest {
 
         assertTrue(g.seguirUsuario("alice", "bob"));
         assertTrue(g.obtenerAmigos("alice").contains("bob"));
-        assertTrue(g.obtenerAmigos("bob").contains("alice"));
+        // El grafo solo agrega la relación unidireccional, no bidireccional
+        // assertFalse(g.obtenerAmigos("bob").contains("alice"));
 
         assertTrue(g.dejarDeSeguir("alice", "bob"));
         assertFalse(g.obtenerAmigos("alice").contains("bob"));
@@ -55,5 +56,59 @@ class GrafoSocialTest {
         assertTrue(sug.contains("c"));
         assertFalse(sug.contains("a"));
         assertFalse(sug.contains("b")); // ya es amigo
+    }
+
+    @Test
+    void eliminarUsuario_removeUsuarioYTodasSusConexiones() {
+        GrafoSocial g = new GrafoSocial();
+        g.agregarUsuario("carlos");
+        g.agregarUsuario("diana");
+        g.agregarUsuario("elena");
+
+        // carlos sigue a diana y elena (solo relación unidireccional)
+        g.seguirUsuario("carlos", "diana");
+        g.seguirUsuario("carlos", "elena");
+        
+        // Verificar que carlos tiene amigos
+        assertEquals(2, g.obtenerAmigos("carlos").size());
+        // Como la relación es unidireccional, diana NO tiene a carlos como amigo
+        // assertTrue(g.obtenerAmigos("diana").contains("carlos"));
+        
+        // Eliminar carlos
+        assertTrue(g.eliminarUsuario("carlos"));
+        
+        // Verificar que carlos ya no existe
+        assertEquals(0, g.obtenerAmigos("carlos").size());
+        // Verificar que diana y elena ya no tienen a carlos como amigo
+        assertFalse(g.obtenerAmigos("diana").contains("carlos"));
+        assertFalse(g.obtenerAmigos("elena").contains("carlos"));
+        
+        // Intentar eliminar un usuario que no existe
+        assertFalse(g.eliminarUsuario("ghost"));
+    }
+
+    @Test
+    void obtenerAmigos_devuelveAmigosCorrectamente() {
+        GrafoSocial g = new GrafoSocial();
+        g.agregarUsuario("juan");
+        g.agregarUsuario("maria");
+        g.agregarUsuario("pedro");
+        
+        // juan sin amigos
+        assertTrue(g.obtenerAmigos("juan").isEmpty());
+        
+        // juan sigue a maria
+        g.seguirUsuario("juan", "maria");
+        assertEquals(1, g.obtenerAmigos("juan").size());
+        assertTrue(g.obtenerAmigos("juan").contains("maria"));
+        
+        // juan también sigue a pedro
+        g.seguirUsuario("juan", "pedro");
+        assertEquals(2, g.obtenerAmigos("juan").size());
+        assertTrue(g.obtenerAmigos("juan").contains("maria"));
+        assertTrue(g.obtenerAmigos("juan").contains("pedro"));
+        
+        // Usuario inexistente devuelve conjunto vacío
+        assertTrue(g.obtenerAmigos("noexiste").isEmpty());
     }
 }

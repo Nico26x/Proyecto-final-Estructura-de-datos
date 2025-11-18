@@ -11,34 +11,74 @@ import java.util.List;
 
 /**
  * Controlador REST para la gestión del catálogo de canciones.
- * Cumple RF-010 (CRUD) y RF-003 (búsqueda por título/género).
+ * <p>
+ * Proporciona endpoints para operaciones CRUD, búsqueda, recomendaciones
+ * y gestión de metadatos de canciones.
+ * </p>
+ * <p>
+ * Implementa:
+ * <ul>
+ *   <li>RF-010: CRUD de canciones</li>
+ *   <li>RF-003: Búsqueda por título y género</li>
+ *   <li>RF-004: Búsqueda avanzada con filtros</li>
+ *   <li>RF-030: Búsqueda concurrente</li>
+ *   <li>Autocompletado de títulos</li>
+ *   <li>Canciones similares y radio</li>
+ * </ul>
+ * </p>
  *
- * 👉 IMPORTANTE: ahora el JSON incluye "fileName" (nombre del MP3 en el front/public/music).
+ * @author SyncUp
+ * @version 1.0
  */
 @RestController
 @RequestMapping("/api/canciones")
-@CrossOrigin(origins = "http://localhost:3000") // Permite peticiones desde React
+@CrossOrigin(origins = "http://localhost:3000")
 public class CancionController {
 
+    /**
+     * Servicio de gestión de canciones inyectado.
+     */
     private final CancionService cancionService;
 
+    /**
+     * Constructor que inyecta el servicio de canciones.
+     *
+     * @param cancionService el servicio de canciones
+     */
     public CancionController(CancionService cancionService) {
         this.cancionService = cancionService;
     }
 
-    // 📋 Obtener todas las canciones
+    /**
+     * Lista todas las canciones del catálogo.
+     *
+     * @return colección de todas las canciones
+     */
     @GetMapping
     public Collection<Cancion> listarCanciones() {
         return cancionService.listarCanciones();
     }
 
-    // 🔎 Buscar una canción por ID
+    /**
+     * Obtiene una canción específica por su identificador.
+     *
+     * @param id el identificador de la canción
+     * @return la canción si existe, {@code null} en caso contrario
+     */
     @GetMapping("/{id}")
     public Cancion obtenerCancion(@PathVariable String id) {
         return cancionService.buscarPorId(id);
     }
 
-    // ➕ Agregar una nueva canción (con validación)
+    /**
+     * Agrega una nueva canción al catálogo.
+     * <p>
+     * Valida que no exista otra canción con el mismo ID antes de agregar.
+     * </p>
+     *
+     * @param nuevaCancion la canción a agregar
+     * @return mensaje de confirmación o advertencia
+     */
     @PostMapping
     public String agregarCancion(@RequestBody Cancion nuevaCancion) {
         if (cancionService.buscarPorId(nuevaCancion.getId()) != null) {
@@ -48,7 +88,16 @@ public class CancionController {
         return "✅ Canción agregada correctamente.";
     }
 
-    // ✏️ Actualizar una canción existente
+    /**
+     * Actualiza una canción existente.
+     * <p>
+     * Modifica todos los atributos de la canción identificada por el ID de la ruta.
+     * </p>
+     *
+     * @param id el identificador de la canción a actualizar
+     * @param cancionActualizada los nuevos datos de la canción
+     * @return mensaje de confirmación o error
+     */
     @PutMapping("/{id}")
     public String actualizarCancion(@PathVariable String id, @RequestBody Cancion cancionActualizada) {
         cancionActualizada.setId(id);
@@ -58,7 +107,12 @@ public class CancionController {
                 : "❌ No se encontró la canción con ID " + id;
     }
 
-    // 🗑️ Eliminar una canción por ID
+    /**
+     * Elimina una canción del catálogo.
+     *
+     * @param id el identificador de la canción a eliminar
+     * @return mensaje de confirmación o error
+     */
     @DeleteMapping("/{id}")
     public String eliminarCancion(@PathVariable String id) {
         boolean eliminada = cancionService.eliminarCancion(id);
@@ -67,11 +121,21 @@ public class CancionController {
                 : "❌ No se encontró la canción con ID " + id;
     }
 
-    // 🎵 Buscar canciones por título o género
-    // Ejemplos:
-    //   /api/canciones/buscar?titulo=Imagine
-    //   /api/canciones/buscar?genero=Rock
-    //   /api/canciones/buscar?titulo=Love&genero=Pop
+    /**
+     * Realiza una búsqueda simple de canciones por título y/o género.
+     * <p>
+     * Ambos parámetros son opcionales. Ejemplos:
+     * <ul>
+     *   <li>{@code GET /api/canciones/buscar?titulo=Imagine}</li>
+     *   <li>{@code GET /api/canciones/buscar?genero=Rock}</li>
+     *   <li>{@code GET /api/canciones/buscar?titulo=Love&genero=Pop}</li>
+     * </ul>
+     * </p>
+     *
+     * @param titulo el título o parte del título a buscar (opcional)
+     * @param genero el género o parte del género a buscar (opcional)
+     * @return lista de canciones que coinciden con los criterios
+     */
     @GetMapping("/buscar")
     public List<Cancion> buscarCanciones(
             @RequestParam(required = false) String titulo,
@@ -80,9 +144,20 @@ public class CancionController {
     }
 
     /**
-     * Búsqueda avanzada concurrente
+     * Realiza una búsqueda avanzada y concurrente de canciones con múltiples criterios.
+     * <p>
+     * Implementa RF-004 y RF-030. Todos los parámetros son opcionales.
      * Ejemplo:
      * {@code GET /api/canciones/buscar/avanzado?titulo=love&artista=queen&genero=rock&anioFrom=1970&anioTo=1990&op=OR}
+     * </p>
+     *
+     * @param titulo título o parte del título (opcional)
+     * @param artista artista o parte del nombre (opcional)
+     * @param genero género o parte del género (opcional)
+     * @param anioFrom año inicial del rango (opcional)
+     * @param anioTo año final del rango (opcional)
+     * @param op operador de combinación: "AND" o "OR" (por defecto "AND")
+     * @return lista de canciones que cumplen los criterios
      */
     @GetMapping("/buscar/avanzado")
     public List<Cancion> buscarAvanzado(
@@ -96,6 +171,15 @@ public class CancionController {
         return cancionService.buscarAvanzada(titulo, artista, genero, anioFrom, anioTo, op);
     }
 
+    /**
+     * Carga un lote de canciones desde un archivo CSV/TXT.
+     * <p>
+     * El archivo debe contener líneas con 6 o 7 campos separados por punto y coma.
+     * </p>
+     *
+     * @param archivo el archivo MultipartFile a procesar
+     * @return mensaje con la cantidad de canciones cargadas o error
+     */
     @PostMapping("/cargar")
     public String cargarCancionesMasivamente(@RequestParam("archivo") MultipartFile archivo) {
         try {
@@ -106,11 +190,27 @@ public class CancionController {
         }
     }
 
+    /**
+     * Genera sugerencias de autocompletado basadas en un prefijo de título.
+     *
+     * @param prefijo el prefijo para autocompletar
+     * @return lista de títulos que comienzan con el prefijo
+     */
     @GetMapping("/autocompletar")
     public List<String> autocompletar(@RequestParam String prefijo) {
         return cancionService.autocompletarTitulo(prefijo);
     }
 
+    /**
+     * Obtiene las canciones más similares a una canción específica.
+     * <p>
+     * La similitud se calcula basándose en género, artista y año.
+     * </p>
+     *
+     * @param id el identificador de la canción
+     * @param limite la cantidad máxima de canciones similares a retornar (por defecto 5)
+     * @return respuesta con la lista de canciones similares
+     */
     @GetMapping("/{id}/similares")
     public ResponseEntity<List<Cancion>> obtenerSimilares(@PathVariable String id,
                                                           @RequestParam(defaultValue = "5") int limite) {
@@ -118,6 +218,16 @@ public class CancionController {
         return ResponseEntity.ok(similares);
     }
 
+    /**
+     * Inicia una radio personalizada a partir de una canción.
+     * <p>
+     * Genera una cola de reproducción con canciones similares.
+     * </p>
+     *
+     * @param id el identificador de la canción semilla
+     * @param limite la cantidad máxima de canciones para la cola (por defecto 10)
+     * @return respuesta con la lista de canciones para la radio
+     */
     @GetMapping("/{id}/radio")
     public ResponseEntity<List<Cancion>> iniciarRadio(
             @PathVariable String id,
@@ -127,7 +237,17 @@ public class CancionController {
         return ResponseEntity.ok(cola);
     }
 
-    // 👇 NUEVO: Actualizar SOLO el fileName de una canción (útil para enlazar al MP3 del front)
+    /**
+     * Actualiza solamente el nombre del archivo MP3 asociado a una canción.
+     * <p>
+     * Útil para enlazar la canción con el archivo de audio ubicado en
+     * {@code public/music} del frontend.
+     * </p>
+     *
+     * @param id el identificador de la canción
+     * @param fileName el nombre del archivo MP3 (ej: "song1.mp3")
+     * @return respuesta de confirmación o error
+     */
     @PutMapping("/{id}/file")
     public ResponseEntity<?> actualizarFileName(@PathVariable String id, @RequestParam String fileName) {
         Cancion c = cancionService.buscarPorId(id);
