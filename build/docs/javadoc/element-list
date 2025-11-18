@@ -1,4 +1,5 @@
 co.edu.uniquindio.application
+co.edu.uniquindio.application.api
 co.edu.uniquindio.application.controller
 co.edu.uniquindio.application.model
 co.edu.uniquindio.application.repository

@@ -30,6 +30,7 @@ loadScripts(document, 'script');</script>
 <li><a href="package-summary.html">Package</a></li>
 <li class="nav-bar-cell1-rev">Class</li>
 <li><a href="package-tree.html">Tree</a></li>
+<li><a href="../../../../../deprecated-list.html">Deprecated</a></li>
 <li><a href="../../../../../index-all.html">Index</a></li>
 <li><a href="../../../../../help-doc.html#class">Help</a></li>
 </ul>
@@ -92,6 +93,22 @@ loadScripts(document, 'script');</script>
 <div class="type-signature"><span class="annotations">@Service
 </span><span class="modifiers">public class </span><span class="element-name type-name-label">CancionService</span>
 <span class="extends-implements">extends <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a></span></div>
+<div class="block">Servicio de negocio para la gestión de canciones.
+ <p>
+ Proporciona funcionalidades de CRUD, búsqueda avanzada, autocompletado de títulos
+ y recomendación de canciones similares mediante un grafo de similitud.
+ </p>
+ <p>
+ Características principales:
+ </p>
+ <ul>
+   <li>Gestión de canciones (agregar, actualizar, eliminar, listar)</li>
+   <li>Autocompletado de títulos usando estructura Trie</li>
+   <li>Búsqueda avanzada concurrente por múltiples criterios</li>
+   <li>Construcción de grafo de similitud entre canciones</li>
+   <li>Recomendación de canciones similares y radio personalizada</li>
+   <li>Carga masiva de canciones desde archivo CSV</li>
+ </ul></div>
 </section>
 <section class="summary">
 <ul class="summary-list">
@@ -104,7 +121,9 @@ loadScripts(document, 'script');</script>
 <div class="table-header col-first">Constructor</div>
 <div class="table-header col-last">Description</div>
 <div class="col-constructor-name even-row-color"><code><a href="#%3Cinit%3E(co.edu.uniquindio.application.repository.CancionRepository)" class="member-name-link">CancionService</a><wbr>(<a href="../repository/CancionRepository.html" title="class in co.edu.uniquindio.application.repository">CancionRepository</a>&nbsp;cancionRepository)</code></div>
-<div class="col-last even-row-color">&nbsp;</div>
+<div class="col-last even-row-color">
+<div class="block">Constructor que inicializa el servicio de canciones.</div>
+</div>
 </div>
 </section>
 </li>
@@ -121,13 +140,19 @@ loadScripts(document, 'script');</script>
 <div class="table-header col-last">Description</div>
 <div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>boolean</code></div>
 <div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#actualizarCancion(co.edu.uniquindio.application.model.Cancion)" class="member-name-link">actualizarCancion</a><wbr>(<a href="../model/Cancion.html" title="class in co.edu.uniquindio.application.model">Cancion</a>&nbsp;cancion)</code></div>
-<div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">&nbsp;</div>
+<div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
+<div class="block">Actualiza los datos de una canción existente.</div>
+</div>
 <div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>void</code></div>
 <div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#agregarCancion(co.edu.uniquindio.application.model.Cancion)" class="member-name-link">agregarCancion</a><wbr>(<a href="../model/Cancion.html" title="class in co.edu.uniquindio.application.model">Cancion</a>&nbsp;cancion)</code></div>
-<div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">&nbsp;</div>
+<div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
+<div class="block">Agrega una nueva canción al repositorio.</div>
+</div>
 <div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/util/List.html" title="class or interface in java.util" class="external-link">List</a><wbr>&lt;<a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&gt;</code></div>
 <div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#autocompletarTitulo(java.lang.String)" class="member-name-link">autocompletarTitulo</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;prefijo)</code></div>
-<div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">&nbsp;</div>
+<div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
+<div class="block">Obtiene sugerencias de títulos de canciones que coinciden con un prefijo.</div>
+</div>
 <div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/util/List.html" title="class or interface in java.util" class="external-link">List</a><wbr>&lt;<a href="../model/Cancion.html" title="class in co.edu.uniquindio.application.model">Cancion</a>&gt;</code></div>
 <div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#buscarAvanzada(java.lang.String,java.lang.String,java.lang.String,java.lang.Integer,java.lang.Integer,java.lang.String)" class="member-name-link">buscarAvanzada</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;titulo,
  <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;artista,
@@ -135,34 +160,52 @@ loadScripts(document, 'script');</script>
  <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/Integer.html" title="class or interface in java.lang" class="external-link">Integer</a>&nbsp;anioFrom,
  <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/Integer.html" title="class or interface in java.lang" class="external-link">Integer</a>&nbsp;anioTo,
  <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;op)</code></div>
-<div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">&nbsp;</div>
+<div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
+<div class="block">Realiza una búsqueda avanzada y concurrente de canciones por múltiples criterios.</div>
+</div>
 <div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/util/List.html" title="class or interface in java.util" class="external-link">List</a><wbr>&lt;<a href="../model/Cancion.html" title="class in co.edu.uniquindio.application.model">Cancion</a>&gt;</code></div>
 <div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#buscarPorFiltro(java.lang.String,java.lang.String)" class="member-name-link">buscarPorFiltro</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;titulo,
  <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;genero)</code></div>
-<div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">&nbsp;</div>
+<div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
+<div class="block">Busca canciones por filtros básicos (título y género).</div>
+</div>
 <div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="../model/Cancion.html" title="class in co.edu.uniquindio.application.model">Cancion</a></code></div>
 <div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#buscarPorId(java.lang.String)" class="member-name-link">buscarPorId</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;id)</code></div>
-<div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">&nbsp;</div>
+<div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
+<div class="block">Busca una canción por su identificador único.</div>
+</div>
 <div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>int</code></div>
 <div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#cargarCancionesMasivamente(org.springframework.web.multipart.MultipartFile)" class="member-name-link">cargarCancionesMasivamente</a><wbr>(org.springframework.web.multipart.MultipartFile&nbsp;archivo)</code></div>
-<div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">&nbsp;</div>
+<div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
+<div class="block">Carga un lote masivo de canciones desde un archivo CSV.</div>
+</div>
 <div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>void</code></div>
 <div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#construirGrafoDeSimilitud()" class="member-name-link">construirGrafoDeSimilitud</a>()</code></div>
-<div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">&nbsp;</div>
+<div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
+<div class="block">Construye o reconstruye el grafo de similitud entre canciones.</div>
+</div>
 <div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>boolean</code></div>
 <div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#eliminarCancion(java.lang.String)" class="member-name-link">eliminarCancion</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;id)</code></div>
-<div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">&nbsp;</div>
+<div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
+<div class="block">Elimina una canción del repositorio por su identificador.</div>
+</div>
 <div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/util/List.html" title="class or interface in java.util" class="external-link">List</a><wbr>&lt;<a href="../model/Cancion.html" title="class in co.edu.uniquindio.application.model">Cancion</a>&gt;</code></div>
 <div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#iniciarRadio(java.lang.String,int)" class="member-name-link">iniciarRadio</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;idCancion,
  int&nbsp;limite)</code></div>
-<div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">&nbsp;</div>
+<div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
+<div class="block">Inicia una estación de radio personalizada basada en una canción.</div>
+</div>
 <div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/util/Collection.html" title="class or interface in java.util" class="external-link">Collection</a><wbr>&lt;<a href="../model/Cancion.html" title="class in co.edu.uniquindio.application.model">Cancion</a>&gt;</code></div>
 <div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#listarCanciones()" class="member-name-link">listarCanciones</a>()</code></div>
-<div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">&nbsp;</div>
+<div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
+<div class="block">Obtiene todas las canciones del repositorio.</div>
+</div>
 <div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/util/List.html" title="class or interface in java.util" class="external-link">List</a><wbr>&lt;<a href="../model/Cancion.html" title="class in co.edu.uniquindio.application.model">Cancion</a>&gt;</code></div>
 <div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#obtenerCancionesSimilares(java.lang.String,int)" class="member-name-link">obtenerCancionesSimilares</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;idCancion,
  int&nbsp;limite)</code></div>
-<div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">&nbsp;</div>
+<div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
+<div class="block">Obtiene un conjunto de canciones similares a una canción especificada.</div>
+</div>
 </div>
 </div>
 </div>
@@ -185,6 +228,14 @@ loadScripts(document, 'script');</script>
 <h3>CancionService</h3>
 <div class="member-signature"><span class="annotations">@Autowired
 </span><span class="modifiers">public</span>&nbsp;<span class="element-name">CancionService</span><wbr><span class="parameters">(<a href="../repository/CancionRepository.html" title="class in co.edu.uniquindio.application.repository">CancionRepository</a>&nbsp;cancionRepository)</span></div>
+<div class="block">Constructor que inicializa el servicio de canciones.
+ <p>
+ Carga inicial de títulos en el Trie y construcción del grafo de similitud.
+ </p></div>
+<dl class="notes">
+<dt>Parameters:</dt>
+<dd><code>cancionRepository</code> - el repositorio de canciones</dd>
+</dl>
 </section>
 </li>
 </ul>
@@ -199,36 +250,84 @@ loadScripts(document, 'script');</script>
 <section class="detail" id="autocompletarTitulo(java.lang.String)">
 <h3>autocompletarTitulo</h3>
 <div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/util/List.html" title="class or interface in java.util" class="external-link">List</a>&lt;<a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&gt;</span>&nbsp;<span class="element-name">autocompletarTitulo</span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;prefijo)</span></div>
+<div class="block">Obtiene sugerencias de títulos de canciones que coinciden con un prefijo.</div>
+<dl class="notes">
+<dt>Parameters:</dt>
+<dd><code>prefijo</code> - el prefijo a buscar. No debe ser <code>null</code></dd>
+<dt>Returns:</dt>
+<dd>lista de títulos de canciones que comienzan con el prefijo especificado</dd>
+</dl>
 </section>
 </li>
 <li>
 <section class="detail" id="listarCanciones()">
 <h3>listarCanciones</h3>
 <div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/util/Collection.html" title="class or interface in java.util" class="external-link">Collection</a>&lt;<a href="../model/Cancion.html" title="class in co.edu.uniquindio.application.model">Cancion</a>&gt;</span>&nbsp;<span class="element-name">listarCanciones</span>()</div>
+<div class="block">Obtiene todas las canciones del repositorio.</div>
+<dl class="notes">
+<dt>Returns:</dt>
+<dd>colección de todas las canciones disponibles</dd>
+</dl>
 </section>
 </li>
 <li>
 <section class="detail" id="buscarPorId(java.lang.String)">
 <h3>buscarPorId</h3>
 <div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="../model/Cancion.html" title="class in co.edu.uniquindio.application.model">Cancion</a></span>&nbsp;<span class="element-name">buscarPorId</span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;id)</span></div>
+<div class="block">Busca una canción por su identificador único.</div>
+<dl class="notes">
+<dt>Parameters:</dt>
+<dd><code>id</code> - el identificador de la canción</dd>
+<dt>Returns:</dt>
+<dd>la canción si existe, <code>null</code> en caso contrario</dd>
+</dl>
 </section>
 </li>
 <li>
 <section class="detail" id="agregarCancion(co.edu.uniquindio.application.model.Cancion)">
 <h3>agregarCancion</h3>
 <div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">void</span>&nbsp;<span class="element-name">agregarCancion</span><wbr><span class="parameters">(<a href="../model/Cancion.html" title="class in co.edu.uniquindio.application.model">Cancion</a>&nbsp;cancion)</span></div>
+<div class="block">Agrega una nueva canción al repositorio.
+ <p>
+ También inserta el título en el Trie para autocompletado
+ y reconstruye el grafo de similitud.
+ </p></div>
+<dl class="notes">
+<dt>Parameters:</dt>
+<dd><code>cancion</code> - la canción a agregar. No debe ser <code>null</code></dd>
+</dl>
 </section>
 </li>
 <li>
 <section class="detail" id="actualizarCancion(co.edu.uniquindio.application.model.Cancion)">
 <h3>actualizarCancion</h3>
 <div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">boolean</span>&nbsp;<span class="element-name">actualizarCancion</span><wbr><span class="parameters">(<a href="../model/Cancion.html" title="class in co.edu.uniquindio.application.model">Cancion</a>&nbsp;cancion)</span></div>
+<div class="block">Actualiza los datos de una canción existente.
+ <p>
+ Si la actualización es exitosa, refresca el Trie y el grafo de similitud.
+ </p></div>
+<dl class="notes">
+<dt>Parameters:</dt>
+<dd><code>cancion</code> - la canción con los datos actualizados. No debe ser <code>null</code></dd>
+<dt>Returns:</dt>
+<dd><code>true</code> si la canción fue actualizada, <code>false</code> en caso contrario</dd>
+</dl>
 </section>
 </li>
 <li>
 <section class="detail" id="eliminarCancion(java.lang.String)">
 <h3>eliminarCancion</h3>
 <div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">boolean</span>&nbsp;<span class="element-name">eliminarCancion</span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;id)</span></div>
+<div class="block">Elimina una canción del repositorio por su identificador.
+ <p>
+ Si la eliminación es exitosa, refresca el Trie y el grafo de similitud.
+ </p></div>
+<dl class="notes">
+<dt>Parameters:</dt>
+<dd><code>id</code> - el identificador de la canción a eliminar</dd>
+<dt>Returns:</dt>
+<dd><code>true</code> si la canción fue eliminada, <code>false</code> en caso contrario</dd>
+</dl>
 </section>
 </li>
 <li>
@@ -236,6 +335,14 @@ loadScripts(document, 'script');</script>
 <h3>buscarPorFiltro</h3>
 <div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/util/List.html" title="class or interface in java.util" class="external-link">List</a>&lt;<a href="../model/Cancion.html" title="class in co.edu.uniquindio.application.model">Cancion</a>&gt;</span>&nbsp;<span class="element-name">buscarPorFiltro</span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;titulo,
  <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;genero)</span></div>
+<div class="block">Busca canciones por filtros básicos (título y género).</div>
+<dl class="notes">
+<dt>Parameters:</dt>
+<dd><code>titulo</code> - el título de la canción a buscar (puede ser parcial)</dd>
+<dd><code>genero</code> - el género de la canción</dd>
+<dt>Returns:</dt>
+<dd>lista de canciones que coinciden con los filtros especificados</dd>
+</dl>
 </section>
 </li>
 <li>
@@ -247,6 +354,21 @@ loadScripts(document, 'script');</script>
  <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/Integer.html" title="class or interface in java.lang" class="external-link">Integer</a>&nbsp;anioFrom,
  <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/Integer.html" title="class or interface in java.lang" class="external-link">Integer</a>&nbsp;anioTo,
  <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;op)</span></div>
+<div class="block">Realiza una búsqueda avanzada y concurrente de canciones por múltiples criterios.
+ <p>
+ Implementa los requisitos funcionales RF-004 y RF-030.
+ </p></div>
+<dl class="notes">
+<dt>Parameters:</dt>
+<dd><code>titulo</code> - el título de la canción (opcional)</dd>
+<dd><code>artista</code> - el artista de la canción (opcional)</dd>
+<dd><code>genero</code> - el género de la canción (opcional)</dd>
+<dd><code>anioFrom</code> - el año mínimo (opcional)</dd>
+<dd><code>anioTo</code> - el año máximo (opcional)</dd>
+<dd><code>op</code> - el operador lógico para combinar criterios (AND/OR)</dd>
+<dt>Returns:</dt>
+<dd>lista de canciones que coinciden con los criterios especificados</dd>
+</dl>
 </section>
 </li>
 <li>
@@ -254,9 +376,24 @@ loadScripts(document, 'script');</script>
 <h3>cargarCancionesMasivamente</h3>
 <div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">int</span>&nbsp;<span class="element-name">cargarCancionesMasivamente</span><wbr><span class="parameters">(org.springframework.web.multipart.MultipartFile&nbsp;archivo)</span>
                                throws <span class="exceptions"><a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/Exception.html" title="class or interface in java.lang" class="external-link">Exception</a></span></div>
+<div class="block">Carga un lote masivo de canciones desde un archivo CSV.
+ <p>
+ El archivo debe tener el siguiente formato (con separador semicolon):
+ </p>
+ <ul>
+   <li>6 columnas: id;titulo;artista;genero;anio;fileName</li>
+   <li>7 columnas: id;titulo;artista;genero;anio;duracion;fileName</li>
+ </ul>
+ <p>
+ Líneas en blanco o que comienzan con '#' son ignoradas.
+ </p></div>
 <dl class="notes">
+<dt>Parameters:</dt>
+<dd><code>archivo</code> - el archivo MultipartFile con las canciones a cargar</dd>
+<dt>Returns:</dt>
+<dd>el número de canciones cargadas exitosamente</dd>
 <dt>Throws:</dt>
-<dd><code><a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/Exception.html" title="class or interface in java.lang" class="external-link">Exception</a></code></dd>
+<dd><code><a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/Exception.html" title="class or interface in java.lang" class="external-link">Exception</a></code> - si ocurre un error al procesar el archivo</dd>
 </dl>
 </section>
 </li>
@@ -264,6 +401,11 @@ loadScripts(document, 'script');</script>
 <section class="detail" id="construirGrafoDeSimilitud()">
 <h3>construirGrafoDeSimilitud</h3>
 <div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">void</span>&nbsp;<span class="element-name">construirGrafoDeSimilitud</span>()</div>
+<div class="block">Construye o reconstruye el grafo de similitud entre canciones.
+ <p>
+ Utiliza todas las canciones del repositorio para establecer relaciones
+ de similitud basadas en criterios como género, artista, etc.
+ </p></div>
 </section>
 </li>
 <li>
@@ -271,6 +413,14 @@ loadScripts(document, 'script');</script>
 <h3>obtenerCancionesSimilares</h3>
 <div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/util/List.html" title="class or interface in java.util" class="external-link">List</a>&lt;<a href="../model/Cancion.html" title="class in co.edu.uniquindio.application.model">Cancion</a>&gt;</span>&nbsp;<span class="element-name">obtenerCancionesSimilares</span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;idCancion,
  int&nbsp;limite)</span></div>
+<div class="block">Obtiene un conjunto de canciones similares a una canción especificada.</div>
+<dl class="notes">
+<dt>Parameters:</dt>
+<dd><code>idCancion</code> - el identificador de la canción de origen</dd>
+<dd><code>limite</code> - el número máximo de canciones similares a retornar</dd>
+<dt>Returns:</dt>
+<dd>lista de canciones similares, o lista vacía si la canción no existe</dd>
+</dl>
 </section>
 </li>
 <li>
@@ -278,6 +428,18 @@ loadScripts(document, 'script');</script>
 <h3>iniciarRadio</h3>
 <div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/util/List.html" title="class or interface in java.util" class="external-link">List</a>&lt;<a href="../model/Cancion.html" title="class in co.edu.uniquindio.application.model">Cancion</a>&gt;</span>&nbsp;<span class="element-name">iniciarRadio</span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;idCancion,
  int&nbsp;limite)</span></div>
+<div class="block">Inicia una estación de radio personalizada basada en una canción.
+ <p>
+ Retorna la canción original seguida de una lista de canciones similares
+ para crear una cola de reproducción personalizada.
+ </p></div>
+<dl class="notes">
+<dt>Parameters:</dt>
+<dd><code>idCancion</code> - el identificador de la canción a partir de la cual iniciar la radio</dd>
+<dd><code>limite</code> - el número máximo de canciones similares a incluir</dd>
+<dt>Returns:</dt>
+<dd>lista de canciones con la canción original al inicio, o lista vacía si la canción no existe</dd>
+</dl>
 </section>
 </li>
 </ul>

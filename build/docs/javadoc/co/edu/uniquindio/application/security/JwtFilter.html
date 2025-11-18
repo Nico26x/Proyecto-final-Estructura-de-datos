@@ -30,6 +30,7 @@ loadScripts(document, 'script');</script>
 <li><a href="package-summary.html">Package</a></li>
 <li class="nav-bar-cell1-rev">Class</li>
 <li><a href="package-tree.html">Tree</a></li>
+<li><a href="../../../../../deprecated-list.html">Deprecated</a></li>
 <li><a href="../../../../../index-all.html">Index</a></li>
 <li><a href="../../../../../help-doc.html#class">Help</a></li>
 </ul>
@@ -100,8 +101,30 @@ loadScripts(document, 'script');</script>
 <div class="type-signature"><span class="annotations">@Component
 </span><span class="modifiers">public class </span><span class="element-name type-name-label">JwtFilter</span>
 <span class="extends-implements">extends org.springframework.web.filter.OncePerRequestFilter</span></div>
-<div class="block">🔐 Filtro que valida el token JWT en cada solicitud HTTP.
- Extrae el username y rol del token, y los coloca en el contexto de seguridad.</div>
+<div class="block">Filtro de seguridad que valida tokens JWT en cada solicitud HTTP.
+ <p>
+ Intercepta las solicitudes entrantes, extrae el token JWT del encabezado Authorization,
+ valida su autenticidad y coloca la información del usuario (username y rol) en el contexto
+ de seguridad de Spring para su uso posterior.
+ </p>
+ <p>
+ Proceso:
+ </p>
+ <ol>
+   <li>Extrae el token del encabezado Authorization (formato: "Bearer &lt;token&gt;")</li>
+   <li>Obtiene el username y rol del token JWT</li>
+   <li>Valida la integridad y vigencia del token</li>
+   <li>Crea un contexto de autenticación con los datos del usuario</li>
+   <li>Continúa con la cadena de filtros</li>
+ </ol></div>
+<dl class="notes">
+<dt>See Also:</dt>
+<dd>
+<ul class="tag-list">
+<li><a href="JwtUtil.html" title="class in co.edu.uniquindio.application.security"><code>JwtUtil</code></a></li>
+</ul>
+</dd>
+</dl>
 </section>
 <section class="summary">
 <ul class="summary-list">
@@ -145,7 +168,9 @@ loadScripts(document, 'script');</script>
 <div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#doFilterInternal(jakarta.servlet.http.HttpServletRequest,jakarta.servlet.http.HttpServletResponse,jakarta.servlet.FilterChain)" class="member-name-link">doFilterInternal</a><wbr>(jakarta.servlet.http.HttpServletRequest&nbsp;request,
  jakarta.servlet.http.HttpServletResponse&nbsp;response,
  jakarta.servlet.FilterChain&nbsp;filterChain)</code></div>
-<div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">&nbsp;</div>
+<div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
+<div class="block">Procesa cada solicitud HTTP para validar y establecer la autenticación JWT.</div>
+</div>
 </div>
 </div>
 </div>
@@ -191,12 +216,21 @@ loadScripts(document, 'script');</script>
  jakarta.servlet.FilterChain&nbsp;filterChain)</span>
                          throws <span class="exceptions">jakarta.servlet.ServletException,
 <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/io/IOException.html" title="class or interface in java.io" class="external-link">IOException</a></span></div>
+<div class="block">Procesa cada solicitud HTTP para validar y establecer la autenticación JWT.
+ <p>
+ Este método se ejecuta una única vez por solicitud (OncePerRequestFilter).
+ Valida el token JWT y establece el contexto de seguridad si es válido.
+ </p></div>
 <dl class="notes">
 <dt>Specified by:</dt>
 <dd><code>doFilterInternal</code>&nbsp;in class&nbsp;<code>org.springframework.web.filter.OncePerRequestFilter</code></dd>
+<dt>Parameters:</dt>
+<dd><code>request</code> - la solicitud HTTP entrante</dd>
+<dd><code>response</code> - la respuesta HTTP</dd>
+<dd><code>filterChain</code> - la cadena de filtros de seguridad</dd>
 <dt>Throws:</dt>
-<dd><code>jakarta.servlet.ServletException</code></dd>
-<dd><code><a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/io/IOException.html" title="class or interface in java.io" class="external-link">IOException</a></code></dd>
+<dd><code>jakarta.servlet.ServletException</code> - si ocurre un error de servlet</dd>
+<dd><code><a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/io/IOException.html" title="class or interface in java.io" class="external-link">IOException</a></code> - si ocurre un error de I/O</dd>
 </dl>
 </section>
 </li>

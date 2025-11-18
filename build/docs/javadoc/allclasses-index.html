@@ -30,6 +30,7 @@ loadScripts(document, 'script');</script>
 <li>Package</li>
 <li>Class</li>
 <li><a href="overview-tree.html">Tree</a></li>
+<li><a href="deprecated-list.html">Deprecated</a></li>
 <li><a href="index-all.html">Index</a></li>
 <li><a href="help-doc.html#all-classes">Help</a></li>
 </ul>
@@ -55,70 +56,105 @@ loadScripts(document, 'script');</script>
 <div class="summary-table two-column-summary">
 <div class="table-header col-first">Class</div>
 <div class="table-header col-last">Description</div>
-<div class="col-first even-row-color all-classes-table all-classes-table-tab2"><a href="co/edu/uniquindio/application/model/Cancion.html" title="class in co.edu.uniquindio.application.model">Cancion</a></div>
-<div class="col-last even-row-color all-classes-table all-classes-table-tab2">&nbsp;</div>
-<div class="col-first odd-row-color all-classes-table all-classes-table-tab2"><a href="co/edu/uniquindio/application/controller/CancionController.html" title="class in co.edu.uniquindio.application.controller">CancionController</a></div>
+<div class="col-first even-row-color all-classes-table all-classes-table-tab2"><a href="co/edu/uniquindio/application/api/ApiResponse.html" title="class in co.edu.uniquindio.application.api">ApiResponse&lt;T&gt;</a></div>
+<div class="col-last even-row-color all-classes-table all-classes-table-tab2">
+<div class="block">Clase genérica que encapsula las respuestas de la API en un formato estándar (envelope).</div>
+</div>
+<div class="col-first odd-row-color all-classes-table all-classes-table-tab2"><a href="co/edu/uniquindio/application/model/Cancion.html" title="class in co.edu.uniquindio.application.model">Cancion</a></div>
 <div class="col-last odd-row-color all-classes-table all-classes-table-tab2">
+<div class="block">Modelo que representa una canción en el sistema.</div>
+</div>
+<div class="col-first even-row-color all-classes-table all-classes-table-tab2"><a href="co/edu/uniquindio/application/controller/CancionController.html" title="class in co.edu.uniquindio.application.controller">CancionController</a></div>
+<div class="col-last even-row-color all-classes-table all-classes-table-tab2">
 <div class="block">Controlador REST para la gestión del catálogo de canciones.</div>
 </div>
-<div class="col-first even-row-color all-classes-table all-classes-table-tab2"><a href="co/edu/uniquindio/application/repository/CancionRepository.html" title="class in co.edu.uniquindio.application.repository">CancionRepository</a></div>
-<div class="col-last even-row-color all-classes-table all-classes-table-tab2">
-<div class="block">Repositorio con persistencia en archivo canciones.txt</div>
+<div class="col-first odd-row-color all-classes-table all-classes-table-tab2"><a href="co/edu/uniquindio/application/repository/CancionRepository.html" title="class in co.edu.uniquindio.application.repository">CancionRepository</a></div>
+<div class="col-last odd-row-color all-classes-table all-classes-table-tab2">
+<div class="block">Repositorio de canciones con persistencia en archivo.</div>
 </div>
-<div class="col-first odd-row-color all-classes-table all-classes-table-tab2"><a href="co/edu/uniquindio/application/service/CancionService.html" title="class in co.edu.uniquindio.application.service">CancionService</a></div>
-<div class="col-last odd-row-color all-classes-table all-classes-table-tab2">&nbsp;</div>
-<div class="col-first even-row-color all-classes-table all-classes-table-tab2"><a href="co/edu/uniquindio/application/utils/CsvUtils.html" title="class in co.edu.uniquindio.application.utils">CsvUtils</a></div>
-<div class="col-last even-row-color all-classes-table all-classes-table-tab2">&nbsp;</div>
+<div class="col-first even-row-color all-classes-table all-classes-table-tab2"><a href="co/edu/uniquindio/application/service/CancionService.html" title="class in co.edu.uniquindio.application.service">CancionService</a></div>
+<div class="col-last even-row-color all-classes-table all-classes-table-tab2">
+<div class="block">Servicio de negocio para la gestión de canciones.</div>
+</div>
+<div class="col-first odd-row-color all-classes-table all-classes-table-tab2"><a href="co/edu/uniquindio/application/utils/CsvUtils.html" title="class in co.edu.uniquindio.application.utils">CsvUtils</a></div>
+<div class="col-last odd-row-color all-classes-table all-classes-table-tab2">
+<div class="block">Utilidad para manejar operaciones de formato CSV (Comma-Separated Values).</div>
+</div>
+<div class="col-first even-row-color all-classes-table all-classes-table-tab2"><a href="co/edu/uniquindio/application/api/GlobalExceptionHandler.html" title="class in co.edu.uniquindio.application.api">GlobalExceptionHandler</a></div>
+<div class="col-last even-row-color all-classes-table all-classes-table-tab2">
+<div class="block">Manejador global de excepciones para la aplicación REST.</div>
+</div>
 <div class="col-first odd-row-color all-classes-table all-classes-table-tab2"><a href="co/edu/uniquindio/application/model/GrafoDeSimilitud.html" title="class in co.edu.uniquindio.application.model">GrafoDeSimilitud</a></div>
-<div class="col-last odd-row-color all-classes-table all-classes-table-tab2">&nbsp;</div>
+<div class="col-last odd-row-color all-classes-table all-classes-table-tab2">
+<div class="block">Grafo ponderado que representa la similitud entre canciones.</div>
+</div>
 <div class="col-first even-row-color all-classes-table all-classes-table-tab2"><a href="co/edu/uniquindio/application/model/GrafoSocial.html" title="class in co.edu.uniquindio.application.model">GrafoSocial</a></div>
 <div class="col-last even-row-color all-classes-table all-classes-table-tab2">
-<div class="block">Grafo no dirigido que modela las relaciones entre usuarios.</div>
+<div class="block">Grafo no dirigido que modela las relaciones sociales entre usuarios.</div>
 </div>
 <div class="col-first odd-row-color all-classes-table all-classes-table-tab2"><a href="co/edu/uniquindio/application/security/JwtFilter.html" title="class in co.edu.uniquindio.application.security">JwtFilter</a></div>
 <div class="col-last odd-row-color all-classes-table all-classes-table-tab2">
-<div class="block">🔐 Filtro que valida el token JWT en cada solicitud HTTP.</div>
+<div class="block">Filtro de seguridad que valida tokens JWT en cada solicitud HTTP.</div>
 </div>
 <div class="col-first even-row-color all-classes-table all-classes-table-tab2"><a href="co/edu/uniquindio/application/security/JwtUtil.html" title="class in co.edu.uniquindio.application.security">JwtUtil</a></div>
-<div class="col-last even-row-color all-classes-table all-classes-table-tab2">&nbsp;</div>
+<div class="col-last even-row-color all-classes-table all-classes-table-tab2">
+<div class="block">Utilidad para la gestión de tokens JWT (JSON Web Tokens).</div>
+</div>
 <div class="col-first odd-row-color all-classes-table all-classes-table-tab2"><a href="co/edu/uniquindio/application/controller/MetricasController.html" title="class in co.edu.uniquindio.application.controller">MetricasController</a></div>
-<div class="col-last odd-row-color all-classes-table all-classes-table-tab2">&nbsp;</div>
+<div class="col-last odd-row-color all-classes-table all-classes-table-tab2">
+<div class="block">Controlador REST para la gestión y consulta de métricas del sistema.</div>
+</div>
 <div class="col-first even-row-color all-classes-table all-classes-table-tab2"><a href="co/edu/uniquindio/application/service/MetricasService.html" title="class in co.edu.uniquindio.application.service">MetricasService</a></div>
-<div class="col-last even-row-color all-classes-table all-classes-table-tab2">&nbsp;</div>
+<div class="col-last even-row-color all-classes-table all-classes-table-tab2">
+<div class="block">Servicio de gestión de métricas y análisis de datos del sistema.</div>
+</div>
 <div class="col-first odd-row-color all-classes-table all-classes-table-tab2"><a href="co/edu/uniquindio/application/service/MetricasService.EventoDTO.html" title="class in co.edu.uniquindio.application.service">MetricasService.EventoDTO</a></div>
-<div class="col-last odd-row-color all-classes-table all-classes-table-tab2">&nbsp;</div>
+<div class="col-last odd-row-color all-classes-table all-classes-table-tab2">
+<div class="block">DTO que representa un evento registrado en las métricas.</div>
+</div>
 <div class="col-first even-row-color all-classes-table all-classes-table-tab3"><a href="co/edu/uniquindio/application/model/Rol.html" title="enum class in co.edu.uniquindio.application.model">Rol</a></div>
-<div class="col-last even-row-color all-classes-table all-classes-table-tab3">&nbsp;</div>
+<div class="col-last even-row-color all-classes-table all-classes-table-tab3">
+<div class="block">Enumeración que define los roles de usuario en el sistema.</div>
+</div>
 <div class="col-first odd-row-color all-classes-table all-classes-table-tab2"><a href="co/edu/uniquindio/application/security/SecurityConfig.html" title="class in co.edu.uniquindio.application.security">SecurityConfig</a></div>
 <div class="col-last odd-row-color all-classes-table all-classes-table-tab2">
-<div class="block">🔐 Configuración de seguridad basada en JWT.</div>
+<div class="block">Configuración de seguridad basada en JWT para la aplicación.</div>
 </div>
 <div class="col-first even-row-color all-classes-table all-classes-table-tab2"><a href="co/edu/uniquindio/application/SyncUpApplication.html" title="class in co.edu.uniquindio.application">SyncUpApplication</a></div>
-<div class="col-last even-row-color all-classes-table all-classes-table-tab2">&nbsp;</div>
+<div class="col-last even-row-color all-classes-table all-classes-table-tab2">
+<div class="block">Punto de entrada principal de la aplicación SyncUp.</div>
+</div>
 <div class="col-first odd-row-color all-classes-table all-classes-table-tab2"><a href="co/edu/uniquindio/application/trie/TrieAutocompletado.html" title="class in co.edu.uniquindio.application.trie">TrieAutocompletado</a></div>
-<div class="col-last odd-row-color all-classes-table all-classes-table-tab2">&nbsp;</div>
+<div class="col-last odd-row-color all-classes-table all-classes-table-tab2">
+<div class="block">Estructura de datos Trie optimizada para autocompletado de palabras.</div>
+</div>
 <div class="col-first even-row-color all-classes-table all-classes-table-tab2"><a href="co/edu/uniquindio/application/trie/TrieNode.html" title="class in co.edu.uniquindio.application.trie">TrieNode</a></div>
-<div class="col-last even-row-color all-classes-table all-classes-table-tab2">&nbsp;</div>
+<div class="col-last even-row-color all-classes-table all-classes-table-tab2">
+<div class="block">Representa un nodo en la estructura de datos Trie.</div>
+</div>
 <div class="col-first odd-row-color all-classes-table all-classes-table-tab2"><a href="co/edu/uniquindio/application/security/UserDetailsServiceImpl.html" title="class in co.edu.uniquindio.application.security">UserDetailsServiceImpl</a></div>
 <div class="col-last odd-row-color all-classes-table all-classes-table-tab2">
-<div class="block">Carga los detalles del usuario desde el repositorio
- para integrarlo con Spring Security.</div>
+<div class="block">Implementación de UserDetailsService para integración con Spring Security.</div>
 </div>
 <div class="col-first even-row-color all-classes-table all-classes-table-tab2"><a href="co/edu/uniquindio/application/model/Usuario.html" title="class in co.edu.uniquindio.application.model">Usuario</a></div>
-<div class="col-last even-row-color all-classes-table all-classes-table-tab2">&nbsp;</div>
+<div class="col-last even-row-color all-classes-table all-classes-table-tab2">
+<div class="block">Modelo que representa un usuario en el sistema.</div>
+</div>
 <div class="col-first odd-row-color all-classes-table all-classes-table-tab2"><a href="co/edu/uniquindio/application/controller/UsuarioController.html" title="class in co.edu.uniquindio.application.controller">UsuarioController</a></div>
 <div class="col-last odd-row-color all-classes-table all-classes-table-tab2">
-<div class="block">Controlador REST para la gestión de usuarios y sus favoritos.</div>
+<div class="block">Controlador REST para la gestión integral de usuarios y sus funcionalidades.</div>
 </div>
 <div class="col-first even-row-color all-classes-table all-classes-table-tab2"><a href="co/edu/uniquindio/application/repository/UsuarioRepository.html" title="class in co.edu.uniquindio.application.repository">UsuarioRepository</a></div>
 <div class="col-last even-row-color all-classes-table all-classes-table-tab2">
-<div class="block">Repositorio con persistencia en archivo usuarios.txt y manejo de favoritos.</div>
+<div class="block">Repositorio de usuarios con persistencia en archivo.</div>
 </div>
 <div class="col-first odd-row-color all-classes-table all-classes-table-tab2"><a href="co/edu/uniquindio/application/service/UsuarioService.html" title="class in co.edu.uniquindio.application.service">UsuarioService</a></div>
-<div class="col-last odd-row-color all-classes-table all-classes-table-tab2">&nbsp;</div>
+<div class="col-last odd-row-color all-classes-table all-classes-table-tab2">
+<div class="block">Servicio de gestión de usuarios del sistema.</div>
+</div>
 <div class="col-first even-row-color all-classes-table all-classes-table-tab2"><a href="co/edu/uniquindio/application/service/UsuarioService.ExportResultado.html" title="class in co.edu.uniquindio.application.service">UsuarioService.ExportResultado</a></div>
 <div class="col-last even-row-color all-classes-table all-classes-table-tab2">
-<div class="block">DTO simple para devolver info del export.</div>
+<div class="block">DTO que encapsula la información de un resultado de exportación.</div>
 </div>
 </div>
 </div>

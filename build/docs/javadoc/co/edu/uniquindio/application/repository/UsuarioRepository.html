@@ -30,6 +30,7 @@ loadScripts(document, 'script');</script>
 <li><a href="package-summary.html">Package</a></li>
 <li class="nav-bar-cell1-rev">Class</li>
 <li><a href="package-tree.html">Tree</a></li>
+<li><a href="../../../../../deprecated-list.html">Deprecated</a></li>
 <li><a href="../../../../../index-all.html">Index</a></li>
 <li><a href="../../../../../help-doc.html#class">Help</a></li>
 </ul>
@@ -92,9 +93,19 @@ loadScripts(document, 'script');</script>
 <div class="type-signature"><span class="annotations">@Repository
 </span><span class="modifiers">public class </span><span class="element-name type-name-label">UsuarioRepository</span>
 <span class="extends-implements">extends <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a></span></div>
-<div class="block">Repositorio con persistencia en archivo usuarios.txt y manejo de favoritos.
- Formato de línea:
- username;password;nombre;id1,id2,id3</div>
+<div class="block">Repositorio de usuarios con persistencia en archivo.
+ <p>
+ Gestiona la lectura, escritura y búsqueda de usuarios utilizando un archivo
+ de texto (usuarios.txt) como almacenamiento. Proporciona operaciones CRUD,
+ gestión de favoritos y carga de dependencias con CancionRepository.
+ </p>
+ <p>
+ Formato de línea en archivo:
+ <code>username;password;nombre;ROL;id1,id2,id3</code>
+ </p>
+ <p>
+ Soporta retrocompatibilidad con formatos legacy sin rol o sin favoritos.
+ </p></div>
 </section>
 <section class="summary">
 <ul class="summary-list">
@@ -107,7 +118,9 @@ loadScripts(document, 'script');</script>
 <div class="table-header col-first">Constructor</div>
 <div class="table-header col-last">Description</div>
 <div class="col-constructor-name even-row-color"><code><a href="#%3Cinit%3E(co.edu.uniquindio.application.repository.CancionRepository)" class="member-name-link">UsuarioRepository</a><wbr>(<a href="CancionRepository.html" title="class in co.edu.uniquindio.application.repository">CancionRepository</a>&nbsp;cancionRepository)</code></div>
-<div class="col-last even-row-color">&nbsp;</div>
+<div class="col-last even-row-color">
+<div class="block">Constructor que inyecta el repositorio de canciones y carga los usuarios desde archivo.</div>
+</div>
 </div>
 </section>
 </li>
@@ -125,29 +138,55 @@ loadScripts(document, 'script');</script>
 <div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>boolean</code></div>
 <div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#agregarFavorito(java.lang.String,co.edu.uniquindio.application.model.Cancion)" class="member-name-link">agregarFavorito</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;username,
  <a href="../model/Cancion.html" title="class in co.edu.uniquindio.application.model">Cancion</a>&nbsp;cancion)</code></div>
-<div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">&nbsp;</div>
+<div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
+<div class="block">Agrega una canción a la lista de favoritos de un usuario.</div>
+</div>
 <div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="../model/Usuario.html" title="class in co.edu.uniquindio.application.model">Usuario</a></code></div>
 <div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#buscarPorUsername(java.lang.String)" class="member-name-link">buscarPorUsername</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;username)</code></div>
-<div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">&nbsp;</div>
+<div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
+<div class="block">Busca un usuario por su nombre de usuario.</div>
+</div>
 <div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>boolean</code></div>
 <div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#eliminarFavorito(java.lang.String,java.lang.String)" class="member-name-link">eliminarFavorito</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;username,
  <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;idCancion)</code></div>
-<div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">&nbsp;</div>
+<div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
+<div class="block">Elimina una canción de la lista de favoritos de un usuario.</div>
+</div>
 <div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="../model/Usuario.html" title="class in co.edu.uniquindio.application.model">Usuario</a></code></div>
 <div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#eliminarUsuario(java.lang.String)" class="member-name-link">eliminarUsuario</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;username)</code></div>
-<div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">&nbsp;</div>
+<div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
+<div class="block">Elimina un usuario del repositorio.</div>
+</div>
+<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>int</code></div>
+<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#eliminarUsuarios(java.util.Collection)" class="member-name-link">eliminarUsuarios</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/util/Collection.html" title="class or interface in java.util" class="external-link">Collection</a>&lt;<a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&gt;&nbsp;usernames)</code></div>
+<div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
+<div class="block">Auxiliar para eliminar múltiples usuarios en una sola operación.</div>
+</div>
+<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>boolean</code></div>
+<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#eliminarUsuarioSiExiste(java.lang.String)" class="member-name-link">eliminarUsuarioSiExiste</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;username)</code></div>
+<div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
+<div class="block">Auxiliar para eliminar un usuario si existe, devolviendo un booleano.</div>
+</div>
 <div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>boolean</code></div>
 <div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#existe(java.lang.String)" class="member-name-link">existe</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;username)</code></div>
-<div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">&nbsp;</div>
+<div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
+<div class="block">Verifica si un usuario existe en el repositorio.</div>
+</div>
 <div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>void</code></div>
 <div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#guardarUsuario(co.edu.uniquindio.application.model.Usuario)" class="member-name-link">guardarUsuario</a><wbr>(<a href="../model/Usuario.html" title="class in co.edu.uniquindio.application.model">Usuario</a>&nbsp;usuario)</code></div>
-<div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">&nbsp;</div>
+<div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
+<div class="block">Guarda un nuevo usuario o actualiza uno existente.</div>
+</div>
 <div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/util/Collection.html" title="class or interface in java.util" class="external-link">Collection</a><wbr>&lt;<a href="../model/Cancion.html" title="class in co.edu.uniquindio.application.model">Cancion</a>&gt;</code></div>
 <div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#listarFavoritos(java.lang.String)" class="member-name-link">listarFavoritos</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;username)</code></div>
-<div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">&nbsp;</div>
+<div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
+<div class="block">Lista todas las canciones favoritas de un usuario.</div>
+</div>
 <div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/util/Map.html" title="class or interface in java.util" class="external-link">Map</a><wbr>&lt;<a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>,<wbr><a href="../model/Usuario.html" title="class in co.edu.uniquindio.application.model">Usuario</a>&gt;</code></div>
 <div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#listarUsuarios()" class="member-name-link">listarUsuarios</a>()</code></div>
-<div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">&nbsp;</div>
+<div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
+<div class="block">Lista todos los usuarios registrados en el repositorio.</div>
+</div>
 </div>
 </div>
 </div>
@@ -170,6 +209,11 @@ loadScripts(document, 'script');</script>
 <h3>UsuarioRepository</h3>
 <div class="member-signature"><span class="annotations">@Autowired
 </span><span class="modifiers">public</span>&nbsp;<span class="element-name">UsuarioRepository</span><wbr><span class="parameters">(<a href="CancionRepository.html" title="class in co.edu.uniquindio.application.repository">CancionRepository</a>&nbsp;cancionRepository)</span></div>
+<div class="block">Constructor que inyecta el repositorio de canciones y carga los usuarios desde archivo.</div>
+<dl class="notes">
+<dt>Parameters:</dt>
+<dd><code>cancionRepository</code> - el repositorio de canciones inyectado</dd>
+</dl>
 </section>
 </li>
 </ul>
@@ -184,30 +228,87 @@ loadScripts(document, 'script');</script>
 <section class="detail" id="buscarPorUsername(java.lang.String)">
 <h3>buscarPorUsername</h3>
 <div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="../model/Usuario.html" title="class in co.edu.uniquindio.application.model">Usuario</a></span>&nbsp;<span class="element-name">buscarPorUsername</span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;username)</span></div>
+<div class="block">Busca un usuario por su nombre de usuario.</div>
+<dl class="notes">
+<dt>Parameters:</dt>
+<dd><code>username</code> - el nombre de usuario a buscar</dd>
+<dt>Returns:</dt>
+<dd>el usuario si existe, <code>null</code> en caso contrario</dd>
+</dl>
 </section>
 </li>
 <li>
 <section class="detail" id="guardarUsuario(co.edu.uniquindio.application.model.Usuario)">
 <h3>guardarUsuario</h3>
 <div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">void</span>&nbsp;<span class="element-name">guardarUsuario</span><wbr><span class="parameters">(<a href="../model/Usuario.html" title="class in co.edu.uniquindio.application.model">Usuario</a>&nbsp;usuario)</span></div>
+<div class="block">Guarda un nuevo usuario o actualiza uno existente.</div>
+<dl class="notes">
+<dt>Parameters:</dt>
+<dd><code>usuario</code> - el usuario a guardar o actualizar</dd>
+</dl>
 </section>
 </li>
 <li>
 <section class="detail" id="listarUsuarios()">
 <h3>listarUsuarios</h3>
 <div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/util/Map.html" title="class or interface in java.util" class="external-link">Map</a>&lt;<a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>,<wbr><a href="../model/Usuario.html" title="class in co.edu.uniquindio.application.model">Usuario</a>&gt;</span>&nbsp;<span class="element-name">listarUsuarios</span>()</div>
+<div class="block">Lista todos los usuarios registrados en el repositorio.</div>
+<dl class="notes">
+<dt>Returns:</dt>
+<dd>mapa no modificable con todos los usuarios</dd>
+</dl>
 </section>
 </li>
 <li>
 <section class="detail" id="existe(java.lang.String)">
 <h3>existe</h3>
 <div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">boolean</span>&nbsp;<span class="element-name">existe</span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;username)</span></div>
+<div class="block">Verifica si un usuario existe en el repositorio.</div>
+<dl class="notes">
+<dt>Parameters:</dt>
+<dd><code>username</code> - el nombre de usuario a verificar</dd>
+<dt>Returns:</dt>
+<dd><code>true</code> si el usuario existe, <code>false</code> en caso contrario</dd>
+</dl>
 </section>
 </li>
 <li>
 <section class="detail" id="eliminarUsuario(java.lang.String)">
 <h3>eliminarUsuario</h3>
 <div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="../model/Usuario.html" title="class in co.edu.uniquindio.application.model">Usuario</a></span>&nbsp;<span class="element-name">eliminarUsuario</span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;username)</span></div>
+<div class="block">Elimina un usuario del repositorio.</div>
+<dl class="notes">
+<dt>Parameters:</dt>
+<dd><code>username</code> - el nombre del usuario a eliminar</dd>
+<dt>Returns:</dt>
+<dd>el usuario eliminado, o <code>null</code> si no existía</dd>
+</dl>
+</section>
+</li>
+<li>
+<section class="detail" id="eliminarUsuarioSiExiste(java.lang.String)">
+<h3>eliminarUsuarioSiExiste</h3>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">boolean</span>&nbsp;<span class="element-name">eliminarUsuarioSiExiste</span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;username)</span></div>
+<div class="block">Auxiliar para eliminar un usuario si existe, devolviendo un booleano.</div>
+<dl class="notes">
+<dt>Parameters:</dt>
+<dd><code>username</code> - el nombre del usuario a eliminar</dd>
+<dt>Returns:</dt>
+<dd><code>true</code> si el usuario fue eliminado, <code>false</code> si no existía</dd>
+</dl>
+</section>
+</li>
+<li>
+<section class="detail" id="eliminarUsuarios(java.util.Collection)">
+<h3>eliminarUsuarios</h3>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">int</span>&nbsp;<span class="element-name">eliminarUsuarios</span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/util/Collection.html" title="class or interface in java.util" class="external-link">Collection</a>&lt;<a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&gt;&nbsp;usernames)</span></div>
+<div class="block">Auxiliar para eliminar múltiples usuarios en una sola operación.</div>
+<dl class="notes">
+<dt>Parameters:</dt>
+<dd><code>usernames</code> - colección con los nombres de usuarios a eliminar</dd>
+<dt>Returns:</dt>
+<dd>la cantidad de usuarios que fueron efectivamente eliminados</dd>
+</dl>
 </section>
 </li>
 <li>
@@ -215,6 +316,14 @@ loadScripts(document, 'script');</script>
 <h3>agregarFavorito</h3>
 <div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">boolean</span>&nbsp;<span class="element-name">agregarFavorito</span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;username,
  <a href="../model/Cancion.html" title="class in co.edu.uniquindio.application.model">Cancion</a>&nbsp;cancion)</span></div>
+<div class="block">Agrega una canción a la lista de favoritos de un usuario.</div>
+<dl class="notes">
+<dt>Parameters:</dt>
+<dd><code>username</code> - el nombre del usuario</dd>
+<dd><code>cancion</code> - la canción a agregar a favoritos</dd>
+<dt>Returns:</dt>
+<dd><code>true</code> si la canción fue agregada, <code>false</code> si ya estaba o usuario no existe</dd>
+</dl>
 </section>
 </li>
 <li>
@@ -222,12 +331,27 @@ loadScripts(document, 'script');</script>
 <h3>eliminarFavorito</h3>
 <div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">boolean</span>&nbsp;<span class="element-name">eliminarFavorito</span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;username,
  <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;idCancion)</span></div>
+<div class="block">Elimina una canción de la lista de favoritos de un usuario.</div>
+<dl class="notes">
+<dt>Parameters:</dt>
+<dd><code>username</code> - el nombre del usuario</dd>
+<dd><code>idCancion</code> - el identificador de la canción a eliminar</dd>
+<dt>Returns:</dt>
+<dd><code>true</code> si la canción fue eliminada, <code>false</code> si no existía o usuario no existe</dd>
+</dl>
 </section>
 </li>
 <li>
 <section class="detail" id="listarFavoritos(java.lang.String)">
 <h3>listarFavoritos</h3>
 <div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/util/Collection.html" title="class or interface in java.util" class="external-link">Collection</a>&lt;<a href="../model/Cancion.html" title="class in co.edu.uniquindio.application.model">Cancion</a>&gt;</span>&nbsp;<span class="element-name">listarFavoritos</span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;username)</span></div>
+<div class="block">Lista todas las canciones favoritas de un usuario.</div>
+<dl class="notes">
+<dt>Parameters:</dt>
+<dd><code>username</code> - el nombre del usuario</dd>
+<dt>Returns:</dt>
+<dd>colección de canciones favoritas, o lista vacía si el usuario no existe</dd>
+</dl>
 </section>
 </li>
 </ul>

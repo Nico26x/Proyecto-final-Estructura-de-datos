@@ -13,6 +13,26 @@ import java.util.*;
 import java.util.concurrent.locks.ReentrantLock;
 import java.util.stream.Collectors;
 
+/**
+ * Servicio de gestión de métricas y análisis de datos del sistema.
+ * <p>
+ * Proporciona funcionalidades para registrar eventos, analizar exportaciones de favoritos,
+ * y generar reportes estadísticos sobre artistas, géneros y canciones más populares.
+ * </p>
+ * <p>
+ * Características principales:
+ * </p>
+ * <ul>
+ *   <li>Registro de eventos en archivo CSV centralizado (metricas.csv)</li>
+ *   <li>Análisis de exportaciones de favoritos por usuario y día</li>
+ *   <li>Estadísticas de artistas, géneros y canciones más descargados</li>
+ *   <li>Consultas con rango de fechas</li>
+ *   <li>Acceso thread-safe mediante ReentrantLock</li>
+ * </ul>
+ *
+ * @author SyncUp
+ * @version 1.0
+ */
 @Service
 public class MetricasService {
 
@@ -21,6 +41,9 @@ public class MetricasService {
     private static final String METRICAS_MASTER = METRICAS_DIR + "/metricas.csv";
     private static final DateTimeFormatter TS_FMT = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
 
+    /**
+     * Lock para garantizar acceso thread-safe al archivo de métricas.
+     */
     private final ReentrantLock lock = new ReentrantLock();
 
     public MetricasService() {
@@ -41,7 +64,17 @@ public class MetricasService {
        REGISTRO DE EVENTOS
        ========================= */
 
-    /** Registra una línea en metricas.csv */
+    /**
+     * Registra un evento en el archivo maestro de métricas.
+     * <p>
+     * Añade una nueva línea con timestamp, usuario, acción y detalles.
+     * Acceso sincronizado mediante ReentrantLock para thread-safety.
+     * </p>
+     *
+     * @param username el usuario que realiza la acción
+     * @param accion la acción realizada (ej: "EXPORT_FAVORITOS")
+     * @param detalle información adicional sobre la acción
+     */
     public void registrarEvento(String username, String accion, String detalle) {
         lock.lock();
         try (BufferedWriter bw = Files.newBufferedWriter(Paths.get(METRICAS_MASTER),
@@ -56,7 +89,15 @@ public class MetricasService {
         }
     }
 
-    /** Conveniencia específica para exportación de favoritos */
+    /**
+     * Registra específicamente una exportación de favoritos.
+     * <p>
+     * Conveniencia para registrar eventos de exportación con la cantidad de favoritos.
+     * </p>
+     *
+     * @param username el usuario que realiza la exportación
+     * @param cantidadFavoritos el número de canciones favoritas exportadas
+     */
     public void registrarExportFavoritos(String username, int cantidadFavoritos) {
         registrarEvento(username, "EXPORT_FAVORITOS", "count=" + cantidadFavoritos);
     }
@@ -65,7 +106,11 @@ public class MetricasService {
        LECTURAS / AGREGACIONES
        ========================= */
 
-    /** Conteo de EXPORT_FAVORITOS por día (yyyy-MM-dd) */
+    /**
+     * Conteo de exportaciones de favoritos agrupadas por día (formato yyyy-MM-dd).
+     *
+     * @return mapa con fechas como clave y cantidad de exportaciones como valor
+     */
     public Map<String, Long> descargasFavoritosPorDia() {
         List<String[]> rows = leerCSV(Paths.get(METRICAS_MASTER));
         return rows.stream()
@@ -76,7 +121,12 @@ public class MetricasService {
                 ));
     }
 
-    /** Top usuarios por cantidad de EXPORT_FAVORITOS */
+    /**
+     * Obtiene los usuarios con más exportaciones de favoritos.
+     *
+     * @param limit el número máximo de usuarios a retornar
+     * @return lista de pares usuario-cantidad ordenados descendentemente
+     */
     public List<Map.Entry<String, Long>> topUsuariosExportadores(int limit) {
         List<String[]> rows = leerCSV(Paths.get(METRICAS_MASTER));
         Map<String, Long> porUsuario = rows.stream()
@@ -89,9 +139,13 @@ public class MetricasService {
     }
 
     /**
-     * Lee TODOS los CSV de favoritos per-user en:
-     *   src/main/resources/data/reportes/favoritos_*.csv
-     * y calcula top artistas / géneros.
+     * Obtiene los artistas más descargados desde todos los archivos de favoritos.
+     * <p>
+     * Lee los archivos favoritos_*.csv y agrega el conteo por artista.
+     * </p>
+     *
+     * @param limit el número máximo de artistas a retornar
+     * @return mapa ordenado descendentemente por cantidad de descargas
      */
     public Map<String, Long> topArtistasDesdeFavoritos(int limit) {
         Map<String, Long> conteo = new HashMap<>();
@@ -113,6 +167,15 @@ public class MetricasService {
                         Map.Entry::getKey, Map.Entry::getValue, (a, b) -> a, LinkedHashMap::new));
     }
 
+    /**
+     * Obtiene los géneros más descargados desde todos los archivos de favoritos.
+     * <p>
+     * Lee los archivos favoritos_*.csv y agrega el conteo por género.
+     * </p>
+     *
+     * @param limit el número máximo de géneros a retornar
+     * @return mapa ordenado descendentemente por cantidad de descargas
+     */
     public Map<String, Long> topGenerosDesdeFavoritos(int limit) {
         Map<String, Long> conteo = new HashMap<>();
         for (Path p : listarFavoritosCsv()) {
@@ -136,7 +199,11 @@ public class MetricasService {
        NUEVOS MÉTODOS DE MÉTRICAS
        ========================= */
 
-    /** Total de eventos EXPORT_FAVORITOS registrados. */
+    /**
+     * Obtiene el total de eventos EXPORT_FAVORITOS registrados.
+     *
+     * @return cantidad total de exportaciones de favoritos
+     */
     public long totalDescargasFavoritos() {
         List<String[]> rows = leerCSV(Paths.get(METRICAS_MASTER));
         return rows.stream()
@@ -144,7 +211,11 @@ public class MetricasService {
                 .count();
     }
 
-    /** Mapa username -> total de EXPORT_FAVORITOS. */
+    /**
+     * Obtiene un mapa de usuarios y su cantidad de exportaciones de favoritos.
+     *
+     * @return mapa con username como clave y cantidad de exportaciones como valor
+     */
     public Map<String, Long> descargasFavoritosPorUsuario() {
         List<String[]> rows = leerCSV(Paths.get(METRICAS_MASTER));
         return rows.stream()
@@ -153,8 +224,14 @@ public class MetricasService {
     }
 
     /**
-     * Conteo por día de EXPORT_FAVORITOS en rango [desde, hasta], formato yyyy-MM-dd.
+     * Conteo de exportaciones de favoritos por día dentro de un rango de fechas.
+     * <p>
      * Incluye días sin eventos con conteo 0 para facilitar gráficos continuos.
+     * </p>
+     *
+     * @param desde fecha de inicio (formato yyyy-MM-dd)
+     * @param hasta fecha de fin (formato yyyy-MM-dd)
+     * @return mapa con fechas completas del rango y sus conteos
      */
     public Map<String, Long> descargasFavoritosPorRango(String desde, String hasta) {
         LocalDate start = LocalDate.parse(desde);
@@ -182,8 +259,12 @@ public class MetricasService {
     }
 
     /**
-     * Promedio de favoritos exportados por evento (usa detalle "count=X").
-     * Si no hay datos, devuelve 0.0
+     * Calcula el promedio de canciones favoritas exportadas por evento.
+     * <p>
+     * Extrae el conteo del campo detalle (formato "count=X") y calcula el promedio.
+     * </p>
+     *
+     * @return el promedio de favoritos por exportación, o 0.0 si no hay datos
      */
     public double promedioFavoritosPorExport() {
         List<String[]> rows = leerCSV(Paths.get(METRICAS_MASTER));
@@ -201,7 +282,15 @@ public class MetricasService {
         return eventos == 0 ? 0.0 : (double) totalFavs / eventos;
     }
 
-    /** Últimos N eventos (cualquier acción), orden cronológico descendente. */
+    /**
+     * Obtiene los últimos N eventos de exportación de favoritos.
+     * <p>
+     * Ordena cronológicamente en orden descendente.
+     * </p>
+     *
+     * @param n el número máximo de eventos a retornar
+     * @return lista de eventos ordenados descendentemente por timestamp
+     */
     public List<EventoDTO> ultimasExportaciones(int n) {
         List<String[]> rows = leerCSV(Paths.get(METRICAS_MASTER));
         List<EventoDTO> eventos = new ArrayList<>();
@@ -219,8 +308,13 @@ public class MetricasService {
     }
 
     /**
-     * Top canciones global desde TODOS los CSV de favoritos (por título).
-     * Si quieres por ID (más confiable), cambia el índice 1->0 abajo.
+     * Obtiene las canciones más descargadas globalmente desde todos los archivos de favoritos.
+     * <p>
+     * Agrega el conteo por título de canción desde todos los archivos favoritos_*.csv.
+     * </p>
+     *
+     * @param limit el número máximo de canciones a retornar
+     * @return mapa ordenado descendentemente por cantidad de descargas
      */
     public Map<String, Long> topCancionesDesdeFavoritos(int limit) {
         Map<String, Long> conteo = new HashMap<>();
@@ -241,7 +335,13 @@ public class MetricasService {
                         Map.Entry::getKey, Map.Entry::getValue, (a, b) -> a, LinkedHashMap::new));
     }
 
-    /** Top artistas dentro del CSV de favoritos de UN usuario. */
+    /**
+     * Obtiene los artistas más descargados dentro del archivo de favoritos de un usuario específico.
+     *
+     * @param username el nombre del usuario
+     * @param limit el número máximo de artistas a retornar
+     * @return mapa ordenado descendentemente por cantidad de descargas, o vacío si el archivo no existe
+     */
     public Map<String, Long> topArtistasPorUsuario(String username, int limit) {
         Path file = Paths.get(BASE_DIR, "reportes", "favoritos_" + username + ".csv");
         Map<String, Long> conteo = new HashMap<>();
@@ -260,7 +360,13 @@ public class MetricasService {
                         Map.Entry::getKey, Map.Entry::getValue, (a, b) -> a, LinkedHashMap::new));
     }
 
-    /** Top géneros dentro del CSV de favoritos de UN usuario. */
+    /**
+     * Obtiene los géneros más descargados dentro del archivo de favoritos de un usuario específico.
+     *
+     * @param username el nombre del usuario
+     * @param limit el número máximo de géneros a retornar
+     * @return mapa ordenado descendentemente por cantidad de descargas, o vacío si el archivo no existe
+     */
     public Map<String, Long> topGenerosPorUsuario(String username, int limit) {
         Path file = Paths.get(BASE_DIR, "reportes", "favoritos_" + username + ".csv");
         Map<String, Long> conteo = new HashMap<>();
@@ -283,6 +389,14 @@ public class MetricasService {
        HELPERS CSV / FS
        ========================= */
 
+    /**
+     * Lista todos los archivos de favoritos en el directorio de reportes.
+     * <p>
+     * Busca archivos con patrón favoritos_*.csv.
+     * </p>
+     *
+     * @return lista de rutas a archivos de favoritos, o lista vacía si el directorio no existe
+     */
     private List<Path> listarFavoritosCsv() {
         Path dir = Paths.get(BASE_DIR, "reportes");
         if (!Files.exists(dir)) return List.of();
@@ -297,6 +411,15 @@ public class MetricasService {
         }
     }
 
+    /**
+     * Lee un archivo CSV y lo convierte en una lista de arrays de strings.
+     * <p>
+     * Maneja correctamente caracteres especiales y comillas dobles según el estándar CSV.
+     * </p>
+     *
+     * @param path la ruta del archivo CSV a leer
+     * @return lista de arrays de strings representando las filas del CSV, o lista vacía si el archivo no existe
+     */
     private List<String[]> leerCSV(Path path) {
         if (!Files.exists(path)) return List.of();
         List<String[]> out = new ArrayList<>();
@@ -311,6 +434,20 @@ public class MetricasService {
         return out;
     }
 
+    /**
+     * Analiza una línea CSV respetando comillas dobles como delimitador de campos.
+     * <p>
+     * Implementa parsing estándar de CSV:
+     * </p>
+     * <ul>
+     *   <li>Los campos se separan por comas</li>
+     *   <li>Las comillas dobles dentro de un campo se escapan duplicándose</li>
+     *   <li>Los campos entrecomillados pueden contener comas y saltos de línea</li>
+     * </ul>
+     *
+     * @param line la línea de texto a analizar
+     * @return array de strings con los campos parseados
+     */
     private String[] parse(String line) {
         // parse simple: divide por coma respetando comillas dobles
         List<String> cells = new ArrayList<>();
@@ -336,6 +473,16 @@ public class MetricasService {
         return cells.toArray(new String[0]);
     }
 
+    /**
+     * Escapa un valor de texto para cumplir con el estándar CSV.
+     * <p>
+     * Duplica las comillas internas y envuelve el valor con comillas si contiene
+     * caracteres especiales (comas, comillas, saltos de línea o retornos de carro).
+     * </p>
+     *
+     * @param v el valor a escapar
+     * @return el valor escapado listo para usar en CSV, o cadena vacía si es {@code null}
+     */
     private String escape(String v) {
         if (v == null) return "";
         boolean needs = v.contains(",") || v.contains("\"") || v.contains("\n") || v.contains("\r");
@@ -347,12 +494,41 @@ public class MetricasService {
        DTOs
        ========================= */
 
+    /**
+     * DTO que representa un evento registrado en las métricas.
+     * <p>
+     * Contiene la información de un evento: timestamp, usuario, acción y detalles.
+     * </p>
+     */
     public static class EventoDTO {
-        public final String timestamp; // "yyyy-MM-dd HH:mm:ss"
+        /**
+         * Timestamp del evento en formato "yyyy-MM-dd HH:mm:ss".
+         */
+        public final String timestamp;
+
+        /**
+         * Nombre de usuario que realizó la acción.
+         */
         public final String username;
+
+        /**
+         * Tipo de acción realizada (ej: "EXPORT_FAVORITOS").
+         */
         public final String accion;
+
+        /**
+         * Información adicional sobre la acción.
+         */
         public final String detalle;
 
+        /**
+         * Constructor de EventoDTO.
+         *
+         * @param timestamp el timestamp del evento
+         * @param username el usuario que realizó la acción
+         * @param accion la acción realizada
+         * @param detalle información adicional
+         */
         public EventoDTO(String timestamp, String username, String accion, String detalle) {
             this.timestamp = timestamp;
             this.username = username;
@@ -365,6 +541,15 @@ public class MetricasService {
        PARSERS ESPECÍFICOS
        ========================= */
 
+    /**
+     * Extrae el conteo de favoritos desde el campo detalle.
+     * <p>
+     * Espera formato "count=NUM" y devuelve el número extraído.
+     * </p>
+     *
+     * @param detalle el campo detalle del evento
+     * @return el conteo extraído, o {@code null} si el formato no es válido
+     */
     private Integer parseCountFromDetalle(String detalle) {
         // espera formato "count=NUM"
         if (detalle == null) return null;

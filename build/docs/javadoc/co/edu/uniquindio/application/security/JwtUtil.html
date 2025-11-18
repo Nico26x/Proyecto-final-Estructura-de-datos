@@ -30,6 +30,7 @@ loadScripts(document, 'script');</script>
 <li><a href="package-summary.html">Package</a></li>
 <li class="nav-bar-cell1-rev">Class</li>
 <li><a href="package-tree.html">Tree</a></li>
+<li><a href="../../../../../deprecated-list.html">Deprecated</a></li>
 <li><a href="../../../../../index-all.html">Index</a></li>
 <li><a href="../../../../../help-doc.html#class">Help</a></li>
 </ul>
@@ -92,6 +93,21 @@ loadScripts(document, 'script');</script>
 <div class="type-signature"><span class="annotations">@Component
 </span><span class="modifiers">public class </span><span class="element-name type-name-label">JwtUtil</span>
 <span class="extends-implements">extends <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a></span></div>
+<div class="block">Utilidad para la gestión de tokens JWT (JSON Web Tokens).
+ <p>
+ Proporciona métodos para generar, validar y extraer información de tokens JWT
+ utilizando la librería JJWT. Los tokens contienen información del usuario (username)
+ y su rol de autorización.
+ </p>
+ <p>
+ Características:
+ </p>
+ <ul>
+   <li>Generación de tokens JWT firmados con HMAC-SHA256</li>
+   <li>Validación de integridad y vigencia de tokens</li>
+   <li>Extracción de claims del token (username, rol)</li>
+   <li>Tiempo de expiración configurable (24 horas por defecto)</li>
+ </ul></div>
 </section>
 <section class="summary">
 <ul class="summary-list">
@@ -122,22 +138,34 @@ loadScripts(document, 'script');</script>
 <div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></code></div>
 <div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#generarToken(java.lang.String,java.lang.String)" class="member-name-link">generarToken</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;username,
  <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;rol)</code></div>
-<div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">&nbsp;</div>
+<div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
+<div class="block">Genera un nuevo token JWT para un usuario con su rol asociado.</div>
+</div>
 <div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></code></div>
 <div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#obtenerRol(java.lang.String)" class="member-name-link">obtenerRol</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;token)</code></div>
-<div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">&nbsp;</div>
+<div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
+<div class="block">Extrae el rol del usuario del claim "rol" del token JWT.</div>
+</div>
 <div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></code></div>
 <div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#obtenerRolDelToken(java.lang.String)" class="member-name-link">obtenerRolDelToken</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;token)</code></div>
-<div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">&nbsp;</div>
+<div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
+<div class="block">Extrae el rol del usuario del claim "rol" del token JWT.</div>
+</div>
 <div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></code></div>
 <div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#obtenerUsername(java.lang.String)" class="member-name-link">obtenerUsername</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;token)</code></div>
-<div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">&nbsp;</div>
+<div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
+<div class="block">Extrae el nombre de usuario (subject) del token JWT.</div>
+</div>
 <div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></code></div>
 <div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#obtenerUsernameDelToken(java.lang.String)" class="member-name-link">obtenerUsernameDelToken</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;token)</code></div>
-<div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">&nbsp;</div>
+<div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
+<div class="block">Extrae el nombre de usuario (subject) del token JWT.</div>
+</div>
 <div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>boolean</code></div>
 <div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#validarToken(java.lang.String)" class="member-name-link">validarToken</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;token)</code></div>
-<div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">&nbsp;</div>
+<div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
+<div class="block">Valida la integridad y vigencia de un token JWT.</div>
+</div>
 </div>
 </div>
 </div>
@@ -174,36 +202,103 @@ loadScripts(document, 'script');</script>
 <h3>generarToken</h3>
 <div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></span>&nbsp;<span class="element-name">generarToken</span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;username,
  <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;rol)</span></div>
+<div class="block">Genera un nuevo token JWT para un usuario con su rol asociado.
+ <p>
+ El token contiene:
+ </p>
+ <ul>
+   <li>subject: el username del usuario</li>
+   <li>claim "rol": el rol del usuario</li>
+   <li>issuedAt: marca de tiempo de creación</li>
+   <li>expiration: marca de tiempo de expiración (24 horas)</li>
+   <li>firma: HMAC-SHA256 para garantizar integridad</li>
+ </ul></div>
+<dl class="notes">
+<dt>Parameters:</dt>
+<dd><code>username</code> - el nombre de usuario a incluir en el token</dd>
+<dd><code>rol</code> - el rol del usuario a incluir en el token</dd>
+<dt>Returns:</dt>
+<dd>el token JWT codificado y firmado</dd>
+</dl>
 </section>
 </li>
 <li>
 <section class="detail" id="obtenerUsername(java.lang.String)">
 <h3>obtenerUsername</h3>
 <div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></span>&nbsp;<span class="element-name">obtenerUsername</span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;token)</span></div>
+<div class="block">Extrae el nombre de usuario (subject) del token JWT.</div>
+<dl class="notes">
+<dt>Parameters:</dt>
+<dd><code>token</code> - el token JWT a procesar</dd>
+<dt>Returns:</dt>
+<dd>el username contenido en el token</dd>
+</dl>
 </section>
 </li>
 <li>
 <section class="detail" id="obtenerRol(java.lang.String)">
 <h3>obtenerRol</h3>
 <div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></span>&nbsp;<span class="element-name">obtenerRol</span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;token)</span></div>
+<div class="block">Extrae el rol del usuario del claim "rol" del token JWT.</div>
+<dl class="notes">
+<dt>Parameters:</dt>
+<dd><code>token</code> - el token JWT a procesar</dd>
+<dt>Returns:</dt>
+<dd>el rol contenido en el token</dd>
+</dl>
 </section>
 </li>
 <li>
 <section class="detail" id="validarToken(java.lang.String)">
 <h3>validarToken</h3>
 <div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">boolean</span>&nbsp;<span class="element-name">validarToken</span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;token)</span></div>
+<div class="block">Valida la integridad y vigencia de un token JWT.
+ <p>
+ Verifica que:
+ </p>
+ <ul>
+   <li>La firma sea válida (coincide con la clave secreta)</li>
+   <li>El token no haya expirado</li>
+   <li>El formato del token sea correcto</li>
+ </ul></div>
+<dl class="notes">
+<dt>Parameters:</dt>
+<dd><code>token</code> - el token JWT a validar</dd>
+<dt>Returns:</dt>
+<dd><code>true</code> si el token es válido, <code>false</code> en caso contrario</dd>
+</dl>
 </section>
 </li>
 <li>
 <section class="detail" id="obtenerUsernameDelToken(java.lang.String)">
 <h3>obtenerUsernameDelToken</h3>
 <div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></span>&nbsp;<span class="element-name">obtenerUsernameDelToken</span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;token)</span></div>
+<div class="block">Extrae el nombre de usuario (subject) del token JWT.
+ <p>
+ Alias de <a href="#obtenerUsername(java.lang.String)"><code>obtenerUsername(String)</code></a> con nombre más descriptivo.
+ </p></div>
+<dl class="notes">
+<dt>Parameters:</dt>
+<dd><code>token</code> - el token JWT a procesar</dd>
+<dt>Returns:</dt>
+<dd>el username contenido en el token</dd>
+</dl>
 </section>
 </li>
 <li>
 <section class="detail" id="obtenerRolDelToken(java.lang.String)">
 <h3>obtenerRolDelToken</h3>
 <div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></span>&nbsp;<span class="element-name">obtenerRolDelToken</span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;token)</span></div>
+<div class="block">Extrae el rol del usuario del claim "rol" del token JWT.
+ <p>
+ Alias de <a href="#obtenerRol(java.lang.String)"><code>obtenerRol(String)</code></a> con nombre más descriptivo.
+ </p></div>
+<dl class="notes">
+<dt>Parameters:</dt>
+<dd><code>token</code> - el token JWT a procesar</dd>
+<dt>Returns:</dt>
+<dd>el rol contenido en el token</dd>
+</dl>
 </section>
 </li>
 </ul>

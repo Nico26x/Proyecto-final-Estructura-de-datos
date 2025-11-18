@@ -30,6 +30,7 @@ loadScripts(document, 'script');</script>
 <li><a href="package-summary.html">Package</a></li>
 <li class="nav-bar-cell1-rev">Class</li>
 <li><a href="package-tree.html">Tree</a></li>
+<li><a href="../../../../../deprecated-list.html">Deprecated</a></li>
 <li><a href="../../../../../index-all.html">Index</a></li>
 <li><a href="../../../../../help-doc.html#class">Help</a></li>
 </ul>
@@ -92,8 +93,29 @@ loadScripts(document, 'script');</script>
 <div class="type-signature"><span class="annotations">@Configuration
 </span><span class="modifiers">public class </span><span class="element-name type-name-label">SecurityConfig</span>
 <span class="extends-implements">extends <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a></span></div>
-<div class="block">🔐 Configuración de seguridad basada en JWT.
- Controla qué endpoints son públicos y cuáles requieren autenticación o rol específico.</div>
+<div class="block">Configuración de seguridad basada en JWT para la aplicación.
+ <p>
+ Define la cadena de filtros de seguridad, reglas de autorización por rol,
+ CORS y configuración de sesiones sin estado (stateless) para una API REST.
+ </p>
+ <p>
+ Características de seguridad:
+ </p>
+ <ul>
+   <li>Autenticación mediante tokens JWT</li>
+   <li>Autorización basada en roles (ADMIN, USER)</li>
+   <li>CORS habilitado para comunicación con frontend en localhost:3000</li>
+   <li>CSRF deshabilitado para API REST stateless</li>
+   <li>Encriptación de contraseñas con BCrypt</li>
+ </ul>
+ <p>
+ Roles y permisos:
+ </p>
+ <ul>
+   <li><strong>Sin autenticación:</strong> Login, registro, consultas públicas</li>
+   <li><strong>USER/ADMIN:</strong> Gestión de favoritos, social, recomendaciones</li>
+   <li><strong>ADMIN:</strong> Gestión completa de usuarios y canciones</li>
+ </ul></div>
 </section>
 <section class="summary">
 <ul class="summary-list">
@@ -123,13 +145,24 @@ loadScripts(document, 'script');</script>
 <div class="table-header col-last">Description</div>
 <div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>org.springframework.security.authentication.AuthenticationManager</code></div>
 <div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#authenticationManager(org.springframework.security.config.annotation.authentication.configuration.AuthenticationConfiguration)" class="member-name-link">authenticationManager</a><wbr>(org.springframework.security.config.annotation.authentication.configuration.AuthenticationConfiguration&nbsp;configuration)</code></div>
-<div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">&nbsp;</div>
-<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>org.springframework.security.crypto.password.PasswordEncoder</code></div>
-<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#passwordEncoder()" class="member-name-link">passwordEncoder</a>()</code></div>
-<div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">&nbsp;</div>
-<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>org.springframework.security.web.SecurityFilterChain</code></div>
-<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#securityFilterChain(org.springframework.security.config.annotation.web.builders.HttpSecurity)" class="member-name-link">securityFilterChain</a><wbr>(org.springframework.security.config.annotation.web.builders.HttpSecurity&nbsp;http)</code></div>
-<div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">&nbsp;</div>
+<div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
+<div class="block">Proporciona el gestor de autenticación de Spring Security.</div>
+</div>
+<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>org.springframework.web.cors.CorsConfigurationSource</code></div>
+<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#corsConfigurationSource()" class="member-name-link">corsConfigurationSource</a>()</code></div>
+<div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
+<div class="block">Configura CORS (Cross-Origin Resource Sharing) para permitir solicitudes desde el frontend.</div>
+</div>
+<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>org.springframework.security.crypto.password.PasswordEncoder</code></div>
+<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#passwordEncoder()" class="member-name-link">passwordEncoder</a>()</code></div>
+<div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
+<div class="block">Proporciona el codificador de contraseñas usando BCrypt.</div>
+</div>
+<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>org.springframework.security.web.SecurityFilterChain</code></div>
+<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#securityFilterChain(org.springframework.security.config.annotation.web.builders.HttpSecurity)" class="member-name-link">securityFilterChain</a><wbr>(org.springframework.security.config.annotation.web.builders.HttpSecurity&nbsp;http)</code></div>
+<div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
+<div class="block">Configura la cadena de filtros de seguridad con reglas de autorización.</div>
+</div>
 </div>
 </div>
 </div>
@@ -167,9 +200,39 @@ loadScripts(document, 'script');</script>
 <div class="member-signature"><span class="annotations">@Bean
 </span><span class="modifiers">public</span>&nbsp;<span class="return-type">org.springframework.security.web.SecurityFilterChain</span>&nbsp;<span class="element-name">securityFilterChain</span><wbr><span class="parameters">(org.springframework.security.config.annotation.web.builders.HttpSecurity&nbsp;http)</span>
                                                                          throws <span class="exceptions"><a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/Exception.html" title="class or interface in java.lang" class="external-link">Exception</a></span></div>
+<div class="block">Configura la cadena de filtros de seguridad con reglas de autorización.
+ <p>
+ Define:
+ </p>
+ <ul>
+   <li>CORS: permite solicitudes desde localhost:3000</li>
+   <li>CSRF: deshabilitado para API REST stateless</li>
+   <li>Autorización: reglas por rol para cada endpoint</li>
+   <li>Sesiones: stateless (sin cookies de sesión)</li>
+ </ul></div>
 <dl class="notes">
+<dt>Parameters:</dt>
+<dd><code>http</code> - la configuración de seguridad HTTP</dd>
+<dt>Returns:</dt>
+<dd>la cadena de filtros de seguridad configurada</dd>
 <dt>Throws:</dt>
-<dd><code><a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/Exception.html" title="class or interface in java.lang" class="external-link">Exception</a></code></dd>
+<dd><code><a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/Exception.html" title="class or interface in java.lang" class="external-link">Exception</a></code> - si ocurre un error en la configuración</dd>
+</dl>
+</section>
+</li>
+<li>
+<section class="detail" id="corsConfigurationSource()">
+<h3>corsConfigurationSource</h3>
+<div class="member-signature"><span class="annotations">@Bean
+</span><span class="modifiers">public</span>&nbsp;<span class="return-type">org.springframework.web.cors.CorsConfigurationSource</span>&nbsp;<span class="element-name">corsConfigurationSource</span>()</div>
+<div class="block">Configura CORS (Cross-Origin Resource Sharing) para permitir solicitudes desde el frontend.
+ <p>
+ Permite solicitudes desde localhost:3000 (frontend React) con métodos HTTP comunes
+ y todos los encabezados.
+ </p></div>
+<dl class="notes">
+<dt>Returns:</dt>
+<dd>la fuente de configuración CORS</dd>
 </dl>
 </section>
 </li>
@@ -178,6 +241,15 @@ loadScripts(document, 'script');</script>
 <h3>passwordEncoder</h3>
 <div class="member-signature"><span class="annotations">@Bean
 </span><span class="modifiers">public</span>&nbsp;<span class="return-type">org.springframework.security.crypto.password.PasswordEncoder</span>&nbsp;<span class="element-name">passwordEncoder</span>()</div>
+<div class="block">Proporciona el codificador de contraseñas usando BCrypt.
+ <p>
+ BCrypt es un algoritmo de hash seguro que incluye salt automático
+ y es resistente a ataques de fuerza bruta.
+ </p></div>
+<dl class="notes">
+<dt>Returns:</dt>
+<dd>codificador de contraseñas BCrypt</dd>
+</dl>
 </section>
 </li>
 <li>
@@ -186,9 +258,17 @@ loadScripts(document, 'script');</script>
 <div class="member-signature"><span class="annotations">@Bean
 </span><span class="modifiers">public</span>&nbsp;<span class="return-type">org.springframework.security.authentication.AuthenticationManager</span>&nbsp;<span class="element-name">authenticationManager</span><wbr><span class="parameters">(org.springframework.security.config.annotation.authentication.configuration.AuthenticationConfiguration&nbsp;configuration)</span>
                                                                                         throws <span class="exceptions"><a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/Exception.html" title="class or interface in java.lang" class="external-link">Exception</a></span></div>
+<div class="block">Proporciona el gestor de autenticación de Spring Security.
+ <p>
+ Se utiliza para autenticar credenciales de usuario en el proceso de login.
+ </p></div>
 <dl class="notes">
+<dt>Parameters:</dt>
+<dd><code>configuration</code> - la configuración de autenticación</dd>
+<dt>Returns:</dt>
+<dd>gestor de autenticación configurado</dd>
 <dt>Throws:</dt>
-<dd><code><a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/Exception.html" title="class or interface in java.lang" class="external-link">Exception</a></code></dd>
+<dd><code><a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/Exception.html" title="class or interface in java.lang" class="external-link">Exception</a></code> - si ocurre un error en la configuración</dd>
 </dl>
 </section>
 </li>

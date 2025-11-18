@@ -30,6 +30,7 @@ loadScripts(document, 'script');</script>
 <li><a href="package-summary.html">Package</a></li>
 <li class="nav-bar-cell1-rev">Class</li>
 <li><a href="package-tree.html">Tree</a></li>
+<li><a href="../../../../../deprecated-list.html">Deprecated</a></li>
 <li><a href="../../../../../index-all.html">Index</a></li>
 <li><a href="../../../../../help-doc.html#class">Help</a></li>
 </ul>
@@ -97,6 +98,11 @@ loadScripts(document, 'script');</script>
 <hr>
 <div class="type-signature"><span class="modifiers">public enum </span><span class="element-name type-name-label">Rol</span>
 <span class="extends-implements">extends <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/Enum.html" title="class or interface in java.lang" class="external-link">Enum</a>&lt;<a href="Rol.html" title="enum class in co.edu.uniquindio.application.model">Rol</a>&gt;</span></div>
+<div class="block">Enumeración que define los roles de usuario en el sistema.
+ <p>
+ Los roles determinan el nivel de autorización y permisos de un usuario
+ en la plataforma SyncUp.
+ </p></div>
 </section>
 <section class="summary">
 <ul class="summary-list">
@@ -118,9 +124,13 @@ loadScripts(document, 'script');</script>
 <div class="table-header col-first">Enum Constant</div>
 <div class="table-header col-last">Description</div>
 <div class="col-first even-row-color"><code><a href="#ADMIN" class="member-name-link">ADMIN</a></code></div>
-<div class="col-last even-row-color">&nbsp;</div>
+<div class="col-last even-row-color">
+<div class="block">Rol de administrador.</div>
+</div>
 <div class="col-first odd-row-color"><code><a href="#USER" class="member-name-link">USER</a></code></div>
-<div class="col-last odd-row-color">&nbsp;</div>
+<div class="col-last odd-row-color">
+<div class="block">Rol de usuario regular.</div>
+</div>
 </div>
 </section>
 </li>
@@ -170,12 +180,21 @@ the order they are declared.</div>
 <section class="detail" id="ADMIN">
 <h3>ADMIN</h3>
 <div class="member-signature"><span class="modifiers">public static final</span>&nbsp;<span class="return-type"><a href="Rol.html" title="enum class in co.edu.uniquindio.application.model">Rol</a></span>&nbsp;<span class="element-name">ADMIN</span></div>
+<div class="block">Rol de administrador.
+ <p>
+ Permisos completos para gestionar usuarios, canciones, métricas y configuración del sistema.
+ </p></div>
 </section>
 </li>
 <li>
 <section class="detail" id="USER">
 <h3>USER</h3>
 <div class="member-signature"><span class="modifiers">public static final</span>&nbsp;<span class="return-type"><a href="Rol.html" title="enum class in co.edu.uniquindio.application.model">Rol</a></span>&nbsp;<span class="element-name">USER</span></div>
+<div class="block">Rol de usuario regular.
+ <p>
+ Permisos limitados: reproducción de música, gestión de favoritos, redes sociales
+ y acceso a funcionalidades estándar de la aplicación.
+ </p></div>
 </section>
 </li>
 </ul>

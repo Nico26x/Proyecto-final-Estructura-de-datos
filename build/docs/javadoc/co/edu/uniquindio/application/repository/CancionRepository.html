@@ -30,6 +30,7 @@ loadScripts(document, 'script');</script>
 <li><a href="package-summary.html">Package</a></li>
 <li class="nav-bar-cell1-rev">Class</li>
 <li><a href="package-tree.html">Tree</a></li>
+<li><a href="../../../../../deprecated-list.html">Deprecated</a></li>
 <li><a href="../../../../../index-all.html">Index</a></li>
 <li><a href="../../../../../help-doc.html#class">Help</a></li>
 </ul>
@@ -92,7 +93,22 @@ loadScripts(document, 'script');</script>
 <div class="type-signature"><span class="annotations">@Repository
 </span><span class="modifiers">public class </span><span class="element-name type-name-label">CancionRepository</span>
 <span class="extends-implements">extends <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a></span></div>
-<div class="block">Repositorio con persistencia en archivo canciones.txt</div>
+<div class="block">Repositorio de canciones con persistencia en archivo.
+ <p>
+ Gestiona la lectura, escritura y búsqueda de canciones utilizando un archivo
+ de texto (canciones.txt) como almacenamiento. Proporciona operaciones CRUD completas
+ y búsqueda avanzada concurrente.
+ </p>
+ <p>
+ Características:
+ </p>
+ <ul>
+   <li>Persistencia en archivo con soporte para 6 o 7 columnas</li>
+   <li>Almacenamiento en memoria con ConcurrentHashMap para thread-safety</li>
+   <li>Búsqueda simple por título y género</li>
+   <li>Búsqueda avanzada concurrente con operadores AND/OR</li>
+   <li>Control automático de IDs duplicados</li>
+ </ul></div>
 </section>
 <section class="summary">
 <ul class="summary-list">
@@ -105,7 +121,9 @@ loadScripts(document, 'script');</script>
 <div class="table-header col-first">Constructor</div>
 <div class="table-header col-last">Description</div>
 <div class="col-constructor-name even-row-color"><code><a href="#%3Cinit%3E()" class="member-name-link">CancionRepository</a>()</code></div>
-<div class="col-last even-row-color">&nbsp;</div>
+<div class="col-last even-row-color">
+<div class="block">Constructor que carga las canciones desde el archivo al inicializar.</div>
+</div>
 </div>
 </section>
 </li>
@@ -122,10 +140,14 @@ loadScripts(document, 'script');</script>
 <div class="table-header col-last">Description</div>
 <div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>boolean</code></div>
 <div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#actualizarCancion(co.edu.uniquindio.application.model.Cancion)" class="member-name-link">actualizarCancion</a><wbr>(<a href="../model/Cancion.html" title="class in co.edu.uniquindio.application.model">Cancion</a>&nbsp;cancion)</code></div>
-<div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">&nbsp;</div>
+<div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
+<div class="block">Actualiza una canción existente en el repositorio.</div>
+</div>
 <div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>void</code></div>
 <div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#agregarCancion(co.edu.uniquindio.application.model.Cancion)" class="member-name-link">agregarCancion</a><wbr>(<a href="../model/Cancion.html" title="class in co.edu.uniquindio.application.model">Cancion</a>&nbsp;cancion)</code></div>
-<div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">&nbsp;</div>
+<div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
+<div class="block">Agrega una nueva canción al repositorio.</div>
+</div>
 <div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/util/List.html" title="class or interface in java.util" class="external-link">List</a><wbr>&lt;<a href="../model/Cancion.html" title="class in co.edu.uniquindio.application.model">Cancion</a>&gt;</code></div>
 <div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#buscarAvanzadaConcurrente(java.lang.String,java.lang.String,java.lang.String,java.lang.Integer,java.lang.Integer,java.lang.String)" class="member-name-link">buscarAvanzadaConcurrente</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;titulo,
  <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;artista,
@@ -133,20 +155,30 @@ loadScripts(document, 'script');</script>
  <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/Integer.html" title="class or interface in java.lang" class="external-link">Integer</a>&nbsp;anioFrom,
  <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/Integer.html" title="class or interface in java.lang" class="external-link">Integer</a>&nbsp;anioTo,
  <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;op)</code></div>
-<div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">&nbsp;</div>
+<div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
+<div class="block">Realiza una búsqueda avanzada concurrente de canciones con múltiples criterios.</div>
+</div>
 <div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/util/List.html" title="class or interface in java.util" class="external-link">List</a><wbr>&lt;<a href="../model/Cancion.html" title="class in co.edu.uniquindio.application.model">Cancion</a>&gt;</code></div>
 <div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#buscarPorFiltro(java.lang.String,java.lang.String)" class="member-name-link">buscarPorFiltro</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;titulo,
  <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;genero)</code></div>
-<div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">&nbsp;</div>
+<div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
+<div class="block">Realiza una búsqueda simple de canciones por título y/o género.</div>
+</div>
 <div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="../model/Cancion.html" title="class in co.edu.uniquindio.application.model">Cancion</a></code></div>
 <div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#buscarPorId(java.lang.String)" class="member-name-link">buscarPorId</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;id)</code></div>
-<div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">&nbsp;</div>
+<div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
+<div class="block">Busca una canción por su identificador único.</div>
+</div>
 <div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>boolean</code></div>
 <div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#eliminarCancion(java.lang.String)" class="member-name-link">eliminarCancion</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;id)</code></div>
-<div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">&nbsp;</div>
+<div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
+<div class="block">Elimina una canción del repositorio por su identificador.</div>
+</div>
 <div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/util/Collection.html" title="class or interface in java.util" class="external-link">Collection</a><wbr>&lt;<a href="../model/Cancion.html" title="class in co.edu.uniquindio.application.model">Cancion</a>&gt;</code></div>
 <div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#listarCanciones()" class="member-name-link">listarCanciones</a>()</code></div>
-<div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">&nbsp;</div>
+<div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
+<div class="block">Lista todas las canciones registradas en el repositorio.</div>
+</div>
 </div>
 </div>
 </div>
@@ -168,6 +200,7 @@ loadScripts(document, 'script');</script>
 <section class="detail" id="&lt;init&gt;()">
 <h3>CancionRepository</h3>
 <div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="element-name">CancionRepository</span>()</div>
+<div class="block">Constructor que carga las canciones desde el archivo al inicializar.</div>
 </section>
 </li>
 </ul>
@@ -182,30 +215,65 @@ loadScripts(document, 'script');</script>
 <section class="detail" id="buscarPorId(java.lang.String)">
 <h3>buscarPorId</h3>
 <div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="../model/Cancion.html" title="class in co.edu.uniquindio.application.model">Cancion</a></span>&nbsp;<span class="element-name">buscarPorId</span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;id)</span></div>
+<div class="block">Busca una canción por su identificador único.</div>
+<dl class="notes">
+<dt>Parameters:</dt>
+<dd><code>id</code> - el identificador de la canción a buscar</dd>
+<dt>Returns:</dt>
+<dd>la canción si existe, <code>null</code> en caso contrario</dd>
+</dl>
 </section>
 </li>
 <li>
 <section class="detail" id="listarCanciones()">
 <h3>listarCanciones</h3>
 <div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/util/Collection.html" title="class or interface in java.util" class="external-link">Collection</a>&lt;<a href="../model/Cancion.html" title="class in co.edu.uniquindio.application.model">Cancion</a>&gt;</span>&nbsp;<span class="element-name">listarCanciones</span>()</div>
+<div class="block">Lista todas las canciones registradas en el repositorio.</div>
+<dl class="notes">
+<dt>Returns:</dt>
+<dd>colección con todas las canciones almacenadas</dd>
+</dl>
 </section>
 </li>
 <li>
 <section class="detail" id="agregarCancion(co.edu.uniquindio.application.model.Cancion)">
 <h3>agregarCancion</h3>
 <div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">void</span>&nbsp;<span class="element-name">agregarCancion</span><wbr><span class="parameters">(<a href="../model/Cancion.html" title="class in co.edu.uniquindio.application.model">Cancion</a>&nbsp;cancion)</span></div>
+<div class="block">Agrega una nueva canción al repositorio.
+ <p>
+ Si el ID de la canción ya existe, se asigna automáticamente un nuevo ID disponible
+ y se registra una advertencia en la consola.
+ </p></div>
+<dl class="notes">
+<dt>Parameters:</dt>
+<dd><code>cancion</code> - la canción a agregar</dd>
+</dl>
 </section>
 </li>
 <li>
 <section class="detail" id="actualizarCancion(co.edu.uniquindio.application.model.Cancion)">
 <h3>actualizarCancion</h3>
 <div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">boolean</span>&nbsp;<span class="element-name">actualizarCancion</span><wbr><span class="parameters">(<a href="../model/Cancion.html" title="class in co.edu.uniquindio.application.model">Cancion</a>&nbsp;cancion)</span></div>
+<div class="block">Actualiza una canción existente en el repositorio.</div>
+<dl class="notes">
+<dt>Parameters:</dt>
+<dd><code>cancion</code> - la canción con los datos actualizados</dd>
+<dt>Returns:</dt>
+<dd><code>true</code> si la actualización fue exitosa, <code>false</code> si la canción no existe</dd>
+</dl>
 </section>
 </li>
 <li>
 <section class="detail" id="eliminarCancion(java.lang.String)">
 <h3>eliminarCancion</h3>
 <div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">boolean</span>&nbsp;<span class="element-name">eliminarCancion</span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;id)</span></div>
+<div class="block">Elimina una canción del repositorio por su identificador.</div>
+<dl class="notes">
+<dt>Parameters:</dt>
+<dd><code>id</code> - el identificador de la canción a eliminar</dd>
+<dt>Returns:</dt>
+<dd><code>true</code> si la eliminación fue exitosa, <code>false</code> si la canción no existe</dd>
+</dl>
 </section>
 </li>
 <li>
@@ -213,6 +281,18 @@ loadScripts(document, 'script');</script>
 <h3>buscarPorFiltro</h3>
 <div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/util/List.html" title="class or interface in java.util" class="external-link">List</a>&lt;<a href="../model/Cancion.html" title="class in co.edu.uniquindio.application.model">Cancion</a>&gt;</span>&nbsp;<span class="element-name">buscarPorFiltro</span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;titulo,
  <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;genero)</span></div>
+<div class="block">Realiza una búsqueda simple de canciones por título y/o género.
+ <p>
+ La búsqueda es case-insensitive y utiliza contención de subcadenas.
+ Ambos parámetros son opcionales (pueden ser <code>null</code>).
+ </p></div>
+<dl class="notes">
+<dt>Parameters:</dt>
+<dd><code>titulo</code> - el título o parte del título a buscar (opcional)</dd>
+<dd><code>genero</code> - el género o parte del género a buscar (opcional)</dd>
+<dt>Returns:</dt>
+<dd>lista de canciones que coinciden con los criterios</dd>
+</dl>
 </section>
 </li>
 <li>
@@ -224,6 +304,25 @@ loadScripts(document, 'script');</script>
  <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/Integer.html" title="class or interface in java.lang" class="external-link">Integer</a>&nbsp;anioFrom,
  <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/Integer.html" title="class or interface in java.lang" class="external-link">Integer</a>&nbsp;anioTo,
  <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;op)</span></div>
+<div class="block">Realiza una búsqueda avanzada concurrente de canciones con múltiples criterios.
+ <p>
+ Ejecuta búsquedas por título, artista, género y rango de años en paralelo,
+ combinando los resultados con el operador especificado (AND u OR).
+ </p>
+ <p>
+ Implementa RF-004 (Búsqueda avanzada) y RF-030 (Búsqueda concurrente).
+ </p></div>
+<dl class="notes">
+<dt>Parameters:</dt>
+<dd><code>titulo</code> - título o parte del título a buscar (opcional)</dd>
+<dd><code>artista</code> - artista o parte del nombre a buscar (opcional)</dd>
+<dd><code>genero</code> - género o parte del género a buscar (opcional)</dd>
+<dd><code>anioFrom</code> - año inicial del rango (opcional)</dd>
+<dd><code>anioTo</code> - año final del rango (opcional)</dd>
+<dd><code>op</code> - operador de combinación: "AND" para intersección, "OR" para unión</dd>
+<dt>Returns:</dt>
+<dd>lista de canciones que cumplen con los criterios de búsqueda</dd>
+</dl>
 </section>
 </li>
 </ul>

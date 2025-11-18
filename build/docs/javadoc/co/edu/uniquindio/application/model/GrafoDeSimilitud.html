@@ -30,6 +30,7 @@ loadScripts(document, 'script');</script>
 <li><a href="package-summary.html">Package</a></li>
 <li class="nav-bar-cell1-rev">Class</li>
 <li><a href="package-tree.html">Tree</a></li>
+<li><a href="../../../../../deprecated-list.html">Deprecated</a></li>
 <li><a href="../../../../../index-all.html">Index</a></li>
 <li><a href="../../../../../help-doc.html#class">Help</a></li>
 </ul>
@@ -91,6 +92,20 @@ loadScripts(document, 'script');</script>
 <hr>
 <div class="type-signature"><span class="modifiers">public class </span><span class="element-name type-name-label">GrafoDeSimilitud</span>
 <span class="extends-implements">extends <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a></span></div>
+<div class="block">Grafo ponderado que representa la similitud entre canciones.
+ <p>
+ Implementa un modelo de recomendación basado en similitud de metadatos
+ (género, artista y año). Las aristas del grafo tienen pesos que indican
+ el grado de similitud entre dos canciones.
+ </p>
+ <p>
+ La similitud se calcula mediante una función configurable que considera:
+ <ul>
+   <li>Mismo género: +0.6</li>
+   <li>Mismo artista: +0.3</li>
+   <li>Año cercano (±2): +0.1</li>
+ </ul>
+ </p></div>
 </section>
 <section class="summary">
 <ul class="summary-list">
@@ -120,11 +135,15 @@ loadScripts(document, 'script');</script>
 <div class="table-header col-last">Description</div>
 <div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>void</code></div>
 <div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#construirGrafo(java.util.Collection)" class="member-name-link">construirGrafo</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/util/Collection.html" title="class or interface in java.util" class="external-link">Collection</a>&lt;<a href="Cancion.html" title="class in co.edu.uniquindio.application.model">Cancion</a>&gt;&nbsp;canciones)</code></div>
-<div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">&nbsp;</div>
+<div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
+<div class="block">Construye el grafo de similitud a partir de una colección de canciones.</div>
+</div>
 <div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/util/List.html" title="class or interface in java.util" class="external-link">List</a><wbr>&lt;<a href="Cancion.html" title="class in co.edu.uniquindio.application.model">Cancion</a>&gt;</code></div>
 <div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#obtenerSimilares(co.edu.uniquindio.application.model.Cancion,int)" class="member-name-link">obtenerSimilares</a><wbr>(<a href="Cancion.html" title="class in co.edu.uniquindio.application.model">Cancion</a>&nbsp;origen,
  int&nbsp;limite)</code></div>
-<div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">&nbsp;</div>
+<div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
+<div class="block">Obtiene las canciones más similares a una canción dada, ordenadas por similitud descendente.</div>
+</div>
 </div>
 </div>
 </div>
@@ -160,6 +179,18 @@ loadScripts(document, 'script');</script>
 <section class="detail" id="construirGrafo(java.util.Collection)">
 <h3>construirGrafo</h3>
 <div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">void</span>&nbsp;<span class="element-name">construirGrafo</span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/util/Collection.html" title="class or interface in java.util" class="external-link">Collection</a>&lt;<a href="Cancion.html" title="class in co.edu.uniquindio.application.model">Cancion</a>&gt;&nbsp;canciones)</span></div>
+<div class="block">Construye el grafo de similitud a partir de una colección de canciones.
+ <p>
+ Realiza comparaciones entre todos los pares de canciones y establece aristas
+ bidireccionales para aquellos pares cuya similitud sea mayor a 0.
+ </p>
+ <p>
+ Complejidad: O(n²) donde n es la cantidad de canciones.
+ </p></div>
+<dl class="notes">
+<dt>Parameters:</dt>
+<dd><code>canciones</code> - la colección de canciones para construir el grafo</dd>
+</dl>
 </section>
 </li>
 <li>
@@ -167,6 +198,22 @@ loadScripts(document, 'script');</script>
 <h3>obtenerSimilares</h3>
 <div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/util/List.html" title="class or interface in java.util" class="external-link">List</a>&lt;<a href="Cancion.html" title="class in co.edu.uniquindio.application.model">Cancion</a>&gt;</span>&nbsp;<span class="element-name">obtenerSimilares</span><wbr><span class="parameters">(<a href="Cancion.html" title="class in co.edu.uniquindio.application.model">Cancion</a>&nbsp;origen,
  int&nbsp;limite)</span></div>
+<div class="block">Obtiene las canciones más similares a una canción dada, ordenadas por similitud descendente.
+ <p>
+ Busca la canción en el grafo y retorna sus adyacentes ordenados por peso (similitud)
+ de mayor a menor, limitando el resultado a una cantidad especificada.
+ </p>
+ <p>
+ Complejidad: O(k log k) donde k es el número de vecinos de la canción origen.
+ </p></div>
+<dl class="notes">
+<dt>Parameters:</dt>
+<dd><code>origen</code> - la canción de referencia</dd>
+<dd><code>limite</code> - la cantidad máxima de canciones similares a retornar</dd>
+<dt>Returns:</dt>
+<dd>lista de canciones similares ordenadas de mayor a menor similitud,
+         o lista vacía si la canción no existe en el grafo</dd>
+</dl>
 </section>
 </li>
 </ul>

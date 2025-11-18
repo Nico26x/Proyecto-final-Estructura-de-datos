@@ -30,6 +30,7 @@ loadScripts(document, 'script');</script>
 <li><a href="package-summary.html">Package</a></li>
 <li class="nav-bar-cell1-rev">Class</li>
 <li><a href="package-tree.html">Tree</a></li>
+<li><a href="../../../../../deprecated-list.html">Deprecated</a></li>
 <li><a href="../../../../../index-all.html">Index</a></li>
 <li><a href="../../../../../help-doc.html#class">Help</a></li>
 </ul>
@@ -94,8 +95,21 @@ loadScripts(document, 'script');</script>
 @CrossOrigin(origins="*")
 </span><span class="modifiers">public class </span><span class="element-name type-name-label">UsuarioController</span>
 <span class="extends-implements">extends <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a></span></div>
-<div class="block">Controlador REST para la gestión de usuarios y sus favoritos.
- Usa UsuarioService para la lógica de negocio.</div>
+<div class="block">Controlador REST para la gestión integral de usuarios y sus funcionalidades.
+ <p>
+ Proporciona endpoints para autenticación, gestión de perfiles, favoritos,
+ redes sociales y exportación de datos.
+ </p>
+ <p>
+ Implementa:
+ </p>
+ <ul>
+   <li>RF-001: Registro de usuarios con contraseña encriptada</li>
+   <li>RF-002: Autenticación con JWT</li>
+   <li>RF-005: Playlist de descubrimiento</li>
+   <li>RF-008: Gestión de amigos (seguir/dejar de seguir)</li>
+   <li>RF-009: Exportación de favoritos a CSV</li>
+ </ul></div>
 </section>
 <section class="summary">
 <ul class="summary-list">
@@ -109,7 +123,9 @@ loadScripts(document, 'script');</script>
 <div class="table-header col-last">Description</div>
 <div class="col-constructor-name even-row-color"><code><a href="#%3Cinit%3E(co.edu.uniquindio.application.service.UsuarioService,co.edu.uniquindio.application.security.JwtUtil)" class="member-name-link">UsuarioController</a><wbr>(<a href="../service/UsuarioService.html" title="class in co.edu.uniquindio.application.service">UsuarioService</a>&nbsp;usuarioService,
  <a href="../security/JwtUtil.html" title="class in co.edu.uniquindio.application.security">JwtUtil</a>&nbsp;jwtUtil)</code></div>
-<div class="col-last even-row-color">&nbsp;</div>
+<div class="col-last even-row-color">
+<div class="block">Constructor que inyecta las dependencias del servicio y seguridad.</div>
+</div>
 </div>
 </section>
 </li>
@@ -127,70 +143,122 @@ loadScripts(document, 'script');</script>
 <div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></code></div>
 <div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#actualizarNombre(java.lang.String,java.lang.String)" class="member-name-link">actualizarNombre</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;username,
  <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;nuevoNombre)</code></div>
-<div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">&nbsp;</div>
+<div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
+<div class="block">Actualiza el nombre completo del usuario.</div>
+</div>
 <div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></code></div>
 <div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#agregarFavorito(java.lang.String,java.lang.String,java.lang.String)" class="member-name-link">agregarFavorito</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;username,
  <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;idCancion,
  <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;authHeader)</code></div>
-<div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">&nbsp;</div>
+<div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
+<div class="block">Agrega una canción a la lista de favoritos de un usuario.</div>
+</div>
 <div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></code></div>
 <div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#cambiarPassword(java.lang.String,java.lang.String)" class="member-name-link">cambiarPassword</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;username,
  <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;nuevaPassword)</code></div>
-<div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">&nbsp;</div>
+<div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
+<div class="block">Cambia la contraseña de un usuario.</div>
+</div>
 <div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></code></div>
 <div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#cerrarSesion()" class="member-name-link">cerrarSesion</a>()</code></div>
-<div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">&nbsp;</div>
-<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>org.springframework.http.ResponseEntity<wbr>&lt;<a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&gt;</code></div>
-<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#dejarDeSeguir(java.lang.String,java.lang.String)" class="member-name-link">dejarDeSeguir</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;username,
- <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;destino)</code></div>
-<div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">&nbsp;</div>
+<div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
+<div class="block">Cierra la sesión del usuario actual.</div>
+</div>
+<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>org.springframework.http.ResponseEntity<wbr>&lt;<a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/util/Map.html" title="class or interface in java.util" class="external-link">Map</a>&lt;<a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>,<wbr><a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&gt;&gt;</code></div>
+<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#dejarDeSeguir(java.util.Map)" class="member-name-link">dejarDeSeguir</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/util/Map.html" title="class or interface in java.util" class="external-link">Map</a>&lt;<a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>,<wbr><a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&gt;&nbsp;body)</code></div>
+<div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
+<div class="block">Permite que un usuario deje de seguir a otro usuario.</div>
+</div>
 <div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></code></div>
 <div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#eliminarFavorito(java.lang.String,java.lang.String,java.lang.String)" class="member-name-link">eliminarFavorito</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;username,
  <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;idCancion,
  <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;authHeader)</code></div>
-<div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">&nbsp;</div>
-<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>org.springframework.http.ResponseEntity<wbr>&lt;byte[]&gt;</code></div>
-<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#exportarFavoritosCsv(java.lang.String,java.lang.String)" class="member-name-link">exportarFavoritosCsv</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;username,
- <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;authHeader)</code></div>
-<div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">&nbsp;</div>
-<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>org.springframework.http.ResponseEntity<wbr>&lt;byte[]&gt;</code></div>
-<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#exportarFavoritosCsvUsuarioActual()" class="member-name-link">exportarFavoritosCsvUsuarioActual</a>()</code></div>
-<div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">&nbsp;</div>
+<div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
+<div class="block">Elimina una canción de la lista de favoritos de un usuario.</div>
+</div>
 <div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>org.springframework.http.ResponseEntity<wbr>&lt;?&gt;</code></div>
-<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#generarDescubrimientoSemanal(java.lang.String,int,java.lang.String)" class="member-name-link">generarDescubrimientoSemanal</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;username,
+<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#eliminarUsuarioAdmin(java.lang.String,java.lang.String)" class="member-name-link">eliminarUsuarioAdmin</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;username,
+ <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;authHeader)</code></div>
+<div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
+<div class="block">Elimina un usuario del sistema (requiere rol ADMIN).</div>
+</div>
+<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>org.springframework.http.ResponseEntity<wbr>&lt;byte[]&gt;</code></div>
+<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#exportarFavoritosCsv(java.lang.String,java.lang.String)" class="member-name-link">exportarFavoritosCsv</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;username,
+ <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;authHeader)</code></div>
+<div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
+<div class="block">Exporta los favoritos de un usuario en formato CSV.</div>
+</div>
+<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>org.springframework.http.ResponseEntity<wbr>&lt;byte[]&gt;</code></div>
+<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#exportarFavoritosCsvUsuarioActual()" class="member-name-link">exportarFavoritosCsvUsuarioActual</a>()</code></div>
+<div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
+<div class="block">Exporta los favoritos del usuario actual en formato CSV (versión alternativa).</div>
+</div>
+<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>org.springframework.http.ResponseEntity<wbr>&lt;?&gt;</code></div>
+<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#generarDescubrimientoSemanal(java.lang.String,int,java.lang.String)" class="member-name-link">generarDescubrimientoSemanal</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;username,
  int&nbsp;size,
  <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;authHeader)</code></div>
-<div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">&nbsp;</div>
-<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>org.springframework.http.ResponseEntity<wbr>&lt;?&gt;</code></div>
-<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#listar(java.lang.String)" class="member-name-link">listar</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;token)</code></div>
-<div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">&nbsp;</div>
-<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/util/Collection.html" title="class or interface in java.util" class="external-link">Collection</a><wbr>&lt;<a href="../model/Cancion.html" title="class in co.edu.uniquindio.application.model">Cancion</a>&gt;</code></div>
-<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#listarFavoritos(java.lang.String,java.lang.String)" class="member-name-link">listarFavoritos</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;username,
+<div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
+<div class="block">Genera una playlist de descubrimiento para un usuario.</div>
+</div>
+<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>org.springframework.http.ResponseEntity<wbr>&lt;?&gt;</code></div>
+<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#listar(java.lang.String)" class="member-name-link">listar</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;token)</code></div>
+<div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
+<div class="block">Lista todos los usuarios del sistema (requiere rol ADMIN).</div>
+</div>
+<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/util/Collection.html" title="class or interface in java.util" class="external-link">Collection</a><wbr>&lt;<a href="../model/Cancion.html" title="class in co.edu.uniquindio.application.model">Cancion</a>&gt;</code></div>
+<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#listarFavoritos(java.lang.String,java.lang.String)" class="member-name-link">listarFavoritos</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;username,
  <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;authHeader)</code></div>
-<div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">&nbsp;</div>
-<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>org.springframework.http.ResponseEntity<wbr>&lt;<a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/util/Set.html" title="class or interface in java.util" class="external-link">Set</a>&lt;<a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&gt;&gt;</code></div>
-<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#listarSeguidos(java.lang.String)" class="member-name-link">listarSeguidos</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;username)</code></div>
-<div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">&nbsp;</div>
-<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>org.springframework.http.ResponseEntity<wbr>&lt;<a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/util/Map.html" title="class or interface in java.util" class="external-link">Map</a>&lt;<a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>,<wbr><a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>&gt;&gt;</code></div>
-<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#login(java.lang.String,java.lang.String)" class="member-name-link">login</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;username,
+<div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
+<div class="block">Lista todas las canciones favoritas de un usuario.</div>
+</div>
+<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>org.springframework.http.ResponseEntity<wbr>&lt;<a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/util/Set.html" title="class or interface in java.util" class="external-link">Set</a>&lt;<a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&gt;&gt;</code></div>
+<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#listarSeguidos(java.lang.String,java.lang.String)" class="member-name-link">listarSeguidos</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;username,
+ <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;authHeader)</code></div>
+<div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
+<div class="block">Lista todos los usuarios que un usuario específico está siguiendo.</div>
+</div>
+<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>org.springframework.http.ResponseEntity<wbr>&lt;<a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/util/Map.html" title="class or interface in java.util" class="external-link">Map</a>&lt;<a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>,<wbr><a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>&gt;&gt;</code></div>
+<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#login(java.lang.String,java.lang.String)" class="member-name-link">login</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;username,
  <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;password)</code></div>
-<div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">&nbsp;</div>
+<div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
+<div class="block">Autentica un usuario y genera un JWT token.</div>
+</div>
+<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>org.springframework.http.ResponseEntity<wbr>&lt;<a href="../api/ApiResponse.html" title="class in co.edu.uniquindio.application.api">ApiResponse</a>&lt;<a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/util/Map.html" title="class or interface in java.util" class="external-link">Map</a>&lt;<a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>,<wbr><a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>&gt;&gt;&gt;</code></div>
+<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#loginStd(java.lang.String,java.lang.String)" class="member-name-link">loginStd</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;username,
+ <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;password)</code></div>
+<div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
+<div class="block">Autentica un usuario usando formato de respuesta estándar (envelope).</div>
+</div>
 <div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>org.springframework.http.ResponseEntity<wbr>&lt;?&gt;</code></div>
 <div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#obtenerSesion(java.lang.String)" class="member-name-link">obtenerSesion</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;authHeader)</code></div>
-<div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">&nbsp;</div>
-<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></code></div>
+<div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
+<div class="block">Obtiene los datos del usuario actual desde el JWT token.</div>
+</div>
+<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>org.springframework.http.ResponseEntity<wbr>&lt;<a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&gt;</code></div>
 <div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#registrar(java.lang.String,java.lang.String,java.lang.String)" class="member-name-link">registrar</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;username,
  <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;password,
  <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;nombre)</code></div>
-<div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">&nbsp;</div>
-<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>org.springframework.http.ResponseEntity<wbr>&lt;<a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&gt;</code></div>
-<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#seguirUsuario(java.lang.String,java.lang.String)" class="member-name-link">seguirUsuario</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;username,
- <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;destino)</code></div>
-<div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">&nbsp;</div>
-<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>org.springframework.http.ResponseEntity<wbr>&lt;<a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/util/List.html" title="class or interface in java.util" class="external-link">List</a>&lt;<a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&gt;&gt;</code></div>
-<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#sugerirUsuarios(java.lang.String,int)" class="member-name-link">sugerirUsuarios</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;username,
+<div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
+<div class="block">Registra un nuevo usuario en el sistema con contraseña encriptada.</div>
+</div>
+<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>org.springframework.http.ResponseEntity<wbr>&lt;<a href="../api/ApiResponse.html" title="class in co.edu.uniquindio.application.api">ApiResponse</a>&lt;<a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/util/Map.html" title="class or interface in java.util" class="external-link">Map</a>&lt;<a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>,<wbr><a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>&gt;&gt;&gt;</code></div>
+<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#registrarStd(java.lang.String,java.lang.String,java.lang.String)" class="member-name-link">registrarStd</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;username,
+ <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;password,
+ <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;nombre)</code></div>
+<div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
+<div class="block">Registra un nuevo usuario usando formato de respuesta estándar (envelope).</div>
+</div>
+<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>org.springframework.http.ResponseEntity<wbr>&lt;<a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/util/Map.html" title="class or interface in java.util" class="external-link">Map</a>&lt;<a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>,<wbr><a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&gt;&gt;</code></div>
+<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#seguirUsuario(java.util.Map)" class="member-name-link">seguirUsuario</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/util/Map.html" title="class or interface in java.util" class="external-link">Map</a>&lt;<a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>,<wbr><a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&gt;&nbsp;body)</code></div>
+<div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
+<div class="block">Permite que un usuario siga a otro usuario.</div>
+</div>
+<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>org.springframework.http.ResponseEntity<wbr>&lt;<a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/util/List.html" title="class or interface in java.util" class="external-link">List</a>&lt;<a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&gt;&gt;</code></div>
+<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#sugerirUsuariosPorFavoritos(java.lang.String,int)" class="member-name-link">sugerirUsuariosPorFavoritos</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;username,
  int&nbsp;limite)</code></div>
-<div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">&nbsp;</div>
+<div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
+<div class="block">Sugiere usuarios basándose en canciones favoritas comunes.</div>
+</div>
 </div>
 </div>
 </div>
@@ -214,6 +282,12 @@ loadScripts(document, 'script');</script>
 <div class="member-signature"><span class="annotations">@Autowired
 </span><span class="modifiers">public</span>&nbsp;<span class="element-name">UsuarioController</span><wbr><span class="parameters">(<a href="../service/UsuarioService.html" title="class in co.edu.uniquindio.application.service">UsuarioService</a>&nbsp;usuarioService,
  <a href="../security/JwtUtil.html" title="class in co.edu.uniquindio.application.security">JwtUtil</a>&nbsp;jwtUtil)</span></div>
+<div class="block">Constructor que inyecta las dependencias del servicio y seguridad.</div>
+<dl class="notes">
+<dt>Parameters:</dt>
+<dd><code>usuarioService</code> - el servicio de usuarios</dd>
+<dd><code>jwtUtil</code> - la utilidad JWT para manejo de tokens</dd>
+</dl>
 </section>
 </li>
 </ul>
@@ -228,12 +302,49 @@ loadScripts(document, 'script');</script>
 <section class="detail" id="registrar(java.lang.String,java.lang.String,java.lang.String)">
 <h3>registrar</h3>
 <div class="member-signature"><span class="annotations">@PostMapping("/registrar")
-</span><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></span>&nbsp;<span class="element-name">registrar</span><wbr><span class="parameters">(@RequestParam
+</span><span class="modifiers">public</span>&nbsp;<span class="return-type">org.springframework.http.ResponseEntity&lt;<a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&gt;</span>&nbsp;<span class="element-name">registrar</span><wbr><span class="parameters">(@RequestParam
  <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;username,
  @RequestParam
  <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;password,
  @RequestParam
  <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;nombre)</span></div>
+<div class="block">Registra un nuevo usuario en el sistema con contraseña encriptada.
+ <p>
+ Implementa RF-001. Valida que no exista un usuario con el mismo username.
+ </p></div>
+<dl class="notes">
+<dt>Parameters:</dt>
+<dd><code>username</code> - el nombre de usuario (debe ser único)</dd>
+<dd><code>password</code> - la contraseña (será encriptada con BCrypt)</dd>
+<dd><code>nombre</code> - el nombre completo del usuario</dd>
+<dt>Returns:</dt>
+<dd>respuesta 201 CREATED si el registro es exitoso, 409 CONFLICT si ya existe</dd>
+</dl>
+</section>
+</li>
+<li>
+<section class="detail" id="registrarStd(java.lang.String,java.lang.String,java.lang.String)">
+<h3>registrarStd</h3>
+<div class="member-signature"><span class="annotations">@PostMapping("/auth/registrar")
+</span><span class="modifiers">public</span>&nbsp;<span class="return-type">org.springframework.http.ResponseEntity&lt;<a href="../api/ApiResponse.html" title="class in co.edu.uniquindio.application.api">ApiResponse</a>&lt;<a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/util/Map.html" title="class or interface in java.util" class="external-link">Map</a>&lt;<a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>,<wbr><a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>&gt;&gt;&gt;</span>&nbsp;<span class="element-name">registrarStd</span><wbr><span class="parameters">(@RequestParam
+ <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;username,
+ @RequestParam
+ <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;password,
+ @RequestParam
+ <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;nombre)</span></div>
+<div class="block">Registra un nuevo usuario usando formato de respuesta estándar (envelope).
+ <p>
+ Alternativa a <a href="#registrar(java.lang.String,java.lang.String,java.lang.String)"><code>registrar(String, String, String)</code></a> que devuelve
+ un objeto <code>ApiResponse</code> con estructura uniforme.
+ </p></div>
+<dl class="notes">
+<dt>Parameters:</dt>
+<dd><code>username</code> - el nombre de usuario (debe ser único)</dd>
+<dd><code>password</code> - la contraseña (será encriptada con BCrypt)</dd>
+<dd><code>nombre</code> - el nombre completo del usuario</dd>
+<dt>Returns:</dt>
+<dd>respuesta envuelta con los datos del usuario registrado o mensaje de error</dd>
+</dl>
 </section>
 </li>
 <li>
@@ -244,6 +355,39 @@ loadScripts(document, 'script');</script>
  <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;username,
  @RequestParam
  <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;password)</span></div>
+<div class="block">Autentica un usuario y genera un JWT token.
+ <p>
+ Implementa RF-002. Valida credenciales y devuelve un JWT válido por 24 horas.
+ </p></div>
+<dl class="notes">
+<dt>Parameters:</dt>
+<dd><code>username</code> - el nombre de usuario</dd>
+<dd><code>password</code> - la contraseña (será comparada con hash BCrypt)</dd>
+<dt>Returns:</dt>
+<dd>respuesta 200 OK con token y datos del usuario si es válido, 401 si no</dd>
+</dl>
+</section>
+</li>
+<li>
+<section class="detail" id="loginStd(java.lang.String,java.lang.String)">
+<h3>loginStd</h3>
+<div class="member-signature"><span class="annotations">@PostMapping("/auth/login")
+</span><span class="modifiers">public</span>&nbsp;<span class="return-type">org.springframework.http.ResponseEntity&lt;<a href="../api/ApiResponse.html" title="class in co.edu.uniquindio.application.api">ApiResponse</a>&lt;<a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/util/Map.html" title="class or interface in java.util" class="external-link">Map</a>&lt;<a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>,<wbr><a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>&gt;&gt;&gt;</span>&nbsp;<span class="element-name">loginStd</span><wbr><span class="parameters">(@RequestParam
+ <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;username,
+ @RequestParam
+ <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;password)</span></div>
+<div class="block">Autentica un usuario usando formato de respuesta estándar (envelope).
+ <p>
+ Alternativa a <a href="#login(java.lang.String,java.lang.String)"><code>login(String, String)</code></a> que devuelve un objeto
+ <code>ApiResponse</code> con estructura uniforme.
+ </p></div>
+<dl class="notes">
+<dt>Parameters:</dt>
+<dd><code>username</code> - el nombre de usuario</dd>
+<dd><code>password</code> - la contraseña</dd>
+<dt>Returns:</dt>
+<dd>respuesta envuelta con token y datos del usuario, o mensaje de error</dd>
+</dl>
 </section>
 </li>
 <li>
@@ -251,6 +395,11 @@ loadScripts(document, 'script');</script>
 <h3>cerrarSesion</h3>
 <div class="member-signature"><span class="annotations">@PostMapping("/logout")
 </span><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></span>&nbsp;<span class="element-name">cerrarSesion</span>()</div>
+<div class="block">Cierra la sesión del usuario actual.</div>
+<dl class="notes">
+<dt>Returns:</dt>
+<dd>mensaje de confirmación</dd>
+</dl>
 </section>
 </li>
 <li>
@@ -259,6 +408,16 @@ loadScripts(document, 'script');</script>
 <div class="member-signature"><span class="annotations">@GetMapping("/sesion")
 </span><span class="modifiers">public</span>&nbsp;<span class="return-type">org.springframework.http.ResponseEntity&lt;?&gt;</span>&nbsp;<span class="element-name">obtenerSesion</span><wbr><span class="parameters">(@RequestHeader("Authorization")
  <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;authHeader)</span></div>
+<div class="block">Obtiene los datos del usuario actual desde el JWT token.
+ <p>
+ Requiere autenticación mediante JWT en el header Authorization.
+ </p></div>
+<dl class="notes">
+<dt>Parameters:</dt>
+<dd><code>authHeader</code> - el header de autorización con el JWT token</dd>
+<dt>Returns:</dt>
+<dd>respuesta con los datos del usuario, o error 401/404 si falta token o usuario no existe</dd>
+</dl>
 </section>
 </li>
 <li>
@@ -267,6 +426,13 @@ loadScripts(document, 'script');</script>
 <div class="member-signature"><span class="annotations">@GetMapping("/listar")
 </span><span class="modifiers">public</span>&nbsp;<span class="return-type">org.springframework.http.ResponseEntity&lt;?&gt;</span>&nbsp;<span class="element-name">listar</span><wbr><span class="parameters">(@RequestHeader("Authorization")
  <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;token)</span></div>
+<div class="block">Lista todos los usuarios del sistema (requiere rol ADMIN).</div>
+<dl class="notes">
+<dt>Parameters:</dt>
+<dd><code>token</code> - el JWT token del usuario autenticado</dd>
+<dt>Returns:</dt>
+<dd>respuesta con la lista de usuarios, o error 401/403 si token inválido o no es ADMIN</dd>
+</dl>
 </section>
 </li>
 <li>
@@ -279,6 +445,18 @@ loadScripts(document, 'script');</script>
  <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;idCancion,
  @RequestHeader(value="Authorization",required=false)
  <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;authHeader)</span></div>
+<div class="block">Agrega una canción a la lista de favoritos de un usuario.
+ <p>
+ Requiere autenticación mediante JWT token.
+ </p></div>
+<dl class="notes">
+<dt>Parameters:</dt>
+<dd><code>username</code> - el nombre del usuario</dd>
+<dd><code>idCancion</code> - el identificador de la canción a agregar</dd>
+<dd><code>authHeader</code> - el header de autorización con el JWT token</dd>
+<dt>Returns:</dt>
+<dd>mensaje de confirmación o error</dd>
+</dl>
 </section>
 </li>
 <li>
@@ -291,6 +469,18 @@ loadScripts(document, 'script');</script>
  <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;idCancion,
  @RequestHeader(value="Authorization",required=false)
  <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;authHeader)</span></div>
+<div class="block">Elimina una canción de la lista de favoritos de un usuario.
+ <p>
+ Requiere autenticación mediante JWT token.
+ </p></div>
+<dl class="notes">
+<dt>Parameters:</dt>
+<dd><code>username</code> - el nombre del usuario</dd>
+<dd><code>idCancion</code> - el identificador de la canción a eliminar</dd>
+<dd><code>authHeader</code> - el header de autorización con el JWT token</dd>
+<dt>Returns:</dt>
+<dd>mensaje de confirmación o error</dd>
+</dl>
 </section>
 </li>
 <li>
@@ -301,6 +491,19 @@ loadScripts(document, 'script');</script>
  <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;username,
  @RequestHeader(value="Authorization",required=false)
  <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;authHeader)</span></div>
+<div class="block">Lista todas las canciones favoritas de un usuario.
+ <p>
+ Requiere autenticación mediante JWT token.
+ </p></div>
+<dl class="notes">
+<dt>Parameters:</dt>
+<dd><code>username</code> - el nombre del usuario</dd>
+<dd><code>authHeader</code> - el header de autorización con el JWT token</dd>
+<dt>Returns:</dt>
+<dd>colección de canciones favoritas</dd>
+<dt>Throws:</dt>
+<dd><code><a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/RuntimeException.html" title="class or interface in java.lang" class="external-link">RuntimeException</a></code> - si falta o es inválido el token</dd>
+</dl>
 </section>
 </li>
 <li>
@@ -311,6 +514,14 @@ loadScripts(document, 'script');</script>
  <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;username,
  @RequestParam
  <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;nuevoNombre)</span></div>
+<div class="block">Actualiza el nombre completo del usuario.</div>
+<dl class="notes">
+<dt>Parameters:</dt>
+<dd><code>username</code> - el nombre del usuario a actualizar</dd>
+<dd><code>nuevoNombre</code> - el nuevo nombre completo</dd>
+<dt>Returns:</dt>
+<dd>mensaje de confirmación o error</dd>
+</dl>
 </section>
 </li>
 <li>
@@ -321,6 +532,17 @@ loadScripts(document, 'script');</script>
  <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;username,
  @RequestParam
  <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;nuevaPassword)</span></div>
+<div class="block">Cambia la contraseña de un usuario.
+ <p>
+ La nueva contraseña será encriptada con BCrypt antes de guardarse.
+ </p></div>
+<dl class="notes">
+<dt>Parameters:</dt>
+<dd><code>username</code> - el nombre del usuario</dd>
+<dd><code>nuevaPassword</code> - la nueva contraseña</dd>
+<dt>Returns:</dt>
+<dd>mensaje de confirmación o error</dd>
+</dl>
 </section>
 </li>
 <li>
@@ -333,44 +555,97 @@ loadScripts(document, 'script');</script>
  int&nbsp;size,
  @RequestHeader("Authorization")
  <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;authHeader)</span></div>
+<div class="block">Genera una playlist de descubrimiento para un usuario.
+ <p>
+ Implementa RF-005. Utiliza el grafo de similitud de canciones y favoritos
+ del usuario para recomendar nuevas canciones.
+ </p></div>
+<dl class="notes">
+<dt>Parameters:</dt>
+<dd><code>username</code> - el nombre del usuario</dd>
+<dd><code>size</code> - la cantidad máxima de canciones a retornar (por defecto 10)</dd>
+<dd><code>authHeader</code> - el header de autorización con el JWT token</dd>
+<dt>Returns:</dt>
+<dd>respuesta con la playlist de descubrimiento, o error 401/403 si token inválido</dd>
+</dl>
 </section>
 </li>
 <li>
-<section class="detail" id="seguirUsuario(java.lang.String,java.lang.String)">
+<section class="detail" id="seguirUsuario(java.util.Map)">
 <h3>seguirUsuario</h3>
 <div class="member-signature"><span class="annotations">@PostMapping("/seguir")
-</span><span class="modifiers">public</span>&nbsp;<span class="return-type">org.springframework.http.ResponseEntity&lt;<a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&gt;</span>&nbsp;<span class="element-name">seguirUsuario</span><wbr><span class="parameters">(@RequestParam
- <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;username,
- @RequestParam
- <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;destino)</span></div>
+</span><span class="modifiers">public</span>&nbsp;<span class="return-type">org.springframework.http.ResponseEntity&lt;<a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/util/Map.html" title="class or interface in java.util" class="external-link">Map</a>&lt;<a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>,<wbr><a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&gt;&gt;</span>&nbsp;<span class="element-name">seguirUsuario</span><wbr><span class="parameters">(@RequestBody
+ <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/util/Map.html" title="class or interface in java.util" class="external-link">Map</a>&lt;<a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>,<wbr><a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&gt;&nbsp;body)</span></div>
+<div class="block">Permite que un usuario siga a otro usuario.
+ <p>
+ Implementa RF-008. Crea una conexión bidireccional en el grafo social.
+ </p></div>
+<dl class="notes">
+<dt>Parameters:</dt>
+<dd><code>body</code> - mapa con campos "username" (origen) y "destino" (usuario a seguir)</dd>
+<dt>Returns:</dt>
+<dd>respuesta con mensaje de confirmación o error</dd>
+</dl>
 </section>
 </li>
 <li>
-<section class="detail" id="dejarDeSeguir(java.lang.String,java.lang.String)">
+<section class="detail" id="dejarDeSeguir(java.util.Map)">
 <h3>dejarDeSeguir</h3>
 <div class="member-signature"><span class="annotations">@PostMapping("/dejar-seguir")
-</span><span class="modifiers">public</span>&nbsp;<span class="return-type">org.springframework.http.ResponseEntity&lt;<a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&gt;</span>&nbsp;<span class="element-name">dejarDeSeguir</span><wbr><span class="parameters">(@RequestParam
- <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;username,
- @RequestParam
- <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;destino)</span></div>
+</span><span class="modifiers">public</span>&nbsp;<span class="return-type">org.springframework.http.ResponseEntity&lt;<a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/util/Map.html" title="class or interface in java.util" class="external-link">Map</a>&lt;<a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>,<wbr><a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&gt;&gt;</span>&nbsp;<span class="element-name">dejarDeSeguir</span><wbr><span class="parameters">(@RequestBody
+ <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/util/Map.html" title="class or interface in java.util" class="external-link">Map</a>&lt;<a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>,<wbr><a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&gt;&nbsp;body)</span></div>
+<div class="block">Permite que un usuario deje de seguir a otro usuario.
+ <p>
+ Implementa RF-008. Elimina la conexión bidireccional en el grafo social.
+ </p></div>
+<dl class="notes">
+<dt>Parameters:</dt>
+<dd><code>body</code> - mapa con campos "username" (origen) y "destino" (usuario a dejar de seguir)</dd>
+<dt>Returns:</dt>
+<dd>respuesta con mensaje de confirmación o error</dd>
+</dl>
 </section>
 </li>
 <li>
-<section class="detail" id="listarSeguidos(java.lang.String)">
+<section class="detail" id="listarSeguidos(java.lang.String,java.lang.String)">
 <h3>listarSeguidos</h3>
 <div class="member-signature"><span class="annotations">@GetMapping("/{username}/seguidos")
 </span><span class="modifiers">public</span>&nbsp;<span class="return-type">org.springframework.http.ResponseEntity&lt;<a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/util/Set.html" title="class or interface in java.util" class="external-link">Set</a>&lt;<a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&gt;&gt;</span>&nbsp;<span class="element-name">listarSeguidos</span><wbr><span class="parameters">(@PathVariable
- <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;username)</span></div>
+ <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;username,
+ @RequestHeader(value="Authorization",required=false)
+ <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;authHeader)</span></div>
+<div class="block">Lista todos los usuarios que un usuario específico está siguiendo.
+ <p>
+ Requiere autenticación mediante JWT token.
+ </p></div>
+<dl class="notes">
+<dt>Parameters:</dt>
+<dd><code>username</code> - el nombre del usuario</dd>
+<dd><code>authHeader</code> - el header de autorización con el JWT token</dd>
+<dt>Returns:</dt>
+<dd>respuesta con el conjunto de usuarios seguidos, o error 401/403 si token inválido</dd>
+</dl>
 </section>
 </li>
 <li>
-<section class="detail" id="sugerirUsuarios(java.lang.String,int)">
-<h3>sugerirUsuarios</h3>
-<div class="member-signature"><span class="annotations">@GetMapping("/{username}/sugerencias")
-</span><span class="modifiers">public</span>&nbsp;<span class="return-type">org.springframework.http.ResponseEntity&lt;<a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/util/List.html" title="class or interface in java.util" class="external-link">List</a>&lt;<a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&gt;&gt;</span>&nbsp;<span class="element-name">sugerirUsuarios</span><wbr><span class="parameters">(@PathVariable
+<section class="detail" id="sugerirUsuariosPorFavoritos(java.lang.String,int)">
+<h3>sugerirUsuariosPorFavoritos</h3>
+<div class="member-signature"><span class="annotations">@PostMapping("/{username}/sugerir-usuarios")
+</span><span class="modifiers">public</span>&nbsp;<span class="return-type">org.springframework.http.ResponseEntity&lt;<a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/util/List.html" title="class or interface in java.util" class="external-link">List</a>&lt;<a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&gt;&gt;</span>&nbsp;<span class="element-name">sugerirUsuariosPorFavoritos</span><wbr><span class="parameters">(@PathVariable
  <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;username,
  @RequestParam(defaultValue="5")
  int&nbsp;limite)</span></div>
+<div class="block">Sugiere usuarios basándose en canciones favoritas comunes.
+ <p>
+ Implementa RF-008. Busca usuarios con intersecciones en favoritos.
+ </p></div>
+<dl class="notes">
+<dt>Parameters:</dt>
+<dd><code>username</code> - el nombre del usuario</dd>
+<dd><code>limite</code> - la cantidad máxima de sugerencias a retornar (por defecto 5)</dd>
+<dt>Returns:</dt>
+<dd>respuesta con la lista de usuarios sugeridos, o 204 si no hay sugerencias</dd>
+</dl>
 </section>
 </li>
 <li>
@@ -381,6 +656,18 @@ loadScripts(document, 'script');</script>
  <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;username,
  @RequestHeader(value="Authorization",required=false)
  <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;authHeader)</span></div>
+<div class="block">Exporta los favoritos de un usuario en formato CSV.
+ <p>
+ Implementa RF-009. Requiere autenticación. Solo el dueño de la cuenta
+ o un ADMIN pueden descargar los favoritos.
+ </p></div>
+<dl class="notes">
+<dt>Parameters:</dt>
+<dd><code>username</code> - el nombre del usuario cuyos favoritos se van a exportar</dd>
+<dd><code>authHeader</code> - el header de autorización con el JWT token</dd>
+<dt>Returns:</dt>
+<dd>respuesta con el archivo CSV o error 401/403 si no autorizado</dd>
+</dl>
 </section>
 </li>
 <li>
@@ -388,6 +675,36 @@ loadScripts(document, 'script');</script>
 <h3>exportarFavoritosCsvUsuarioActual</h3>
 <div class="member-signature"><span class="annotations">@GetMapping("/favoritos/export")
 </span><span class="modifiers">public</span>&nbsp;<span class="return-type">org.springframework.http.ResponseEntity&lt;byte[]&gt;</span>&nbsp;<span class="element-name">exportarFavoritosCsvUsuarioActual</span>()</div>
+<div class="block">Exporta los favoritos del usuario actual en formato CSV (versión alternativa).
+ <p>
+ Utiliza el username del usuario autenticado en la sesión actual.
+ </p></div>
+<dl class="notes">
+<dt>Returns:</dt>
+<dd>respuesta con el archivo CSV descargable</dd>
+</dl>
+</section>
+</li>
+<li>
+<section class="detail" id="eliminarUsuarioAdmin(java.lang.String,java.lang.String)">
+<h3>eliminarUsuarioAdmin</h3>
+<div class="member-signature"><span class="annotations">@DeleteMapping("/eliminar")
+</span><span class="modifiers">public</span>&nbsp;<span class="return-type">org.springframework.http.ResponseEntity&lt;?&gt;</span>&nbsp;<span class="element-name">eliminarUsuarioAdmin</span><wbr><span class="parameters">(@RequestParam
+ <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;username,
+ @RequestHeader(value="Authorization",required=false)
+ <a href="https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;authHeader)</span></div>
+<div class="block">Elimina un usuario del sistema (requiere rol ADMIN).
+ <p>
+ Solo administradores pueden eliminar usuarios. El usuario a eliminar debe
+ ser especificado como parámetro de query.
+ </p></div>
+<dl class="notes">
+<dt>Parameters:</dt>
+<dd><code>username</code> - el nombre del usuario a eliminar</dd>
+<dd><code>authHeader</code> - el header de autorización con el JWT token</dd>
+<dt>Returns:</dt>
+<dd>respuesta con mensaje de confirmación o error (401/403/404)</dd>
+</dl>
 </section>
 </li>
 </ul>
